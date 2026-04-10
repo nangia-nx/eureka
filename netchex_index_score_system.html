@@ -1,0 +1,1238 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --nx-navy: #0A1628;
+    --nx-navy-mid: #1a2d4a;
+    --nx-teal: #00BFA6;
+    --nx-teal-light: #E0F7F4;
+    --nx-gold: #F5A623;
+    --nx-gold-light: #FEF3DC;
+    --nx-red: #E84855;
+    --nx-red-light: #FDEAEA;
+    --nx-green: #2DC98E;
+    --nx-green-light: #E3FAF2;
+    --nx-slate: #6B7C93;
+    --nx-silver: #F4F6F9;
+    --nx-white: #FFFFFF;
+    --font-display: 'DM Serif Display', serif;
+    --font-body: 'DM Sans', sans-serif;
+  }
+  body { font-family: var(--font-body); background: var(--color-background-tertiary, #f8f8f6); }
+
+  .nx-wrapper { max-width: 1100px; margin: 0 auto; padding: 0 0 4rem; }
+
+  .nx-header {
+    background: var(--nx-navy);
+    color: white;
+    padding: 2.5rem 3rem 2rem;
+    border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .nx-header::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,191,166,0.2);
+  }
+  .nx-header::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; right: 60px;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,191,166,0.1);
+  }
+  .nx-badge {
+    display: inline-block;
+    background: rgba(0,191,166,0.15);
+    color: var(--nx-teal);
+    border: 1px solid rgba(0,191,166,0.3);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 1rem;
+  }
+  .nx-header h1 { font-family: var(--font-display); font-size: 32px; font-weight: 400; line-height: 1.2; margin-bottom: 0.5rem; }
+  .nx-header p { color: rgba(255,255,255,0.6); font-size: 14px; font-weight: 300; max-width: 600px; line-height: 1.6; }
+
+  .nx-tabs {
+    display: flex; gap: 4px;
+    background: var(--color-background-secondary, #f0f0ee);
+    border-radius: var(--border-radius-lg);
+    padding: 4px;
+    margin: 0 1.5rem 2rem;
+  }
+  .nx-tab {
+    flex: 1; padding: 10px 16px;
+    border: none; border-radius: 10px;
+    background: transparent;
+    font-family: var(--font-body); font-size: 13px; font-weight: 500;
+    color: var(--color-text-secondary);
+    cursor: pointer; transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .nx-tab.active {
+    background: var(--color-background-primary, #fff);
+    color: var(--nx-navy);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+
+  .nx-section { display: none; padding: 0 1.5rem; }
+  .nx-section.active { display: block; }
+
+  .nx-card {
+    background: var(--color-background-primary, #fff);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .nx-card-title {
+    font-family: var(--font-display); font-size: 20px; font-weight: 400;
+    color: var(--nx-navy); margin-bottom: 0.25rem;
+  }
+  .nx-card-sub { font-size: 13px; color: var(--color-text-secondary); margin-bottom: 1.25rem; line-height: 1.5; }
+
+  .pillar-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+  .pillar-card {
+    border-radius: var(--border-radius-lg);
+    padding: 1.25rem;
+    border: 1px solid;
+    position: relative;
+    overflow: hidden;
+  }
+  .pillar-card::before {
+    content: attr(data-icon);
+    position: absolute; top: -8px; right: 12px;
+    font-size: 60px; opacity: 0.07;
+  }
+  .p-dollars { background: #EDF6FF; border-color: #B5D4F4; }
+  .p-time { background: var(--nx-gold-light); border-color: #FAC775; }
+  .p-people { background: var(--nx-green-light); border-color: #C0DD97; }
+  .p-risk { background: var(--nx-red-light); border-color: #F7C1C1; }
+  .pillar-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .p-dollars .pillar-label { color: #185FA5; }
+  .p-time .pillar-label { color: #854F0B; }
+  .p-people .pillar-label { color: #3B6D11; }
+  .p-risk .pillar-label { color: #A32D2D; }
+  .pillar-name { font-family: var(--font-display); font-size: 18px; color: var(--nx-navy); margin-bottom: 0.5rem; }
+  .pillar-desc { font-size: 12px; color: var(--color-text-secondary); line-height: 1.5; margin-bottom: 0.75rem; }
+  .pillar-personas { display: flex; flex-wrap: wrap; gap: 4px; }
+  .persona-chip {
+    font-size: 10px; padding: 2px 8px; border-radius: 12px; font-weight: 500;
+  }
+  .chip-cfo { background: #E6F1FB; color: #0C447C; }
+  .chip-hr { background: var(--nx-green-light); color: #27500A; }
+  .chip-mgr { background: var(--nx-gold-light); color: #633806; }
+
+  .q-list { list-style: none; }
+  .q-item {
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    margin-bottom: 1rem;
+    overflow: hidden;
+  }
+  .q-header {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 1rem 1.25rem; cursor: pointer;
+    transition: background 0.15s;
+  }
+  .q-header:hover { background: var(--color-background-secondary, #f8f8f6); }
+  .q-num {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--nx-navy); color: white;
+    font-size: 11px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .q-text { flex: 1; }
+  .q-text strong { font-size: 14px; font-weight: 500; color: var(--color-text-primary); display: block; margin-bottom: 4px; }
+  .q-meta { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .q-tag {
+    font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 10px; border: 1px solid;
+  }
+  .tag-format { background: #E6F1FB; color: #185FA5; border-color: #B5D4F4; }
+  .tag-p-dollars { background: #E6F1FB; color: #0C447C; border-color: #85B7EB; }
+  .tag-p-time { background: var(--nx-gold-light); color: #854F0B; border-color: #FAC775; }
+  .tag-p-people { background: var(--nx-green-light); color: #3B6D11; border-color: #C0DD97; }
+  .tag-p-risk { background: var(--nx-red-light); color: #A32D2D; border-color: #F7C1C1; }
+  .q-toggle { color: var(--color-text-secondary); font-size: 12px; margin-top: 4px; }
+  .q-coaching {
+    display: none;
+    padding: 0 1.25rem 1.25rem 3.5rem;
+    border-top: 0.5px solid var(--color-border-tertiary);
+    background: var(--color-background-secondary, #f8f8f6);
+  }
+  .q-coaching.open { display: block; }
+  .coaching-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 0.75rem; }
+  .coaching-block { background: var(--color-background-primary, #fff); border-radius: var(--border-radius-md); padding: 0.75rem; border: 0.5px solid var(--color-border-tertiary); }
+  .coaching-block h4 { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--nx-slate); margin-bottom: 0.4rem; }
+  .coaching-block p { font-size: 12px; color: var(--color-text-secondary); line-height: 1.5; }
+  .coaching-block.full { grid-column: 1 / -1; }
+  .idk-box {
+    background: #FEF3DC; border: 1px solid #FAC775; border-radius: var(--border-radius-md);
+    padding: 0.6rem 0.75rem; margin-top: 0.75rem;
+    font-size: 12px; color: #633806; line-height: 1.5;
+  }
+  .idk-box strong { font-weight: 600; }
+  .competitor-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem; margin-top: 0.75rem; }
+  .comp-block { background: var(--color-background-primary, #fff); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 0.6rem 0.75rem; }
+  .comp-block h5 { font-size: 10px; font-weight: 600; color: var(--nx-slate); margin-bottom: 0.3rem; }
+  .comp-block p { font-size: 11px; color: var(--color-text-secondary); line-height: 1.5; }
+  .weight-bar { display: flex; align-items: center; gap: 8px; margin-top: 0.75rem; }
+  .weight-label { font-size: 11px; color: var(--nx-slate); white-space: nowrap; }
+  .weight-track { flex: 1; height: 6px; background: var(--color-border-tertiary); border-radius: 3px; }
+  .weight-fill { height: 6px; background: var(--nx-navy); border-radius: 3px; }
+
+  .scoring-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+  .score-block { background: var(--color-background-primary, #fff); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.25rem; }
+  .score-block h3 { font-size: 13px; font-weight: 600; color: var(--nx-navy); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 8px; }
+  .score-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .dot-dollars { background: #378ADD; }
+  .dot-time { background: #EF9F27; }
+  .dot-people { background: #63992; background: #639922; }
+  .dot-risk { background: #E24B4A; }
+  .tier-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 0.5px solid var(--color-border-tertiary); font-size: 12px; }
+  .tier-row:last-child { border-bottom: none; }
+  .tier-name { font-weight: 500; color: var(--color-text-primary); }
+  .tier-range { color: var(--color-text-secondary); }
+  .tier-badge { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 10px; }
+  .t-risk { background: #FCEBEB; color: #A32D2D; }
+  .t-avg { background: #FAEEDA; color: #854F0B; }
+  .t-strong { background: #E6F1FB; color: #185FA5; }
+  .t-best { background: var(--nx-green-light); color: #3B6D11; }
+
+  .feature-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .feature-table th { text-align: left; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--nx-slate); padding: 8px 12px; background: var(--color-background-secondary, #f8f8f6); border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .feature-table td { padding: 10px 12px; border-bottom: 0.5px solid var(--color-border-tertiary); color: var(--color-text-primary); vertical-align: top; line-height: 1.5; }
+  .feature-table tr:last-child td { border-bottom: none; }
+  .feature-table tr:hover td { background: var(--color-background-secondary, #f8f8f6); }
+  .feature-pill { display: inline-block; background: var(--nx-navy); color: white; font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 10px; white-space: nowrap; }
+
+  .bench-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+  .bench-card { background: var(--color-background-primary, #fff); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); overflow: hidden; }
+  .bench-header { padding: 1rem 1.25rem 0.75rem; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .bench-industry { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--nx-teal); margin-bottom: 4px; }
+  .bench-name { font-family: var(--font-display); font-size: 16px; color: var(--nx-navy); }
+  .bench-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 1.25rem; border-bottom: 0.5px solid var(--color-border-tertiary); font-size: 12px; }
+  .bench-row:last-child { border-bottom: none; }
+  .bench-metric { color: var(--color-text-secondary); }
+  .bench-val { font-weight: 500; color: var(--color-text-primary); text-align: right; }
+  .bench-val small { display: block; font-weight: 400; color: var(--color-text-secondary); font-size: 10px; }
+
+  .upload-card {
+    border: 1.5px dashed var(--color-border-secondary, rgba(0,0,0,0.2));
+    border-radius: var(--border-radius-lg);
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    display: flex; gap: 1rem; align-items: flex-start;
+  }
+  .upload-icon {
+    width: 40px; height: 40px; border-radius: var(--border-radius-md);
+    background: var(--nx-teal-light); display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .upload-icon svg { width: 20px; height: 20px; }
+  .upload-title { font-weight: 500; font-size: 14px; color: var(--color-text-primary); margin-bottom: 4px; }
+  .upload-desc { font-size: 12px; color: var(--color-text-secondary); line-height: 1.5; }
+  .upload-signal { margin-top: 8px; font-size: 11px; color: var(--nx-teal); font-weight: 500; }
+
+  .narrative-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+  .narrative-card { border-radius: var(--border-radius-lg); overflow: hidden; border: 0.5px solid var(--color-border-tertiary); }
+  .narrative-head { padding: 1rem 1.25rem; }
+  .n-cfo .narrative-head { background: #0A1628; color: white; }
+  .n-hr .narrative-head { background: #0F6E56; color: white; }
+  .n-mgr .narrative-head { background: #854F0B; color: white; }
+  .narrative-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.7; margin-bottom: 4px; }
+  .narrative-persona { font-family: var(--font-display); font-size: 16px; }
+  .narrative-body { padding: 1.25rem; background: var(--color-background-primary, #fff); font-size: 12px; color: var(--color-text-secondary); line-height: 1.7; }
+
+  .report-spec { counter-reset: pages; }
+  .page-spec { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); margin-bottom: 1rem; overflow: hidden; }
+  .page-header { padding: 1rem 1.25rem; background: var(--nx-navy); color: white; display: flex; align-items: center; gap: 12px; cursor: pointer; }
+  .page-header:hover { background: var(--nx-navy-mid); }
+  .page-num { width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,0.15); font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .page-title-text { font-family: var(--font-display); font-size: 16px; font-weight: 400; flex: 1; }
+  .page-sub { font-size: 12px; opacity: 0.6; }
+  .page-body { display: none; padding: 1.25rem; }
+  .page-body.open { display: block; }
+  .copy-block { background: var(--color-background-secondary, #f8f8f6); border-left: 3px solid var(--nx-teal); border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; padding: 0.75rem 1rem; margin-bottom: 0.75rem; font-size: 12px; font-family: 'DM Sans', sans-serif; color: var(--color-text-primary); line-height: 1.6; }
+  .copy-block .copy-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--nx-teal); margin-bottom: 4px; }
+  .viz-spec { background: #EDF6FF; border: 1px solid #B5D4F4; border-radius: var(--border-radius-md); padding: 0.75rem 1rem; margin-bottom: 0.75rem; font-size: 12px; color: #0C447C; line-height: 1.5; }
+  .viz-spec strong { font-weight: 600; }
+  .persona-note { background: var(--nx-gold-light); border: 1px solid #FAC775; border-radius: var(--border-radius-md); padding: 0.6rem 0.75rem; font-size: 12px; color: #633806; line-height: 1.5; }
+
+  .selfserve-intro { background: var(--nx-navy); color: white; border-radius: var(--border-radius-lg); padding: 1.5rem; margin-bottom: 1.5rem; }
+  .selfserve-intro p { font-size: 13px; line-height: 1.7; color: rgba(255,255,255,0.8); }
+  .ss-q { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.25rem; margin-bottom: 1rem; background: var(--color-background-primary, #fff); }
+  .ss-q-num { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--nx-teal); margin-bottom: 4px; }
+  .ss-q-text { font-size: 14px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; }
+  .ss-benchmark { font-size: 12px; color: var(--color-text-secondary); line-height: 1.5; background: var(--color-background-secondary, #f8f8f6); border-radius: var(--border-radius-md); padding: 0.5rem 0.75rem; margin-top: 0.5rem; }
+
+  .nx-divider { height: 0.5px; background: var(--color-border-tertiary); margin: 1.5rem 0; }
+
+  @media (max-width: 700px) {
+    .pillar-grid, .scoring-grid, .bench-grid, .coaching-grid, .competitor-row, .narrative-grid { grid-template-columns: 1fr; }
+    .coaching-block.full { grid-column: 1; }
+    .nx-header { padding: 1.5rem; }
+    .nx-tabs { overflow-x: auto; }
+    .nx-tab { font-size: 11px; padding: 8px 10px; }
+  }
+</style>
+
+<h2 class="sr-only">Netchex Index Score — Complete Sales Strategy System including pillar framework, AE questionnaire, scoring methodology, feature mapping, benchmark data, and report specifications</h2>
+
+<div class="nx-wrapper">
+  <div class="nx-header">
+    <div class="nx-badge">Netchex Index Score — Strategy System</div>
+    <h1>The Netchex Index Score</h1>
+    <p>A complete prospect ROI intelligence system — from pillar framework through AE questionnaire, scoring methodology, feature mapping, benchmark data, report specs, and closing narratives.</p>
+  </div>
+
+  <div class="nx-tabs">
+    <button class="nx-tab active" onclick="showTab('pillars')">Pillars</button>
+    <button class="nx-tab" onclick="showTab('ae-questions')">AE Questionnaire</button>
+    <button class="nx-tab" onclick="showTab('selfserve')">Self-Serve</button>
+    <button class="nx-tab" onclick="showTab('scoring')">Scoring</button>
+    <button class="nx-tab" onclick="showTab('features')">Feature Map</button>
+    <button class="nx-tab" onclick="showTab('benchmarks')">Benchmarks</button>
+    <button class="nx-tab" onclick="showTab('uploads')">Doc Uploads</button>
+    <button class="nx-tab" onclick="showTab('report')">Report Spec</button>
+    <button class="nx-tab" onclick="showTab('narratives')">Narratives</button>
+  </div>
+
+  <!-- PILLARS -->
+  <div id="tab-pillars" class="nx-section active">
+    <div class="nx-card">
+      <div class="nx-card-title">Pillar Framework — Recommendation & Rationale</div>
+      <div class="nx-card-sub">The four proposed pillars are retained with one strategic rename. "Save Headaches" becomes <strong>Reduce Risk</strong> — boardroom language that a CFO can quantify and a CEO can understand. All four pillars are restructured so each one leads with the CFO's cost lens, speaks to the HR Director's people lens, and surfaces the Office Manager's time lens simultaneously.</div>
+    </div>
+
+    <div class="pillar-grid">
+      <div class="pillar-card p-dollars" data-icon="$">
+        <div class="pillar-label">Pillar 01</div>
+        <div class="pillar-name">Save Dollars</div>
+        <div class="pillar-desc">Hard cost reduction across overtime spend, payroll errors, supplemental payrolls, tax penalties, cost-per-hire, and turnover replacement costs. The CFO's native language — every gap translates directly to the P&L.</div>
+        <div class="pillar-personas">
+          <span class="persona-chip chip-cfo">CFO: direct P&L line items</span>
+          <span class="persona-chip chip-hr">HR: turnover cost visibility</span>
+          <span class="persona-chip chip-mgr">Mgr: OT approval control</span>
+        </div>
+      </div>
+      <div class="pillar-card p-time" data-icon="⏱">
+        <div class="pillar-label">Pillar 02</div>
+        <div class="pillar-name">Save Time</div>
+        <div class="pillar-desc">Admin and manager hours recovered across payroll processing, benefits enrollment, onboarding, report-building, timecard approvals, and fielding employee questions. The Office Manager's most urgent felt pain.</div>
+        <div class="pillar-personas">
+          <span class="persona-chip chip-cfo">CFO: labor cost per process</span>
+          <span class="persona-chip chip-hr">HR: strategic capacity freed</span>
+          <span class="persona-chip chip-mgr">Mgr: hours back every week</span>
+        </div>
+      </div>
+      <div class="pillar-card p-people" data-icon="♦">
+        <div class="pillar-label">Pillar 03</div>
+        <div class="pillar-name">Drive Engagement</div>
+        <div class="pillar-desc">Employee experience uplift measured in retention rate, platform adoption, time-to-hire, time-to-productive, and engagement visibility. The HR Director's scorecard — and a CFO story when turnover costs are attached.</div>
+        <div class="pillar-personas">
+          <span class="persona-chip chip-cfo">CFO: retention = cost avoidance</span>
+          <span class="persona-chip chip-hr">HR: culture & talent density</span>
+          <span class="persona-chip chip-mgr">Mgr: new hire ramp speed</span>
+        </div>
+      </div>
+      <div class="pillar-card p-risk" data-icon="!">
+        <div class="pillar-label">Pillar 04</div>
+        <div class="pillar-name">Reduce Risk</div>
+        <div class="pillar-desc">Compliance exposure reduction across ACA filing, tax notices, benefits enrollment errors, audit readiness, and wage-and-hour exposure. Boardroom language that lands for all three personas — nobody wants to be the one who missed a filing.</div>
+        <div class="pillar-personas">
+          <span class="persona-chip chip-cfo">CFO: penalty & audit exposure</span>
+          <span class="persona-chip chip-hr">HR: compliance confidence</span>
+          <span class="persona-chip chip-mgr">Mgr: no surprise errors</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="nx-card">
+      <div class="nx-card-title">Why these four pillars serve all three score goals</div>
+      <div class="coaching-grid" style="margin-top:0">
+        <div class="coaching-block">
+          <h4>Expose unknown pain</h4>
+          <p>Platform utilization rates, compliance confidence scores, and time-to-onboard benchmarks surface gaps the prospect has never measured — and their current platform has never shown them.</p>
+        </div>
+        <div class="coaching-block">
+          <h4>Validate felt pain</h4>
+          <p>Overtime spend, admin hours, and payroll error frequency give language and dollar figures to problems they've lived with for years but couldn't quantify for leadership.</p>
+        </div>
+        <div class="coaching-block">
+          <h4>Differentiate from competitors</h4>
+          <p>Each pillar has a dimension where ADP/Paychex, Paycom/Paylocity, and Rippling/Gusto each have a structural weakness — and Netchex has a measurable answer.</p>
+        </div>
+        <div class="coaching-block">
+          <h4>The rename rationale</h4>
+          <p>"Reduce Risk" lands in a CFO's vocabulary. "Save Headaches" lands for an office manager. Since the report needs to go upstairs, risk framing earns the meeting — headache framing keeps it.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AE QUESTIONNAIRE -->
+  <div id="tab-ae-questions" class="nx-section">
+    <div class="nx-card">
+      <div class="nx-card-title">AE-Led Questionnaire — Pipeline Version</div>
+      <div class="nx-card-sub">20 questions. First 3 profile the company and calibrate benchmarks. Q4 captures the current platform for AE coaching context. All quantitative questions accept "I don't know" — flagged as a coaching moment. Click any question to expand AE coaching notes.</div>
+    </div>
+
+    <ul class="q-list" id="ae-q-list"></ul>
+  </div>
+
+  <!-- SELF-SERVE -->
+  <div id="tab-selfserve" class="nx-section">
+    <div class="selfserve-intro">
+      <div class="nx-badge">Self-Serve Version — Lead Gen</div>
+      <p style="margin-top:0.75rem">See how your HR and payroll setup stacks up against companies your size and industry — in about 3 minutes. Answer 10 questions and get a personalized Netchex Index Score report showing exactly where you're ahead, on par, or leaving value on the table. No vendor pitch. Just honest benchmarks and a clear picture of what better looks like.</p>
+    </div>
+
+    <div id="ss-q-list"></div>
+  </div>
+
+  <!-- SCORING -->
+  <div id="tab-scoring" class="nx-section">
+    <div class="nx-card">
+      <div class="nx-card-title">Scoring Methodology</div>
+      <div class="nx-card-sub">How raw answers convert to sub-scores, a composite Netchex Index Score, benchmark deltas, and qualitative tier labels — with persona-weighted emphasis logic.</div>
+    </div>
+
+    <div class="scoring-grid">
+      <div class="score-block">
+        <h3><span class="score-dot dot-dollars"></span> Save Dollars — sub-score logic</h3>
+        <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.6">
+          <div class="tier-row"><span class="tier-name">Overtime %</span><span class="tier-range">Weight: 25%</span></div>
+          <div class="tier-row"><span class="tier-name">Tax penalties (2yr)</span><span class="tier-range">Weight: 20%</span></div>
+          <div class="tier-row"><span class="tier-name">Payroll error rate</span><span class="tier-range">Weight: 20%</span></div>
+          <div class="tier-row"><span class="tier-name">Turnover cost</span><span class="tier-range">Weight: 20%</span></div>
+          <div class="tier-row"><span class="tier-name">Cost-per-hire vs. benchmark</span><span class="tier-range">Weight: 15%</span></div>
+        </div>
+        <div style="font-size:11px;color:var(--color-text-secondary);margin-top:0.75rem;line-height:1.5">Score = 100 − (weighted penalty points). Penalty points assigned per metric by distance from best-in-class benchmark for their industry + size cohort.</div>
+      </div>
+      <div class="score-block">
+        <h3><span class="score-dot dot-time"></span> Save Time — sub-score logic</h3>
+        <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.6">
+          <div class="tier-row"><span class="tier-name">Admin hrs/wk payroll</span><span class="tier-range">Weight: 25%</span></div>
+          <div class="tier-row"><span class="tier-name">Admin hrs/wk benefits + Q&A</span><span class="tier-range">Weight: 20%</span></div>
+          <div class="tier-row"><span class="tier-name">Manager hrs/wk onboarding</span><span class="tier-range">Weight: 20%</span></div>
+          <div class="tier-row"><span class="tier-name">Time-to-hire (days)</span><span class="tier-range">Weight: 20%</span></div>
+          <div class="tier-row"><span class="tier-name">Manual data re-entry</span><span class="tier-range">Weight: 15%</span></div>
+        </div>
+        <div style="font-size:11px;color:var(--color-text-secondary);margin-top:0.75rem;line-height:1.5">Score = 100 − (weighted penalty points). Each hour above benchmark costs 3 points. Manual re-entry = automatic 15-point penalty regardless of hours reported.</div>
+      </div>
+      <div class="score-block">
+        <h3><span class="score-dot dot-people"></span> Drive Engagement — sub-score logic</h3>
+        <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.6">
+          <div class="tier-row"><span class="tier-name">Annual turnover rate</span><span class="tier-range">Weight: 30%</span></div>
+          <div class="tier-row"><span class="tier-name">Platform utilization %</span><span class="tier-range">Weight: 25%</span></div>
+          <div class="tier-row"><span class="tier-name">Engagement measured (Y/N)</span><span class="tier-range">Weight: 20%</span></div>
+          <div class="tier-row"><span class="tier-name">Manager visibility score</span><span class="tier-range">Weight: 15%</span></div>
+          <div class="tier-row"><span class="tier-name">First paycheck speed</span><span class="tier-range">Weight: 10%</span></div>
+        </div>
+        <div style="font-size:11px;color:var(--color-text-secondary);margin-top:0.75rem;line-height:1.5">Not measuring engagement = automatic 20-point cap on this sub-score (max 80). Platform utilization below 40% = 15-point penalty.</div>
+      </div>
+      <div class="score-block">
+        <h3><span class="score-dot dot-risk"></span> Reduce Risk — sub-score logic</h3>
+        <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.6">
+          <div class="tier-row"><span class="tier-name">Compliance self-rating (1–5)</span><span class="tier-range">Weight: 25%</span></div>
+          <div class="tier-row"><span class="tier-name">ACA/DOL issues (2yr)</span><span class="tier-range">Weight: 30%</span></div>
+          <div class="tier-row"><span class="tier-name">Benefits enrollment errors</span><span class="tier-range">Weight: 25%</span></div>
+          <div class="tier-row"><span class="tier-name">Audit/wage dispute history</span><span class="tier-range">Weight: 20%</span></div>
+        </div>
+        <div style="font-size:11px;color:var(--color-text-secondary);margin-top:0.75rem;line-height:1.5">Any confirmed audit, DOL inquiry, or wage-and-hour dispute in 2 years = automatic "At Risk" floor on this pillar regardless of other scores.</div>
+      </div>
+    </div>
+
+    <div class="nx-card">
+      <div class="nx-card-title">Composite Score & Tier Labels</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+        <div>
+          <div style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:0.75rem">Composite formula</div>
+          <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.7;background:var(--color-background-secondary,#f8f8f6);border-radius:var(--border-radius-md);padding:0.75rem">
+            <strong>Netchex Index Score</strong> = weighted average of four sub-scores:<br>
+            Save Dollars × 0.30 + Save Time × 0.25 + Drive Engagement × 0.25 + Reduce Risk × 0.20<br><br>
+            Dollar and Time pillars carry higher weight because they produce quantifiable ROI for CFO presentations. Persona weighting (below) can re-order emphasis in the report narrative without changing the score.
+          </div>
+        </div>
+        <div>
+          <div style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:0.75rem">Tier thresholds</div>
+          <div class="tier-row"><span class="tier-name">0–44</span><span class="tier-badge t-risk">At Risk</span></div>
+          <div class="tier-row"><span class="tier-name">45–64</span><span class="tier-badge t-avg">Average</span></div>
+          <div class="tier-row"><span class="tier-name">65–79</span><span class="tier-badge t-strong">Strong</span></div>
+          <div class="tier-row"><span class="tier-name">80–100</span><span class="tier-badge t-best">Best-in-Class</span></div>
+          <div style="font-size:11px;color:var(--color-text-secondary);margin-top:0.5rem;line-height:1.5">Tiers apply to each pillar sub-score independently AND to the composite. A prospect can be "Strong" overall but "At Risk" on a single pillar — that's the most powerful coaching scenario.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nx-card">
+      <div class="nx-card-title">Persona-Weighted Report Emphasis</div>
+      <div class="coaching-grid" style="margin-top:0">
+        <div class="coaching-block">
+          <h4>CFO in the room</h4>
+          <p>Lead report with Save Dollars pillar. Translate all time gaps into dollar equivalents (hrs × blended rate). Frame engagement as turnover cost avoidance. Risk pillar = penalty + audit exposure.</p>
+        </div>
+        <div class="coaching-block">
+          <h4>HR Director in the room</h4>
+          <p>Lead with Drive Engagement pillar. Frame Save Dollars as "investing in people pays back." Translate risk as compliance confidence. Time savings = strategic capacity for culture work.</p>
+        </div>
+        <div class="coaching-block">
+          <h4>Office Manager in the room</h4>
+          <p>Lead with Save Time pillar. Speak in hours per week, not abstract percentages. Frame risk as "no more surprise errors." Engagement = faster new hire ramp, fewer repeat questions.</p>
+        </div>
+        <div class="coaching-block">
+          <h4>"I don't know" protocol</h4>
+          <p>Auto-apply industry average for scoring. Flag each IDK answer as an AE coaching moment with this framing: "The fact that your current platform doesn't make this visible to you is part of what we're here to solve."</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURE MAP -->
+  <div id="tab-features" class="nx-section">
+    <div class="nx-card">
+      <div class="nx-card-title">Feature Mapping Table</div>
+      <div class="nx-card-sub">For each pillar and gap scenario: the Netchex module that closes it, the plain-English value statement, competitor differentiation, and persona resonance.</div>
+    </div>
+    <div style="overflow-x:auto;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg)">
+      <table class="feature-table" id="feature-table"></table>
+    </div>
+  </div>
+
+  <!-- BENCHMARKS -->
+  <div id="tab-benchmarks" class="nx-section">
+    <div class="nx-card">
+      <div class="nx-card-title">Benchmark Assumptions Table</div>
+      <div class="nx-card-sub">Default benchmarks by industry for hospitality/restaurants, auto dealerships, and healthcare. All figures are estimates based on SHRM, BLS, and published industry reports. Figures should be updated annually and validated with Netchex internal customer data where available.</div>
+    </div>
+    <div class="bench-grid" id="bench-grid"></div>
+    <div class="nx-card" style="background:var(--nx-gold-light);border-color:#FAC775">
+      <div style="font-size:12px;color:#633806;line-height:1.6">
+        <strong>Data sources:</strong> SHRM Benchmarking Reports (2023–2024), BLS Occupational Employment & Wage Statistics, DHI-DFH Mean Vacancy Duration, National Restaurant Association workforce data, NADA annual dealership workforce study, SHRM Healthcare HR research. All figures represent industry averages, not Netchex customer data. Best-in-class benchmarks represent approximately top-quartile performance for companies of 100–500 employees in each sector.
+      </div>
+    </div>
+  </div>
+
+  <!-- UPLOADS -->
+  <div id="tab-uploads" class="nx-section">
+    <div class="nx-card">
+      <div class="nx-card-title">Optional Document Upload Prompts</div>
+      <div class="nx-card-sub">Three optional uploads — always framed as "sharpen your score" not "prove your pain." Never required. AE should introduce these at the end: "If you want to make the report even more precise, there are a couple of reports your current vendor can pull in about 5 minutes."</div>
+    </div>
+    <div id="upload-list"></div>
+  </div>
+
+  <!-- REPORT SPEC -->
+  <div id="tab-report" class="nx-section">
+    <div class="nx-card">
+      <div class="nx-card-title">Report Page-by-Page Content Spec</div>
+      <div class="nx-card-sub">5-page boardroom-ready PDF. Click each page to expand copy blocks, visualization specs, and persona-adaptive notes.</div>
+    </div>
+    <div class="report-spec" id="report-pages"></div>
+  </div>
+
+  <!-- NARRATIVES -->
+  <div id="tab-narratives" class="nx-section">
+    <div class="nx-card">
+      <div class="nx-card-title">Three-Version Closing Narratives</div>
+      <div class="nx-card-sub">Closing paragraph for the report in three versions — CFO, HR Director, Office Manager. Each is boardroom-ready, persona-specific, and designed so the buyer can hand it to their leadership and look smart for finding Netchex.</div>
+    </div>
+    <div class="narrative-grid" id="narrative-grid"></div>
+  </div>
+
+</div>
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.nx-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nx-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+const AE_QUESTIONS = [
+  {
+    num:1, text:"What industry best describes your organization?",
+    format:"Multiple choice", pillars:["Profile"],
+    listen:"This single answer recalibrates every benchmark in the report. Hospitality and healthcare have dramatically different baseline turnover — don't let the prospect compare themselves to the wrong cohort.",
+    idk:"N/A — this is a required profile question.",
+    cfo:"Frame: 'This calibrates the benchmarks we'll use — industry matters a lot for cost comparisons.'",
+    hr:"Frame: 'Industry context shapes what 'good' looks like for retention and engagement.'",
+    mgr:"Frame: 'We want to compare you to companies that actually look like yours.'",
+    adp:"Use to set up: 'Legacy platforms often use generic benchmarks — we'll show you industry-specific.'",
+    paycom:"Use to note: 'Even modern HCMs don't always surface industry-specific risk thresholds.'",
+    gusto:"Use to set up: 'Lighter platforms often lack industry-specific compliance depth — we'll show where that matters.'",
+    pivot:"Netchex serves hospitality, auto dealerships, and healthcare with industry-specific modules, compliance rules, and benchmarks baked in.",
+    weight:"Profile — no pillar score contribution, enables all benchmarking"
+  },
+  {
+    num:2, text:"How many employees does your organization have?",
+    format:"Range slider (1–25 / 26–100 / 101–250 / 251–500 / 500+)",
+    pillars:["Profile"],
+    listen:"Company size determines benchmark cohort AND signals which Netchex modules will resonate most. 26–100 = efficiency story. 101–500 = integration and compliance story.",
+    idk:"N/A — required profile question. Estimate bands are fine.",
+    cfo:"Frame: 'Size determines cost benchmarks — a 50-person company and a 300-person company have very different payroll overhead profiles.'",
+    hr:"Frame: 'Size tells us a lot about the complexity of what your HR team is managing.'",
+    mgr:"Frame: 'Helps us make sure we're comparing you to the right companies.'",
+    adp:"At 100+, note ADP's service model often shifts to self-service at this band.",
+    paycom:"At 100–300, Paycom is a common incumbent — price-to-value gap often largest here.",
+    gusto:"At 100+, Gusto's compliance depth often becomes the friction point.",
+    pivot:"Netchex is purpose-built for the 50–2,000 employee sweet spot — no feature gaps at this size.",
+    weight:"Profile — enables size-cohort benchmarking"
+  },
+  {
+    num:3, text:"Where are your employees primarily located?",
+    format:"Multiple choice (single state / multi-state / 10+ states)",
+    pillars:["Profile","Reduce Risk"],
+    listen:"Multi-state = automatic compliance complexity flag. 10+ states = ACA, wage-and-hour, and state payroll tax exposure multiplies. This is often a hidden pain point.",
+    idk:"N/A — required profile question.",
+    cfo:"'Multi-state payroll tax compliance is one of the top sources of unplanned penalty costs — worth quantifying.'",
+    hr:"'Multi-state HR compliance adds significant invisible burden to HR teams.'",
+    mgr:"'More states = more complexity in payroll and compliance that usually lands on your desk.'",
+    adp:"ADP handles multi-state well at enterprise — but mid-market service quality often drops.",
+    paycom:"Paycom handles multi-state compliance well — differentiate on service depth and support model.",
+    gusto:"Gusto's multi-state compliance has known gaps — strong opportunity here.",
+    pivot:"Netchex manages multi-state payroll tax, compliance, and filings natively with dedicated compliance team support.",
+    weight:"Profile + Reduce Risk pillar (location count feeds compliance exposure score)"
+  },
+  {
+    num:4, text:"Which HR and payroll platform are you currently using?",
+    format:"Multiple choice (ADP / Paychex / Paycom / Paylocity / Rippling / Gusto / Other / Combination of tools)",
+    pillars:["Profile"],
+    listen:"This unlocks AE coaching mode. Don't react to the answer — just note it and use the competitor-specific gap framing throughout. Prospect on a combination of tools = maximum Save Time and Reduce Risk scoring opportunity.",
+    idk:"'That's actually telling in itself — if you're not sure what platform you're on, that's a service quality signal.'",
+    cfo:"'Knowing your current platform helps us give you precise cost comparisons, not generic ones.'",
+    hr:"'Each platform has different strengths — this helps us give you a more honest comparison.'",
+    mgr:"'This just helps us make sure our comparisons are apples-to-apples.'",
+    adp:"Win angle: modernization, service quality, real human support.",
+    paycom:"Win angle: employee experience, AI workflows, support depth. Can't just win on automation.",
+    gusto:"Win angle: compliance depth, industry specialization, scalability.",
+    pivot:"Netchex replaces the platform AND the service experience — not just the software.",
+    weight:"Profile — determines AE coaching language throughout"
+  },
+  {
+    num:5, text:"Approximately what percentage of your workforce regularly works overtime? (Industry average: 8–12% of total payroll spend)",
+    format:"Slider (0–30%+) + optional dollar estimate",
+    pillars:["Save Dollars"],
+    listen:"Above 12% = significant scoring penalty AND product pivot opportunity to NetSchedule/time optimization. Listen for 'we don't track that closely' — that's an IDK signal.",
+    idk:"Auto-apply industry average (10%). Flag: 'The fact that your current system doesn't surface OT spend clearly is a visibility gap — Netchex makes this a dashboard metric.'",
+    cfo:"'Overtime is one of the most controllable labor costs — most platforms don't give managers real-time visibility before it's already approved.'",
+    hr:"'Chronic overtime often correlates with understaffing and burnout — it's a retention signal.'",
+    mgr:"'How much visibility do your managers have into who's approaching OT before it happens?'",
+    adp:"ADP shows OT in reporting but not in real-time manager alerts — gap here.",
+    paycom:"Paycom has scheduling — differentiate on the proactive alert model, not just tracking.",
+    gusto:"Gusto has limited scheduling and OT visibility — strong gap.",
+    pivot:"NetSchedule gives managers real-time OT alerts before hours are approved — preventing cost, not just reporting it.",
+    weight:"Save Dollars: 25% weight"
+  },
+  {
+    num:6, text:"Have you received any payroll tax notices or penalties in the last two years?",
+    format:"Multiple choice: None / 1–2 notices / 3+ notices / Yes, with financial impact",
+    pillars:["Save Dollars","Reduce Risk"],
+    listen:"Even one notice is a scoring event. Prospects often minimize this — ask 'were there any state filing notices, even small ones?' to surface underreported answers.",
+    idk:"'Most platforms should be flagging these automatically — if you're not sure, that's itself a risk signal.'",
+    cfo:"'Tax notices create financial exposure beyond the penalty itself — amended filings, interest, and audit risk. What was the rough cost?'",
+    hr:"'Tax notice resolution typically lands on HR — how much time did that take to resolve?'",
+    mgr:"'These notices often fall on your desk to figure out — has that been the case?'",
+    adp:"ADP has strong tax filing but mid-market clients often get self-service resolution — not proactive.",
+    paycom:"Paycom is strong on tax compliance — differentiate on proactive notice management vs. reactive.",
+    gusto:"Gusto's tax filing for multi-state has known friction — strong gap if multi-state.",
+    pivot:"Netchex's dedicated tax compliance team proactively monitors, files, and resolves notices — not just filing the return.",
+    weight:"Save Dollars: 20% / Reduce Risk: 30%"
+  },
+  {
+    num:7, text:"How often does your team run supplemental or correction payrolls? (Benchmark: Best-in-class teams run fewer than 2 corrections per year)",
+    format:"Multiple choice: Never / 1–2/year / 3–5/year / More than 5/year",
+    pillars:["Save Dollars","Reduce Risk"],
+    listen:"Each supplemental payroll costs an average of $1,200–$2,500 in direct cost and 4–6 admin hours. Multiply this out for the prospect. Even 3/year = significant hidden cost.",
+    idk:"'Supplemental payrolls often get treated as a normal cost of doing business — they're not. What does your payroll provider charge per supplemental run?'",
+    cfo:"'Each supplemental payroll has a direct cost — typically $1,200–$2,500 including provider fees, staff time, and correction overhead. At [X per year], that's [Y] annually.'",
+    hr:"'Supplemental payrolls are disruptive to employees — especially hourly workers who can't wait for the next cycle.'",
+    mgr:"'Every correction payroll usually means a late night or a Monday morning scramble — how often does that happen?'",
+    adp:"ADP charges per supplemental run — often $500–$1,500+ depending on contract. Confirm.",
+    paycom:"Paycom's system errors are rare but correction UX is self-service — differentiate on prevention.",
+    gusto:"Gusto supplemental payrolls are more frequent due to limitations in scheduling/time integrations.",
+    pivot:"NetPay's error-prevention engine catches discrepancies before payroll is approved — reducing supplemental payrolls to near-zero.",
+    weight:"Save Dollars: 20% / Reduce Risk: 25%"
+  },
+  {
+    num:8, text:"What is your current annual employee turnover rate? (Hospitality: avg 73% / Auto: avg 46% / Healthcare: avg 22%)",
+    format:"Slider (0–150%+) + 'I don't know' option",
+    pillars:["Save Dollars","Drive Engagement"],
+    listen:"Prospects in hospitality often normalize high turnover — don't let them. Use the benchmark to make 73% feel like a problem, not just reality. Turnover cost × headcount × rate = one of the most powerful dollar figures in the report.",
+    idk:"'Not knowing your turnover rate means you likely don't have visibility into what it's costing you. We can estimate from your headcount and industry average — it's often a number that surprises people.'",
+    cfo:"'At [X]% turnover with [Y] employees, your replacement cost is roughly $[Z] annually — based on an average replacement cost of 50–200% of annual salary for your role mix.'",
+    hr:"'Turnover rate is one of the most important metrics on a CHRO's dashboard — if it's not visible in your current platform, that's a gap.'",
+    mgr:"'High turnover means you're constantly onboarding new people — how much of your week does that take?'",
+    adp:"ADP doesn't proactively surface turnover risk signals — it reports after the fact.",
+    paycom:"Paycom has engagement tools — differentiate on the integration between engagement signals and manager action.",
+    gusto:"Gusto lacks predictive engagement and turnover risk features.",
+    pivot:"Netchex's engagement and turnover risk dashboards surface flight risk signals before employees walk out — giving managers time to act.",
+    weight:"Save Dollars: 20% / Drive Engagement: 30%"
+  },
+  {
+    num:9, text:"How many hours per week does your HR or admin team spend on payroll processing, benefits administration, and report-building — combined?",
+    format:"Slider (0–40+ hours/week) broken into sub-sliders: Payroll / Benefits / Reporting / Employee Q&A",
+    pillars:["Save Time"],
+    listen:"Most teams underestimate. If they say under 5 hours, ask about payroll prep, error checking, report exports, and employee questions separately — the total almost always rises. Multiply by blended hourly rate for dollar impact.",
+    idk:"'A good rule of thumb: if your payroll takes more than one person more than one day, there's automation opportunity. Want to walk through what a typical payroll week looks like for your team?'",
+    cfo:"'At [X] hours/week, your team is investing roughly $[Y]/year in payroll processing alone — at a $[Z] blended rate. Best-in-class companies of your size are at [benchmark] hours.'",
+    hr:"'Every hour spent on payroll admin is an hour not spent on hiring, culture, or development. What would you do with that time back?'",
+    mgr:"'Let's be honest — how many Monday mornings are eaten up by payroll prep? That time has a real cost.'",
+    adp:"ADP requires significant manual touchpoints — payroll processing time is often 2–3× modern platforms.",
+    paycom:"Paycom has good automation — differentiate on the AI-assisted exception handling and 24/7 support when it breaks.",
+    gusto:"Gusto's payroll is fast for simple setups but complex scenarios (multi-location, tips, OT rules) slow it down.",
+    pivot:"Netchex's automated payroll engine handles complex rules (tipped wages, OT thresholds, multi-state) with exception-only review — reducing processing time by an average of 67%.",
+    weight:"Save Time: 45% combined (payroll 25%, benefits 10%, reporting 10%)"
+  },
+  {
+    num:10, text:"How many hours per week do your managers spend on timecard approvals, onboarding new hires, and scheduling?",
+    format:"Slider per activity: Timecards / Onboarding / Scheduling",
+    pillars:["Save Time"],
+    listen:"Manager time is often invisible in cost analyses — it's not tracked, so it's not felt as a line item. Converting to dollars (manager salary × hours) creates a powerful, often-surprising number.",
+    idk:"'Most companies don't track manager time on HR tasks — but if your managers are spending more than 3 hours/week on timecards and onboarding, you're paying for an HR function that could be largely automated.'",
+    cfo:"'Manager time has a dollar cost often 2–3× the admin cost. At [salary estimate] × [hours], that's [X]/year in manager capacity allocated to admin tasks.'",
+    hr:"'Managers who spend less time on timecards spend more time developing their teams — that directly impacts retention.'",
+    mgr:"'How much of your week gets eaten by timecard approval chases and onboarding paperwork? That's time you're not spending managing.'",
+    adp:"Manager self-service in ADP mid-market is often clunky — approval workflows are not mobile-optimized.",
+    paycom:"Paycom has manager tools — differentiate on the mobile experience and push-notification approval flow.",
+    gusto:"Gusto has limited manager workflow automation.",
+    pivot:"Netchex's manager mobile app puts timecard approvals, onboarding checklists, and schedule management in one place — most managers recover 3–5 hours per week.",
+    weight:"Save Time: 35% combined"
+  },
+  {
+    num:11, text:"How long does it typically take from a job opening to an accepted offer? And from accepted offer to an employee's first productive day?",
+    format:"Two sliders — Time-to-Hire (days) / Time-to-Onboard (days)",
+    pillars:["Save Time","Drive Engagement"],
+    listen:"Time-to-hire above 30 days in hospitality or 45 days in healthcare = scoring event. Time-to-onboard above 14 days in any industry = onboarding gap. Productive first day ≠ first day in the building.",
+    idk:"'Not having visibility into time-to-hire and time-to-onboard usually means there's no centralized ATS or onboarding system — those processes are probably running on email and spreadsheets.'",
+    cfo:"'Every extra day a role sits open costs you in lost productivity and overtime coverage. At [headcount] open roles at a time, a 10-day reduction in time-to-hire is worth [X] annually.'",
+    hr:"'Time-to-hire is your recruiting team's primary efficiency metric. Where does your current platform make this visible to you?'",
+    mgr:"'What does your first week look like for a new hire? Are they productive by day 5, or still getting set up by day 10?'",
+    adp:"ADP's recruiting module (WorkforceNow) is often bought separately — ATS and onboarding are not native.",
+    paycom:"Paycom's recruiting and onboarding is solid — differentiate on the candidate experience and mobile onboarding completeness.",
+    gusto:"Gusto's ATS and onboarding is basic — strong gap for companies with any recruiting volume.",
+    pivot:"NetRecruit and NetOnboard create a connected pipeline from application to productive employee — with mobile onboarding that new hires can complete before day one.",
+    weight:"Save Time: 20% / Drive Engagement: 15%"
+  },
+  {
+    num:12, text:"Do your HR, payroll, time, and benefits systems talk to each other — or does your team manually re-enter data between them?",
+    format:"Multiple choice: Fully integrated / Mostly integrated with some gaps / Significant manual re-entry / Mostly manual",
+    pillars:["Save Time","Save Dollars"],
+    listen:"Any manual re-entry = automatic 15-point Save Time penalty AND a Reduce Risk flag (manual re-entry = error introduction). This is one of the highest-signal questions in the set.",
+    idk:"'If you're not sure, that's usually a sign there are gaps — the most common ones are between time-tracking and payroll, and between benefits enrollment and payroll deductions.'",
+    cfo:"'Manual data re-entry costs an estimated $4.78 per entry in combined labor and error correction cost (APQC). Across [X] employees, that adds up.'",
+    hr:"'Data disconnects between systems are the #1 source of payroll errors and benefits enrollment mistakes — and they fall on HR to clean up.'",
+    mgr:"'Think about the last time you changed someone's information and had to update it in multiple places. How often does that happen?'",
+    adp:"ADP Workforce Now is integrated — but the integrations are often add-on costs at mid-market, and the APIs require IT support.",
+    paycom:"Paycom is a single database — strong here. Differentiate on Netchex's support when integrations break vs. self-service resolution.",
+    gusto:"Gusto relies heavily on third-party integrations that are not native — strong gap.",
+    pivot:"Netchex is a single, native platform — HR, payroll, time, benefits, and talent in one database. No integrations to break, no manual re-entry.",
+    weight:"Save Time: 15% / Save Dollars: 15% (error cost)"
+  },
+  {
+    num:13, text:"What percentage of your employees actively use your current HR platform on a regular basis — for things like checking pay stubs, requesting time off, or updating information?",
+    format:"Slider (0–100%) + 'I don't know' option",
+    pillars:["Drive Engagement"],
+    listen:"Below 40% utilization = automatic scoring penalty AND a powerful framing moment: 'You're paying for a platform that most of your employees aren't using. That means every benefit, every communication, every process is leaking.'",
+    idk:"'Not knowing platform utilization is itself a signal — most modern HCMs show this in the admin dashboard. If yours doesn't, that's a visibility gap.'",
+    cfo:"'Platform ROI is directly tied to adoption. If 60% of your employees aren't using it, you're getting a fraction of the value you're paying for.'",
+    hr:"'Employee self-service adoption reduces HR admin burden — low utilization usually means HR is still answering questions the platform should handle.'",
+    mgr:"'If employees aren't using the platform, they're calling or texting their managers for pay stubs and time-off requests — how often does that happen to you?'",
+    adp:"ADP mobile adoption at mid-market is historically low — often under 30%. Good benchmark to reference.",
+    paycom:"Paycom has high adoption — differentiate on the employee experience design and the specific workflows Netchex makes easier for frontline workers.",
+    gusto:"Gusto adoption varies — strong for office workers, low for hourly/frontline.",
+    pivot:"Netchex's employee experience is designed for frontline workers — mobile-first, simple UI, accessible on any device. Average client utilization is 78%+.",
+    weight:"Drive Engagement: 25%"
+  },
+  {
+    num:14, text:"Does your organization currently measure employee engagement? (Surveys, NPS, pulse checks, or similar)",
+    format:"Multiple choice: Yes, regularly / Sometimes / We want to but don't have a tool / No",
+    pillars:["Drive Engagement"],
+    listen:"'We want to but don't have a tool' = the most powerful answer. It signals the felt pain (we know we should) and the gap (our platform doesn't enable it). Use this to set up the engagement module.",
+    idk:"N/A — the 'No' answer is an IDK equivalent here.",
+    cfo:"'Companies that measure engagement have 21% higher profitability and 41% lower absenteeism (Gallup). Engagement measurement is a CFO story, not just an HR story.'",
+    hr:"'What does your current platform tell you about team health before someone puts in their notice?'",
+    mgr:"'When was the last time you had a data-driven signal that someone on your team was disengaged — before they quit?'",
+    adp:"ADP does not natively offer engagement surveys — third-party integration required.",
+    paycom:"Paycom has engagement tools — differentiate on the integration between survey results and manager action workflows.",
+    gusto:"Gusto has no native engagement measurement.",
+    pivot:"Netchex's built-in engagement surveys and pulse checks surface team health signals inside the same platform where managers already live — no separate tool, no survey fatigue.",
+    weight:"Drive Engagement: 20% (binary: measuring vs. not)"
+  },
+  {
+    num:15, text:"How quickly do your frontline employees typically receive their first paycheck after starting?",
+    format:"Multiple choice: Same week / 1–2 weeks / 2–4 weeks / Varies, often delayed",
+    pillars:["Drive Engagement","Save Dollars"],
+    listen:"For hospitality and healthcare — industries where frontline workers live paycheck to paycheck — a delayed first paycheck is a direct turnover driver. This often surprises HR leaders who don't see the connection.",
+    idk:"'Not knowing this usually means there's no visibility into the onboarding-to-payroll handoff — and that handoff is often where new hires fall through the cracks.'",
+    cfo:"'First-paycheck delays are a measurable turnover driver for hourly workers — and replacement costs make every early departure expensive. Faster onboarding-to-payroll = lower early attrition.'",
+    hr:"'The number one complaint we hear from frontline workers in their first 30 days is payroll setup issues. What's your current first-paycheck experience?'",
+    mgr:"'Have you ever had a new hire quit in the first two weeks because of a payroll issue? It happens more than people realize.'",
+    adp:"ADP's onboarding-to-payroll connection requires manual steps at mid-market.",
+    paycom:"Paycom is strong here — differentiate on the speed of Netchex's onboarding completion visibility for managers.",
+    gusto:"Gusto's new hire setup can lag for hourly workers with complex pay types.",
+    pivot:"Netchex's digital onboarding feeds directly into payroll — new hires can complete everything on their phone before day one, and appear in the next payroll cycle automatically.",
+    weight:"Drive Engagement: 10% / Save Dollars (early turnover cost): contributing signal"
+  },
+  {
+    num:16, text:"How confident are you in your current compliance posture for ACA, I-9, state payroll taxes, and wage-and-hour requirements? (1 = not confident / 5 = very confident)",
+    format:"5-point scale + optional notes",
+    pillars:["Reduce Risk"],
+    listen:"Self-rated 3 or below = significant scoring event. Even a 4 is worth probing: 'What would it take to move you to a 5?' The answer almost always surfaces a specific gap.",
+    idk:"'A 3 here is often people saying they're not sure what they don't know — and that uncertainty is itself an exposure. What's your biggest compliance worry?'",
+    cfo:"'Compliance gaps have an asymmetric cost profile — low probability but very high impact. What's your current exposure estimate if an audit revealed a wage-and-hour gap?'",
+    hr:"'Compliance confidence for an HR team is like insurance — you want to be certain, not hopeful. Where does your current platform give you certainty vs. requiring you to just trust it?'",
+    mgr:"'The compliance questions that worry most office managers aren't the big ones — they're the ones you didn't know about until the notice arrived.'",
+    adp:"ADP compliance is historically strong — differentiate on the proactive monitoring vs. reactive notice management, and on the human support quality.",
+    paycom:"Paycom is strong on compliance automation — differentiate on Netchex's dedicated compliance team that's a phone call away, not a ticket.",
+    gusto:"Gusto compliance depth is limited, especially for multi-state and industry-specific requirements.",
+    pivot:"Netchex's dedicated compliance team monitors regulatory changes, proactively updates client configurations, and provides direct support — not a knowledge base article.",
+    weight:"Reduce Risk: 25%"
+  },
+  {
+    num:17, text:"Have you experienced any ACA filing issues, DOL inquiries, or wage-and-hour disputes in the last two years?",
+    format:"Multiple choice: None / ACA filing issue / DOL inquiry / Wage-and-hour dispute / Multiple",
+    pillars:["Reduce Risk"],
+    listen:"Any 'yes' = automatic At Risk floor on the Reduce Risk pillar AND a powerful report headline. Don't probe aggressively — simply note it and let the report make the case.",
+    idk:"'If there's any uncertainty here, it's worth walking through — even a small ACA notice can trigger follow-on scrutiny. What's your current process for monitoring ACA compliance?'",
+    cfo:"'ACA penalties alone average $2,700–$4,060 per employee per year for missed filings. A single DOL inquiry can cost $50,000+ in legal fees regardless of outcome. What's your current exposure?'",
+    hr:"'ACA and wage-and-hour compliance is ultimately an HR responsibility — and the liability goes upstairs fast. How is your current platform supporting your compliance documentation?'",
+    mgr:"'Have there been any surprise notices or employee complaints that turned into formal inquiries? Those are the ones that turn into all-hands emergencies.'",
+    adp:"ADP is strong on ACA filing — differentiate on Netchex's proactive review process vs. ADP's file-and-hope model.",
+    paycom:"Paycom is strong on ACA — differentiate on the support model when issues arise.",
+    gusto:"Gusto's ACA support is limited — strong differentiator here.",
+    pivot:"Netchex files ACA returns, monitors for errors before submission, and provides dedicated support for notices — not just the filing software.",
+    weight:"Reduce Risk: 30% (any yes = At Risk floor)"
+  },
+  {
+    num:18, text:"How often do employees report errors or confusion during annual benefits enrollment?",
+    format:"Multiple choice: Rarely or never / A few employees each year / Noticeable volume / Significant disruption every year",
+    pillars:["Reduce Risk","Drive Engagement"],
+    listen:"'Significant disruption' = both a risk flag and an engagement flag. Benefits confusion correlates directly with perceived employer value. This question often surfaces an invisible pain point.",
+    idk:"'If you're not tracking enrollment complaints, you might be absorbing the cost of errors in payroll adjustments and deduction corrections without seeing them as a benefits issue.'",
+    cfo:"'Benefits enrollment errors cost an average of $2,000–$6,000 per employee affected in correction, re-processing, and HR resolution time. How many employees experience issues each year?'",
+    hr:"'Open enrollment is one of the highest-visibility HR moments of the year — and errors during that window erode trust in both HR and the platform.'",
+    mgr:"'Benefits questions during enrollment season are typically the highest-volume employee questions of the year — how does your current system help reduce those?'",
+    adp:"ADP enrollment UX has improved but employee self-service navigation is often cited as a friction point.",
+    paycom:"Paycom has solid enrollment — differentiate on Netchex's guided enrollment experience and decision-support tools for employees.",
+    gusto:"Gusto's benefits enrollment is functional but lacks decision-support and compliance guardrails.",
+    pivot:"Netchex's benefits enrollment includes a guided, mobile-first experience with built-in decision support — reducing confusion and errors at the source.",
+    weight:"Reduce Risk: 25% / Drive Engagement: contributing signal"
+  },
+  {
+    num:19, text:"How does your organization currently handle manager visibility into team performance, attendance, and engagement — day to day?",
+    format:"Multiple choice: Real-time dashboard / Weekly reports / Monthly reports / Ad hoc / Little to no visibility",
+    pillars:["Drive Engagement","Save Time"],
+    listen:"'Little to no visibility' or 'ad hoc' = the most powerful engagement gap. Managers can't coach what they can't see. This question surfaces the invisible cost of reactive management.",
+    idk:"'The answer is often that visibility depends entirely on the manager's habit of pulling reports — which means it's inconsistent. What happens when a manager misses a signal?'",
+    cfo:"'Manager effectiveness is directly tied to data access — teams with real-time visibility have 23% lower voluntary turnover (Gallup). What's your current manager toolset?'",
+    hr:"'HR's ability to retain employees often depends on whether managers are catching warning signs early. What tools are your managers using today?'",
+    mgr:"'What do you know about your team's attendance and engagement right now, in this moment? What would you want to know that you can't see?'",
+    adp:"ADP manager dashboards are available but often require IT configuration and are not mobile-optimized.",
+    paycom:"Paycom has manager dashboards — differentiate on Netchex's proactive alert model vs. passive reporting.",
+    gusto:"Gusto has minimal manager analytics.",
+    pivot:"Netchex's manager dashboard surfaces real-time attendance, overtime alerts, time-off balances, and engagement signals — on mobile, without an IT project.",
+    weight:"Drive Engagement: 15% / Save Time: contributing signal"
+  },
+  {
+    num:20, text:"If you could eliminate one recurring HR or payroll headache tomorrow, what would it be?",
+    format:"Free text (open-ended)",
+    pillars:["All"],
+    listen:"This is the most important answer in the questionnaire — it is the prospect's own words describing their felt pain. Use their exact language in the report. Quote it back. It becomes the opening line of the right report section.",
+    idk:"N/A — any answer is valid. Silence is also valid: 'That's okay — we actually find the score often surfaces the answer.'",
+    cfo:"'That pain almost certainly has a dollar figure attached to it — let's quantify it.'",
+    hr:"'That's exactly what the score is designed to validate. Let's see where it shows up.'",
+    mgr:"'That's probably showing up in your Save Time score — let's see how much it's costing you.'",
+    adp:"Use their exact words: 'That's actually one of the most common things we hear from teams moving off [platform].'",
+    paycom:"'Even modern platforms don't always solve that — especially when support is self-service. That's worth exploring.'",
+    gusto:"'Lighter platforms often require the team to absorb that pain. That's something Netchex is designed to remove.'",
+    pivot:"Whatever the answer — there is a Netchex module, feature, or support model that addresses it. This becomes the personalized first line of the 'Your Netchex Opportunity' page.",
+    weight:"All pillars — qualitative input that shapes report framing, not a scored input"
+  }
+];
+
+function buildAEQuestions() {
+  const list = document.getElementById('ae-q-list');
+  AE_QUESTIONS.forEach(q => {
+    const pillarTags = q.pillars.map(p => {
+      const cls = p === 'Profile' ? 'tag-format' :
+                  p === 'Save Dollars' ? 'tag-p-dollars' :
+                  p === 'Save Time' ? 'tag-p-time' :
+                  p === 'Drive Engagement' ? 'tag-p-people' :
+                  p === 'Reduce Risk' ? 'tag-p-risk' :
+                  p === 'All' ? 'tag-format' : 'tag-format';
+      return `<span class="q-tag ${cls}">${p}</span>`;
+    }).join('');
+    const li = document.createElement('li');
+    li.className = 'q-item';
+    li.innerHTML = `
+      <div class="q-header" onclick="toggleQ(this)">
+        <div class="q-num">${q.num}</div>
+        <div class="q-text">
+          <strong>${q.text}</strong>
+          <div class="q-meta">
+            <span class="q-tag tag-format">${q.format}</span>
+            ${pillarTags}
+          </div>
+        </div>
+        <div class="q-toggle">▾ AE notes</div>
+      </div>
+      <div class="q-coaching">
+        <div class="coaching-grid">
+          <div class="coaching-block">
+            <h4>What to listen for</h4>
+            <p>${q.listen}</p>
+          </div>
+          <div class="coaching-block">
+            <h4>Netchex pivot</h4>
+            <p>${q.pivot}</p>
+          </div>
+          <div class="coaching-block">
+            <h4>CFO framing</h4>
+            <p>${q.cfo}</p>
+          </div>
+          <div class="coaching-block">
+            <h4>HR Director framing</h4>
+            <p>${q.hr}</p>
+          </div>
+          <div class="coaching-block full">
+            <h4>Office Manager framing</h4>
+            <p>${q.mgr}</p>
+          </div>
+        </div>
+        <div class="idk-box"><strong>"I don't know" signal:</strong> ${q.idk}</div>
+        <div class="competitor-row">
+          <div class="comp-block"><h5>vs. ADP / Paychex</h5><p>${q.adp}</p></div>
+          <div class="comp-block"><h5>vs. Paycom / Paylocity</h5><p>${q.paycom}</p></div>
+          <div class="comp-block"><h5>vs. Rippling / Gusto</h5><p>${q.gusto}</p></div>
+        </div>
+        <div class="weight-bar">
+          <span class="weight-label">Scoring contribution:</span>
+          <span style="font-size:12px;color:var(--color-text-secondary)">${q.weight}</span>
+        </div>
+      </div>`;
+    list.appendChild(li);
+  });
+}
+
+function toggleQ(el) {
+  const coaching = el.nextElementSibling;
+  const toggle = el.querySelector('.q-toggle');
+  coaching.classList.toggle('open');
+  toggle.textContent = coaching.classList.contains('open') ? '▴ close' : '▾ AE notes';
+}
+
+const SS_QUESTIONS = [
+  { num:1, text:"What industry best describes your organization?", format:"Multiple choice", bench:null, note:"This calibrates your benchmark comparisons — industry averages for overtime, turnover, and hiring speed vary significantly." },
+  { num:2, text:"How many employees do you have?", format:"Range: Under 25 / 26–100 / 101–250 / 251–500 / 500+", bench:null, note:"Your size determines which peer group you're benchmarked against." },
+  { num:3, text:"What percentage of your workforce regularly works overtime?", format:"Slider (0–30%+)", bench:"Industry average is 8–12% of total payroll spend. Above 12% is a measurable cost signal worth quantifying." },
+  { num:4, text:"How many hours per week does your HR or admin team spend on payroll processing, benefits administration, and answering employee questions?", format:"Slider (2–40+ hrs)", bench:"Best-in-class teams of your size spend fewer than 6 hours/week on payroll processing. Most teams we talk to are surprised by how far above that they are." },
+  { num:5, text:"What is your current annual employee turnover rate?", format:"Slider (0–150%+) or I don't know", bench:"Hospitality average: 73%. Auto dealership: 46%. Healthcare: 22%. Every point above average has a dollar cost — typically 50–200% of that employee's annual salary to replace." },
+  { num:6, text:"What percentage of your employees actively use your current HR platform day-to-day — for things like pay stubs, time-off requests, or benefits info?", format:"Slider (0–100%) or I don't know", bench:"Best-in-class platforms see 75%+ active utilization. Below 40% is a strong signal that your team is still absorbing tasks the platform should handle." },
+  { num:7, text:"Does your organization currently measure employee engagement through surveys, pulse checks, or similar tools?", format:"Yes, regularly / Sometimes / No, but we want to / No", bench:"Companies that regularly measure engagement have 21% higher profitability and 41% lower absenteeism (Gallup). Most platforms don't make this easy — but it should be." },
+  { num:8, text:"Have you experienced any payroll tax notices, ACA filing issues, or benefits enrollment errors in the last two years?", format:"None / 1–2 issues / 3+ issues / Yes, with financial impact", bench:"Best-in-class companies have zero compliance notices. Even one tax notice is a signal worth addressing — and the average cost of resolution is $8,000–$25,000 when you include staff time." },
+  { num:9, text:"Do your HR, payroll, time, and benefits systems share data automatically — or does your team re-enter information between them?", format:"Fully integrated / Some manual steps / Significant manual re-entry", bench:"Manual data re-entry introduces errors at an estimated rate of 1–4% per entry. For payroll and benefits, those errors are costly to find and fix." },
+  { num:10, text:"If you could fix one HR or payroll problem in your organization tomorrow, what would it be?", format:"Free text or common options", bench:null, note:"Your answer shapes the most important section of your report — we'll show you exactly how to solve it." }
+];
+
+function buildSSQuestions() {
+  const list = document.getElementById('ss-q-list');
+  SS_QUESTIONS.forEach(q => {
+    const div = document.createElement('div');
+    div.className = 'ss-q';
+    div.innerHTML = `
+      <div class="ss-q-num">Question ${q.num} of ${SS_QUESTIONS.length}</div>
+      <div class="ss-q-text">${q.text}</div>
+      <div style="font-size:12px;color:var(--color-text-secondary);margin-top:4px">Format: ${q.format}</div>
+      ${q.bench ? `<div class="ss-benchmark">📊 ${q.bench}</div>` : ''}
+      ${q.note ? `<div class="ss-benchmark" style="background:var(--nx-teal-light)">${q.note}</div>` : ''}
+    `;
+    list.appendChild(div);
+  });
+}
+
+const FEATURES = [
+  ["Save Dollars","High overtime spend with no proactive manager alerts","NetSchedule + OT Alert Engine","Managers see overtime risk before it's approved — not after.","ADP shows OT in reports, not alerts.","Paycom has scheduling — Netchex adds proactive threshold alerts.","Gusto has no OT management.","CFO: cost control / Mgr: daily tool"],
+  ["Save Dollars","Recurring payroll errors and supplemental payrolls","NetPay Error Prevention Engine","Catches discrepancies before payroll approves — reducing supplemental runs to near-zero.","ADP requires manual review; supplemental runs are billed separately.","Paycom is strong here — differentiate on support response when errors occur.","Gusto's error prevention is limited for complex pay types.","CFO: cost per error / HR: compliance / Mgr: no late nights"],
+  ["Save Dollars","Tax penalties or notices in last 2 years","Netchex Tax Compliance Team","We don't just file — we monitor, flag, and resolve before notices become penalties.","ADP files but resolution is often self-service.","Paycom is automated; differentiate on human escalation path.","Gusto has limited multi-state tax support.","CFO: penalty avoidance / HR: compliance confidence"],
+  ["Save Time","Admin team spending 10+ hrs/week on payroll processing","NetPay Automated Payroll","Exception-only review reduces processing time by an average of 67% for teams your size.","ADP requires more manual touchpoints at mid-market.","Paycom is fast — differentiate on AI-assisted exception handling.","Gusto is fast for simple payroll; complex rules slow it.","Mgr: hours back / CFO: labor cost per process"],
+  ["Save Time","Manual data entry between disconnected systems","Single Native Platform (HR + Payroll + Time + Benefits)","One database. No integrations to break. No re-entry required.","ADP integrations are add-on cost and IT-dependent.","Paycom is single database — differentiate on support depth when issues arise.","Gusto relies on third-party integrations.","All personas: eliminate invisible error cost"],
+  ["Save Time","Time-to-hire above industry benchmark","NetRecruit ATS","From open req to offer in one platform — with mobile apply and automated screening.","ADP recruiting is often a separate product (add-on cost).","Paycom recruiting is solid — differentiate on candidate experience and hiring manager UX.","Gusto ATS is basic; limited for volume hiring.","HR: recruiting metrics / CFO: vacancy cost / Mgr: faster fills"],
+  ["Drive Engagement","Employee platform utilization below 40%","Employee Experience App (Mobile-First)","Designed for frontline workers — simple, mobile, no training required. Average client utilization: 78%+.","ADP mobile adoption at mid-market is historically low (~30%).","Paycom has good UX — differentiate on frontline/hourly worker design.","Gusto adoption is low for hourly workers.","HR: self-service adoption / Mgr: fewer employee questions"],
+  ["Drive Engagement","No employee engagement measurement in place","NetPulse Engagement Surveys","Built-in pulse surveys and engagement tracking inside the same platform managers already use — no separate tool.","ADP has no native engagement surveys.","Paycom has engagement tools — differentiate on integration with manager action workflows.","Gusto has no engagement measurement.","HR: culture visibility / CFO: retention ROI / Mgr: early warning signals"],
+  ["Drive Engagement","High turnover with no predictive visibility","Turnover Risk Dashboard","Surface flight risk signals before employees walk out — giving managers time to act.","ADP reports turnover after the fact.","Paycom has some analytics — differentiate on the manager alert model.","Gusto has no turnover analytics.","HR: retention / CFO: replacement cost avoidance"],
+  ["Reduce Risk","ACA or DOL compliance issues in last 2 years","Netchex ACA Compliance Engine + Compliance Team","We file, monitor, and resolve — proactively, not reactively. Dedicated compliance team, not a ticket.","ADP files ACA — differentiate on proactive review and human escalation.","Paycom is strong on ACA automation — differentiate on support response time.","Gusto's ACA support is limited.","CFO: penalty exposure / HR: confidence / All: peace of mind"],
+  ["Reduce Risk","Benefits enrollment errors or employee complaints","Guided Benefits Enrollment with Decision Support","Mobile-first enrollment with built-in decision tools — reduces confusion and errors at source.","ADP enrollment UX is functional but navigation is often cited as friction.","Paycom enrollment is solid — differentiate on guided decision support for employees.","Gusto enrollment lacks guardrails and decision support.","HR: open enrollment experience / Mgr: fewer questions / Employees: clarity"]
+];
+
+function buildFeatureTable() {
+  const table = document.getElementById('feature-table');
+  table.innerHTML = `<thead><tr>
+    <th>Pillar</th><th>Gap Scenario</th><th>Netchex Module</th><th>Value Statement</th>
+    <th>vs. Legacy</th><th>vs. Modern HCM</th><th>vs. Newer Tech</th><th>Primary Persona</th>
+  </tr></thead>`;
+  const tbody = document.createElement('tbody');
+  FEATURES.forEach(r => {
+    const tr = document.createElement('tr');
+    const pillarCls = r[0]==='Save Dollars'?'tag-p-dollars':r[0]==='Save Time'?'tag-p-time':r[0]==='Drive Engagement'?'tag-p-people':'tag-p-risk';
+    tr.innerHTML = `
+      <td><span class="q-tag ${pillarCls}" style="white-space:nowrap">${r[0]}</span></td>
+      <td>${r[1]}</td>
+      <td><span class="feature-pill">${r[2]}</span></td>
+      <td>${r[3]}</td>
+      <td style="font-size:11px">${r[4]}</td>
+      <td style="font-size:11px">${r[5]}</td>
+      <td style="font-size:11px">${r[6]}</td>
+      <td style="font-size:11px">${r[7]}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+}
+
+const BENCHMARKS = [
+  {
+    industry: "Hospitality / Restaurants",
+    rows: [
+      ["Overtime % of payroll", "12–18%", "8%", "BLS + NRA"],
+      ["Annual turnover rate", "70–80%", "35%", "NRA Workforce Survey"],
+      ["Time-to-hire (days)", "18–28 days", "10 days", "DHI-DFH + SHRM"],
+      ["Time-to-onboard (days)", "7–14 days", "3 days", "SHRM"],
+      ["HR admin hrs/wk per 100 EE", "22–30 hrs", "10 hrs", "SHRM Benchmarking"],
+      ["Cost-per-hire", "$2,800–$4,500", "$1,200", "SHRM + NRA"]
+    ]
+  },
+  {
+    industry: "Auto Dealerships",
+    rows: [
+      ["Overtime % of payroll", "10–15%", "7%", "BLS + NADA"],
+      ["Annual turnover rate", "40–55%", "20%", "NADA Annual Study"],
+      ["Time-to-hire (days)", "25–40 days", "14 days", "NADA + SHRM"],
+      ["Time-to-onboard (days)", "10–21 days", "5 days", "SHRM"],
+      ["HR admin hrs/wk per 100 EE", "18–25 hrs", "9 hrs", "SHRM Benchmarking"],
+      ["Cost-per-hire", "$4,200–$7,800", "$2,200", "NADA + SHRM"]
+    ]
+  },
+  {
+    industry: "Healthcare",
+    rows: [
+      ["Overtime % of payroll", "15–22%", "10%", "BLS + AHA"],
+      ["Annual turnover rate", "18–28%", "10%", "NSI Nursing Solutions"],
+      ["Time-to-hire (days)", "35–55 days", "20 days", "SHRM Healthcare HR"],
+      ["Time-to-onboard (days)", "14–30 days", "7 days", "SHRM"],
+      ["HR admin hrs/wk per 100 EE", "25–35 hrs", "11 hrs", "SHRM Benchmarking"],
+      ["Cost-per-hire", "$8,500–$15,000", "$3,500", "SHRM + NSI"]
+    ]
+  }
+];
+
+function buildBenchmarks() {
+  const grid = document.getElementById('bench-grid');
+  BENCHMARKS.forEach(b => {
+    const card = document.createElement('div');
+    card.className = 'bench-card';
+    let rows = b.rows.map(r => `
+      <div class="bench-row">
+        <span class="bench-metric">${r[0]}</span>
+        <span class="bench-val">${r[1]}<small>Best-in-class: ${r[2]} · ${r[3]}</small></span>
+      </div>`).join('');
+    card.innerHTML = `
+      <div class="bench-header">
+        <div class="bench-industry">Industry benchmark</div>
+        <div class="bench-name">${b.industry}</div>
+      </div>${rows}`;
+    grid.appendChild(card);
+  });
+}
+
+const UPLOADS = [
+  {
+    title:"Last 12 months of payroll summaries",
+    ask:"Ask your current payroll provider to pull a 'Year-to-Date Payroll Summary' or 'Payroll Register' report for the last 12 months.",
+    signal:"Extracts: actual overtime spend (vs. estimate), supplemental payroll frequency and cost, and pay type mix (hourly vs. salaried). Sharpens the Save Dollars score from an estimate to a precise dollar figure.",
+    icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 10h8M8 14h4"/></svg>`
+  },
+  {
+    title:"Current benefits enrollment summary",
+    ask:"Ask your benefits broker or HRIS to pull an 'Enrollment Summary Report' showing participation rates, plan elections, and waiver rates.",
+    signal:"Extracts: enrollment participation rate, benefits waiver patterns (often a sign of enrollment friction), and plan cost distribution. Sharpens both the Drive Engagement score (adoption) and the Reduce Risk score (error detection).",
+    icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`
+  },
+  {
+    title:"Recent turnover and headcount report",
+    ask:"Ask HR or your HRIS to pull a 'Headcount and Turnover Report' for the last 12 months, showing new hires, terminations, and reasons for departure where available.",
+    signal:"Extracts: actual turnover rate (vs. estimate), voluntary vs. involuntary split, and early tenure attrition (0–90 days — a strong onboarding signal). Converts the Drive Engagement score from an estimate to a precise cost figure and identifies the specific retention lever with highest ROI.",
+    icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`
+  }
+];
+
+function buildUploads() {
+  const list = document.getElementById('upload-list');
+  UPLOADS.forEach((u, i) => {
+    const div = document.createElement('div');
+    div.className = 'upload-card';
+    div.innerHTML = `
+      <div class="upload-icon">${u.icon}</div>
+      <div>
+        <div class="upload-title">Upload ${i+1}: ${u.title}</div>
+        <div class="upload-desc"><strong>How to request it:</strong> ${u.ask}</div>
+        <div class="upload-signal">What we extract: ${u.signal}</div>
+      </div>`;
+    list.appendChild(div);
+  });
+}
+
+const REPORT_PAGES = [
+  {
+    title: "Executive Summary",
+    sub: "The hook. Your score, your story, your benchmark gap — in 60 seconds.",
+    copy: [
+      { label:"Headline", text:"[COMPANY NAME]'s Netchex Index Score: [SCORE]/100 — [TIER LABEL]" },
+      { label:"Score context sub-head", text:"How [COMPANY NAME] compares to [INDUSTRY] peers of similar size" },
+      { label:"Body paragraph (trusted advisor voice)", text:"[COMPANY NAME] scored [SCORE] on the Netchex Index — placing you in the [TIER] range for [INDUSTRY] companies with [SIZE] employees. Your strongest area is [TOP PILLAR], where your team is performing at or above industry average. Your greatest opportunity is [BOTTOM PILLAR], where a [DELTA]-point gap against best-in-class companies suggests [SPECIFIC IMPACT — e.g., 'an estimated $X in recoverable cost annually' or 'Y hours/week in avoidable admin burden']. The rest of this report shows exactly where those gaps are coming from — and what closing them looks like." },
+      { label:"Company profile snapshot", text:"Industry: [INDUSTRY] · Employees: [SIZE] · Location(s): [STATE(S)] · Current platform: [PLATFORM] · Date: [DATE]" }
+    ],
+    viz: "Large gauge dial (0–100 arc) in Netchex navy and teal, showing the composite score as a bold number at center. Four small pillar sub-score rings below the dial (one per pillar), color-coded: teal = strong, amber = average, red = at risk. The visual hierarchy should make the composite score unmissable and the pillar breakdown immediately readable.",
+    persona: "CFO version: composite score followed immediately by estimated dollar impact. HR Director: composite score followed by retention and engagement delta. Office Manager: composite score followed by hours/week recoverable."
+  },
+  {
+    title: "Pillar Scorecards",
+    sub: "Baseball-card style. One card per pillar. Where you stand and why — visually, immediately.",
+    copy: [
+      { label:"Card header", text:"[PILLAR NAME] — Score: [PILLAR SCORE]/100 · [TIER LABEL]" },
+      { label:"Benchmark row", text:"You: [SCORE] · Industry Average: [BENCHMARK] · Best-in-Class: [BEST]" },
+      { label:"Rationale (2–3 sentences)", text:"Your [PILLAR NAME] score reflects [PRIMARY DRIVER — e.g., 'an overtime rate of X%, which is Y points above the industry average for your size and sector']. This is costing [COMPANY NAME] an estimated [DOLLAR OR HOUR IMPACT] annually. The gap between your current score and best-in-class performance is [DELTA] points — achievable within 12 months with the right platform." },
+      { label:"Gap callout", text:"Current state: [SPECIFIC PAIN — e.g., 'Payroll processing takes 18 hours/week, vs. a best-in-class benchmark of 6 hours']. Root cause: [WHY PLATFORM IS FAILING — e.g., 'Manual data entry between disconnected systems creates errors that require correction and re-processing time.']" }
+    ],
+    viz: "Four scorecards in a 2×2 grid. Each card contains: a half-ring score visual (0–100) in the pillar's brand color, a three-dot benchmark comparison (You / Avg / Best-in-Class) shown as a labeled bar, and the 2–3 sentence rationale block. Tier badge (At Risk / Average / Strong / Best-in-Class) displayed as a colored chip in the card header. Cards should feel like a performance scouting report — not a data table.",
+    persona: "CFO: dollar impact in bold below each pillar score. HR: people outcomes in bold. Mgr: hours in bold. The metric emphasis changes; the visual layout stays consistent."
+  },
+  {
+    title: "Your Netchex Opportunity",
+    sub: "Personalized product prescription — not a feature list. Here is exactly what we would turn on for you.",
+    copy: [
+      { label:"Section headline", text:"Based on your Netchex Index Score, here is the roadmap to [TIER UPGRADE TARGET]." },
+      { label:"Gap block header", text:"[PILLAR NAME] Opportunity: [SPECIFIC GAP — e.g., 'Recovering 12 hours/week in payroll admin']" },
+      { label:"Feature prescription", text:"We recommend activating [NETCHEX MODULE] — [one-sentence plain-English value statement]. For a company your size and industry, this typically moves your [PILLAR] score from [CURRENT SCORE/TIER] to [PROJECTED SCORE/TIER] within 6 months." },
+      { label:"Visual improvement indicator", text:"[BEFORE: tier label] → [AFTER: tier label] · Estimated impact: [DOLLAR/HOUR/METRIC]" },
+      { label:"Closing prescription line", text:"The recommended starting point for [COMPANY NAME] is a focused 45-minute demo of [MODULE 1] and [MODULE 2] — the two highest-impact areas based on your score." }
+    ],
+    viz: "One prescription block per significant gap pillar. Each block contains: a 'before/after' tier progress bar (At Risk → Strong, for example), the module name in a navy pill badge, and a one-line impact estimate. The overall page should feel like a doctor writing a prescription — specific, confident, personalized. Not a product catalog.",
+    persona: "CFO version leads with dollar projection. HR version leads with people metric projection. Mgr version leads with hours-per-week projection. The modules are identical; the impact frame changes."
+  },
+  {
+    title: "Benchmark Context",
+    sub: "How you compare to your industry peers and best-in-class companies — pillar by pillar.",
+    copy: [
+      { label:"Section headline", text:"How [COMPANY NAME] compares to [INDUSTRY] companies with [SIZE] employees" },
+      { label:"Benchmark intro", text:"The chart below shows your score on each pillar versus the industry average and best-in-class performance for your peer group. Pillars where you are ahead of average represent strengths to protect. Pillars where you are behind represent the clearest paths to business impact." },
+      { label:"Best-in-class definition", text:"'Best-in-class' for a [SIZE]-employee [INDUSTRY] company means: [SPECIFIC BENCHMARK TARGETS — e.g., payroll processing under 6 hrs/week, turnover below 35%, zero compliance notices, platform utilization above 75%]. These are achievable — they are the current benchmarks for Netchex clients in your industry and size band." }
+    ],
+    viz: "Grouped horizontal bar chart — four pillar groups on the Y-axis, three bars each (You / Industry Avg / Best-in-Class). Colors: You = navy, Industry Avg = gray, Best-in-Class = teal. Bars are labeled with score values at the end. An optional 'gap callout' annotation arrow highlights the largest gap pillar. Chart is immediately scannable — one glance shows where the opportunity is.",
+    persona: "No persona variation needed on this page — the data is universal. Persona variation happens in the callout annotation: CFO version annotates with dollar gap, HR with metric gap, Mgr with hours gap."
+  },
+  {
+    title: "Next Step",
+    sub: "One clear action. Personalized. Forward-looking. The buyer's moment to look like a hero.",
+    copy: [
+      { label:"CTA headline", text:"Your recommended next step — based on your score" },
+      { label:"Personalized recommendation", text:"Based on your Netchex Index Score of [SCORE] and your strongest gap area in [BOTTOM PILLAR], we recommend starting with a focused 45-minute demo of [MODULE 1] and [MODULE 2]. This session will show you exactly what [COMPANY NAME]'s platform would look like from day one — with your actual pay types, your locations, and your compliance requirements built in." },
+      { label:"12-month success vision", text:"For a [SIZE]-employee [INDUSTRY] company moving to Netchex from [CURRENT PLATFORM], here is what success looks like in 12 months: [SPECIFIC OUTCOMES — e.g., 'Payroll processing time reduced from 18 to under 6 hours/week. Turnover rate trending toward industry average. Zero compliance notices. 78%+ employee platform adoption.']" },
+      { label:"Closing statement — see Narratives tab for persona versions", text:"[PERSONA-SPECIFIC CLOSING PARAGRAPH — see three-version narratives]" },
+      { label:"CTA button copy", text:"Schedule your [COMPANY NAME] Demo →" }
+    ],
+    viz: "Clean single-page layout. Large typography for the CTA headline. A simple timeline graphic showing 0 → 30 → 90 → 180 → 365 days, with milestone markers for each major outcome. The Netchex logo and a brief 'About Netchex' line at the bottom (2 sentences max). The page should feel conclusive and confident — not like a form.",
+    persona: "The recommended modules on this page change based on the lowest-scoring pillar(s). The success vision metrics change by persona: CFO = dollars, HR = people outcomes, Mgr = hours and process simplicity."
+  }
+];
+
+function buildReportPages() {
+  const container = document.getElementById('report-pages');
+  REPORT_PAGES.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'page-spec';
+    const copyBlocks = p.copy.map(c => `
+      <div class="copy-block">
+        <div class="copy-label">${c.label}</div>
+        ${c.text}
+      </div>`).join('');
+    div.innerHTML = `
+      <div class="page-header" onclick="togglePage(this)">
+        <div class="page-num">${i+1}</div>
+        <div class="page-title-text">${p.title}</div>
+        <div class="page-sub">${p.sub}</div>
+      </div>
+      <div class="page-body">
+        <div style="font-size:12px;font-weight:600;color:var(--nx-slate);margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:0.08em">Copy blocks</div>
+        ${copyBlocks}
+        <div style="font-size:12px;font-weight:600;color:var(--nx-slate);margin:1rem 0 0.5rem;text-transform:uppercase;letter-spacing:0.08em">Visualization spec</div>
+        <div class="viz-spec"><strong>Recommended visual:</strong> ${p.viz}</div>
+        <div style="font-size:12px;font-weight:600;color:var(--nx-slate);margin:1rem 0 0.5rem;text-transform:uppercase;letter-spacing:0.08em">Persona adaptation</div>
+        <div class="persona-note">${p.persona}</div>
+      </div>`;
+    container.appendChild(div);
+  });
+}
+
+function togglePage(el) {
+  const body = el.nextElementSibling;
+  body.classList.toggle('open');
+}
+
+const NARRATIVES = [
+  {
+    cls: "n-cfo",
+    label: "For the CFO",
+    persona: "Chief Financial Officer",
+    text: `[COMPANY NAME] is running a capable team in a demanding environment — and that makes the cost picture worth examining carefully. Your Netchex Index Score of [SCORE] reflects two specific areas where your current platform is leaving money on the table: [SAVE DOLLARS PILLAR GAP — e.g., 'an estimated $X in recoverable overtime and payroll correction costs'] and [REDUCE RISK PILLAR GAP — e.g., 'compliance exposure that your current system is not monitoring proactively']. Netchex's [MODULE 1] and [MODULE 2] are built to close both gaps — with a typical client ROI of 3.4× in year one for companies your size and industry. For a [SIZE]-employee [INDUSTRY] company, a 12-month Netchex engagement typically means [SPECIFIC OUTCOME — e.g., 'payroll costs reduced by $X, zero compliance notices, and turnover trending toward the industry average'] — and the person who found that solution is usually the one who gets credit for it.`
+  },
+  {
+    cls: "n-hr",
+    label: "For the HR Director",
+    persona: "HR Director / VP of People",
+    text: `Your organization has the right instincts — and your Netchex Index Score of [SCORE] reflects a team that's working hard with tools that aren't giving them the full picture. Your two biggest opportunities are in [DRIVE ENGAGEMENT PILLAR GAP — e.g., 'building the visibility into team health that makes proactive retention possible'] and [SAVE TIME PILLAR GAP — e.g., 'recovering the admin hours your team needs to focus on culture and development instead of payroll corrections']. Netchex's [MODULE 1] brings engagement measurement and turnover risk signals into the same platform your managers already use — and [MODULE 2] gives your HR team time back every week that they can reinvest in the work that actually moves your people strategy. For a [SIZE]-employee [INDUSTRY] company, the 12-month picture typically looks like: [SPECIFIC PEOPLE OUTCOMES — e.g., 'turnover trending 10–15 points below current rate, 78%+ employee platform adoption, and an HR team spending 12 fewer hours/week on admin']. That is the story you bring to your CEO — and it starts here.`
+  },
+  {
+    cls: "n-mgr",
+    label: "For the Office Manager",
+    persona: "Office Manager / HR Generalist",
+    text: `You are running HR for an organization that depends on you to get it right — and you are doing it with a platform that is making your job harder than it needs to be. Your Netchex Index Score of [SCORE] shows that your two biggest time drains are [SAVE TIME PILLAR GAP — e.g., 'payroll processing that is taking 18 hours per week when best-in-class companies your size are doing it in under 6'] and [REDUCE RISK PILLAR GAP — e.g., 'compliance monitoring that lives on your shoulders rather than in the platform']. Netchex's [MODULE 1] handles [SPECIFIC TASK — e.g., 'payroll prep, error checking, and employee questions'] automatically — and [MODULE 2] means compliance issues surface before they become your problem to solve at 5pm on a Friday. In 12 months, a company like [COMPANY NAME] moving to Netchex typically describes the experience this way: [SPECIFIC OUTCOME IN THEIR LANGUAGE — e.g., 'payroll takes less than a day, employees stop calling me for pay stubs, and I stopped dreading open enrollment']. You found this. You can make it happen.`
+  }
+];
+
+function buildNarratives() {
+  const grid = document.getElementById('narrative-grid');
+  NARRATIVES.forEach(n => {
+    const div = document.createElement('div');
+    div.className = 'narrative-card ' + n.cls;
+    div.innerHTML = `
+      <div class="narrative-head">
+        <div class="narrative-label">${n.label}</div>
+        <div class="narrative-persona">${n.persona}</div>
+      </div>
+      <div class="narrative-body">${n.text}</div>`;
+    grid.appendChild(div);
+  });
+}
+
+buildAEQuestions();
+buildSSQuestions();
+buildFeatureTable();
+buildBenchmarks();
+buildUploads();
+buildReportPages();
+buildNarratives();
+</script>
