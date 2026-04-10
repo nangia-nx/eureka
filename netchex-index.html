@@ -1,0 +1,2577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Netchex Index Score</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root {
+  --nx-navy: #0A1628;
+  --nx-navy-mid: #1a2d4a;
+  --nx-teal: #00BFA6;
+  --nx-teal-light: #E0F7F4;
+  --nx-gold: #F5A623;
+  --nx-gold-light: #FEF3DC;
+  --nx-red: #E84855;
+  --nx-red-light: #FDEAEA;
+  --nx-green: #2DC98E;
+  --nx-green-light: #E3FAF2;
+  --nx-slate: #6B7C93;
+  --nx-silver: #F4F6F9;
+  --nx-white: #FFFFFF;
+  --font-display: 'DM Serif Display', serif;
+  --font-body: 'DM Sans', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--nx-navy);
+  color: var(--nx-white);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ===== UTILS ===== */
+.hidden { display: none !important; }
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* ===== LANDING SCREEN ===== */
+#screen-landing {
+  min-height: 100vh;
+  background: var(--nx-navy);
+  position: relative;
+  overflow: hidden;
+}
+
+.landing-bg {
+  position: absolute; inset: 0; pointer-events: none;
+  overflow: hidden;
+}
+.landing-bg::before {
+  content: '';
+  position: absolute;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,191,166,0.12) 0%, transparent 70%);
+  top: -200px; right: -150px;
+}
+.landing-bg::after {
+  content: '';
+  position: absolute;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(245,166,35,0.08) 0%, transparent 70%);
+  bottom: -100px; left: -100px;
+}
+
+.landing-header {
+  padding: 24px 48px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.logo {
+  font-family: var(--font-display);
+  font-size: 28px;
+  color: var(--nx-white);
+  letter-spacing: -0.5px;
+}
+.logo span { color: var(--nx-teal); }
+.badge {
+  background: rgba(0,191,166,0.15);
+  border: 1px solid rgba(0,191,166,0.3);
+  color: var(--nx-teal);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 100px;
+}
+
+.landing-hero {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 80px 32px 48px;
+  text-align: center;
+}
+.landing-hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 64px);
+  line-height: 1.1;
+  color: var(--nx-white);
+  margin-bottom: 20px;
+}
+.landing-hero h1 em {
+  font-style: italic;
+  color: var(--nx-teal);
+}
+.landing-hero p {
+  font-size: 18px;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.6;
+  max-width: 560px;
+  margin: 0 auto 56px;
+}
+
+.landing-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  max-width: 840px;
+  margin: 0 auto;
+  padding: 0 32px 80px;
+}
+@media (max-width: 640px) {
+  .landing-cards { grid-template-columns: 1fr; }
+  .landing-header { padding: 16px 24px; }
+}
+
+.landing-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  padding: 36px 32px;
+  position: relative;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.landing-card:hover { border-color: rgba(0,191,166,0.4); transform: translateY(-2px); }
+.landing-card.featured {
+  background: rgba(0,191,166,0.06);
+  border-color: rgba(0,191,166,0.25);
+}
+
+.card-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+.card-icon.teal { background: rgba(0,191,166,0.2); }
+.card-icon.gold { background: rgba(245,166,35,0.2); }
+
+.landing-card h3 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+.landing-card p {
+  font-size: 14px;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.landing-card .email-row {
+  display: flex; gap: 10px;
+}
+.landing-card input[type="email"] {
+  flex: 1;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 10px;
+  padding: 12px 16px;
+  color: var(--nx-white);
+  font-family: var(--font-body);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.landing-card input[type="email"]:focus { border-color: var(--nx-teal); }
+.landing-card input[type="email"]::placeholder { color: rgba(255,255,255,0.35); }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.btn-teal { background: var(--nx-teal); color: var(--nx-navy); }
+.btn-teal:hover { background: #00d4b8; transform: translateY(-1px); }
+.btn-outline { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: var(--nx-white); }
+.btn-outline:hover { border-color: var(--nx-teal); color: var(--nx-teal); }
+.btn-navy { background: var(--nx-navy-mid); color: var(--nx-white); border: 1px solid rgba(255,255,255,0.1); }
+.btn-navy:hover { border-color: var(--nx-teal); }
+.btn-lg { padding: 16px 32px; font-size: 16px; border-radius: 12px; }
+.btn-full { width: 100%; }
+.btn-sm { padding: 8px 16px; font-size: 13px; }
+
+/* ===== OTP MODAL ===== */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(10,22,40,0.85);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+}
+.modal {
+  background: var(--nx-navy-mid);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 440px;
+  width: 100%;
+}
+.modal h3 { font-family: var(--font-display); font-size: 24px; margin-bottom: 8px; }
+.modal p { color: rgba(255,255,255,0.6); font-size: 14px; line-height: 1.6; margin-bottom: 24px; }
+.otp-display {
+  background: rgba(0,191,166,0.1);
+  border: 1px solid rgba(0,191,166,0.3);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+}
+.otp-display .otp-label { font-size: 11px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; color: var(--nx-teal); margin-bottom: 6px; }
+.otp-display .otp-code { font-size: 32px; font-weight: 700; letter-spacing: 8px; color: var(--nx-white); }
+.modal input[type="text"] {
+  width: 100%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 10px;
+  padding: 14px 16px;
+  color: var(--nx-white);
+  font-family: var(--font-body);
+  font-size: 20px;
+  text-align: center;
+  letter-spacing: 6px;
+  outline: none;
+  margin-bottom: 16px;
+  transition: border-color 0.2s;
+}
+.modal input[type="text"]:focus { border-color: var(--nx-teal); }
+
+/* ===== QUESTIONNAIRE SCREEN ===== */
+#screen-questionnaire {
+  min-height: 100vh;
+  background: var(--nx-silver);
+  color: var(--nx-navy);
+}
+
+.q-header {
+  background: var(--nx-navy);
+  padding: 16px 32px;
+  display: flex; align-items: center; gap: 20px;
+  position: sticky; top: 0; z-index: 100;
+}
+.q-logo { font-family: var(--font-display); font-size: 20px; color: var(--nx-white); }
+.q-logo span { color: var(--nx-teal); }
+.q-meta {
+  flex: 1;
+  display: flex; align-items: center; gap: 16px;
+  font-size: 13px; color: rgba(255,255,255,0.55);
+}
+.q-meta-tag {
+  background: rgba(255,255,255,0.08);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 12px;
+}
+.q-meta-tag.teal { color: var(--nx-teal); background: rgba(0,191,166,0.1); }
+.live-score-card {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 8px 16px;
+  display: flex; align-items: center; gap: 12px;
+  font-size: 12px; color: rgba(255,255,255,0.6);
+}
+.live-score-num {
+  font-size: 22px; font-weight: 700; color: var(--nx-teal);
+}
+
+.progress-bar-wrap {
+  background: var(--nx-navy-mid);
+  height: 4px;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: var(--nx-teal);
+  transition: width 0.4s ease;
+}
+
+.q-body {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 48px 32px;
+}
+.q-counter {
+  font-size: 12px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase;
+  color: var(--nx-slate);
+  margin-bottom: 12px;
+}
+.q-question {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 3vw, 32px);
+  color: var(--nx-navy);
+  margin-bottom: 8px;
+  line-height: 1.25;
+}
+.q-benchmark {
+  font-size: 13px;
+  color: var(--nx-slate);
+  background: var(--nx-white);
+  border-left: 3px solid var(--nx-teal);
+  padding: 10px 14px;
+  border-radius: 0 8px 8px 0;
+  margin: 16px 0 28px;
+  line-height: 1.5;
+}
+
+/* Multiple choice buttons */
+.mc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.mc-btn {
+  background: var(--nx-white);
+  border: 2px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--nx-navy);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s;
+  line-height: 1.4;
+}
+.mc-btn:hover { border-color: var(--nx-teal); background: var(--nx-teal-light); }
+.mc-btn.selected { border-color: var(--nx-teal); background: var(--nx-teal-light); color: var(--nx-navy); font-weight: 600; }
+.mc-btn.mc-multi.selected { background: #E0F7F4; border-color: var(--nx-teal); }
+
+/* Slider */
+.slider-wrap { margin-bottom: 24px; }
+.slider-labels { display: flex; justify-content: space-between; font-size: 12px; color: var(--nx-slate); margin-bottom: 6px; }
+.slider-value-display {
+  font-size: 40px; font-weight: 700; color: var(--nx-navy);
+  text-align: center;
+  margin-bottom: 12px;
+}
+.slider-value-display small { font-size: 18px; font-weight: 400; color: var(--nx-slate); }
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: #E2E8F0;
+  outline: none;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--nx-teal);
+  border: 3px solid white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  cursor: pointer;
+}
+.benchmark-tooltip {
+  text-align: center;
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  margin-top: 10px;
+  font-weight: 500;
+}
+.benchmark-tooltip.warning { background: var(--nx-gold-light); color: #8B6914; }
+.benchmark-tooltip.good { background: var(--nx-green-light); color: #1a6b45; }
+.benchmark-tooltip.bad { background: var(--nx-red-light); color: #9b1c26; }
+
+.idk-toggle {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13px; color: var(--nx-slate);
+  cursor: pointer;
+  margin-top: 12px;
+  user-select: none;
+}
+.idk-toggle input[type="checkbox"] { accent-color: var(--nx-teal); width: 16px; height: 16px; cursor: pointer; }
+.idk-note {
+  background: var(--nx-gold-light);
+  border: 1px solid rgba(245,166,35,0.3);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #8B6914;
+  margin-top: 10px;
+  line-height: 1.5;
+}
+
+/* Rating scale */
+.rating-scale {
+  display: flex; gap: 12px; margin-bottom: 8px;
+}
+.rating-btn {
+  flex: 1;
+  background: var(--nx-white);
+  border: 2px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 16px 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: var(--font-body);
+}
+.rating-btn .rating-num { font-size: 24px; font-weight: 700; color: var(--nx-navy); display: block; }
+.rating-btn .rating-label { font-size: 10px; color: var(--nx-slate); display: block; margin-top: 4px; line-height: 1.3; }
+.rating-btn:hover, .rating-btn.selected { border-color: var(--nx-teal); background: var(--nx-teal-light); }
+
+/* Textarea */
+.q-textarea {
+  width: 100%;
+  background: var(--nx-white);
+  border: 2px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 16px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--nx-navy);
+  resize: vertical;
+  min-height: 120px;
+  outline: none;
+  transition: border-color 0.2s;
+  margin-bottom: 12px;
+}
+.q-textarea:focus { border-color: var(--nx-teal); }
+.q-textarea::placeholder { color: #94A3B8; }
+.tag-suggestions {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px;
+}
+.tag-chip {
+  background: var(--nx-white);
+  border: 1px solid #E2E8F0;
+  border-radius: 100px;
+  padding: 6px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--nx-navy);
+  transition: all 0.15s;
+}
+.tag-chip:hover { border-color: var(--nx-teal); color: var(--nx-teal); }
+
+/* Multi-slider */
+.multi-slider-grid { display: grid; gap: 20px; margin-bottom: 16px; }
+.multi-slider-item label { display: block; font-size: 13px; font-weight: 600; color: var(--nx-navy); margin-bottom: 8px; }
+.multi-slider-item .mini-val { float: right; font-weight: 700; color: var(--nx-teal); }
+
+/* AE Coaching Panel */
+.coaching-panel {
+  background: var(--nx-navy);
+  border-radius: 12px;
+  margin-top: 24px;
+  overflow: hidden;
+}
+.coaching-toggle {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px;
+  cursor: pointer;
+  user-select: none;
+}
+.coaching-toggle span { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.7); }
+.coaching-toggle .chevron { color: var(--nx-teal); transition: transform 0.2s; font-size: 16px; }
+.coaching-toggle.open .chevron { transform: rotate(180deg); }
+.coaching-body { display: none; padding: 0 18px 18px; }
+.coaching-body.open { display: block; }
+.coaching-tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+.coaching-tab {
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 12px; font-weight: 600;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.5);
+  background: transparent;
+  font-family: var(--font-body);
+  transition: all 0.15s;
+}
+.coaching-tab.active { background: var(--nx-teal); color: var(--nx-navy); border-color: var(--nx-teal); }
+.coaching-content { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.6; }
+.coaching-content strong { color: var(--nx-teal); font-weight: 600; }
+.coaching-section { margin-bottom: 14px; }
+.coaching-section h4 { font-size: 11px; font-weight: 700; letter-spacing: 0.7px; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 6px; }
+.competitor-block {
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+}
+.competitor-block.highlighted { border-color: rgba(0,191,166,0.4); background: rgba(0,191,166,0.05); color: rgba(255,255,255,0.7); }
+.competitor-block strong { color: var(--nx-teal); }
+
+/* Navigation */
+.q-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: 32px;
+  border-top: 1px solid #E2E8F0;
+  margin-top: 24px;
+}
+
+/* ===== LOADING SCREEN ===== */
+#screen-loading {
+  min-height: 100vh;
+  background: var(--nx-navy);
+  display: flex; align-items: center; justify-content: center;
+}
+.loading-inner { text-align: center; max-width: 400px; padding: 32px; }
+.loading-logo { font-family: var(--font-display); font-size: 32px; color: var(--nx-white); margin-bottom: 40px; }
+.loading-logo span { color: var(--nx-teal); }
+.spinner-ring {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  border: 4px solid rgba(255,255,255,0.1);
+  border-top-color: var(--nx-teal);
+  animation: spin 1s linear infinite;
+  margin: 0 auto 32px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-steps { list-style: none; text-align: left; }
+.loading-step {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 0;
+  font-size: 14px;
+  color: rgba(255,255,255,0.4);
+  transition: color 0.3s;
+}
+.loading-step.active { color: var(--nx-white); }
+.loading-step.done { color: var(--nx-teal); }
+.step-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  flex-shrink: 0;
+  transition: background 0.3s;
+}
+.loading-step.active .step-dot { background: var(--nx-teal); animation: pulse 1s infinite; }
+.loading-step.done .step-dot { background: var(--nx-teal); }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+/* ===== REPORT SCREEN ===== */
+#screen-report {
+  background: var(--nx-silver);
+  min-height: 100vh;
+}
+
+.report-topbar {
+  background: var(--nx-navy);
+  padding: 16px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 100;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.report-topbar .logo { font-family: var(--font-display); font-size: 22px; color: var(--nx-white); }
+.report-topbar .logo span { color: var(--nx-teal); }
+.report-actions { display: flex; gap: 12px; }
+
+.report-hero {
+  background: var(--nx-navy);
+  padding: 60px 32px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.report-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(0,191,166,0.1) 0%, transparent 60%);
+}
+.report-company-tag {
+  font-size: 12px; letter-spacing: 0.8px; text-transform: uppercase;
+  color: var(--nx-teal); font-weight: 600;
+  margin-bottom: 20px;
+}
+.report-hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4vw, 48px);
+  margin-bottom: 48px;
+  color: var(--nx-white);
+}
+
+/* Score Ring */
+.score-ring-wrap {
+  position: relative;
+  width: 220px; height: 120px;
+  margin: 0 auto 12px;
+}
+.score-ring-svg { width: 220px; height: 130px; }
+.score-ring-val {
+  position: absolute;
+  bottom: -8px; left: 50%; transform: translateX(-50%);
+  text-align: center;
+}
+.score-ring-num { font-size: 52px; font-weight: 800; line-height: 1; }
+.score-ring-label { font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 4px; }
+.tier-badge {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 100px;
+  font-size: 12px; font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-top: 12px;
+}
+.tier-at-risk { background: var(--nx-red-light); color: var(--nx-red); }
+.tier-average { background: var(--nx-gold-light); color: #8B6914; }
+.tier-strong { background: rgba(59,130,246,0.15); color: #1d4ed8; }
+.tier-best { background: var(--nx-green-light); color: #0f5132; }
+
+/* Pillar cards */
+.report-body { max-width: 1000px; margin: 0 auto; padding: 48px 32px; }
+.section-title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  color: var(--nx-navy);
+  margin-bottom: 8px;
+}
+.section-subtitle { font-size: 15px; color: var(--nx-slate); margin-bottom: 32px; }
+
+.pillars-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 48px;
+}
+@media (max-width: 640px) { .pillars-grid { grid-template-columns: 1fr; } }
+
+.pillar-card {
+  background: var(--nx-white);
+  border-radius: 16px;
+  padding: 28px;
+  border: 1px solid #E8EDF2;
+}
+.pillar-card-header {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 16px;
+}
+.pillar-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+.pillar-name { font-weight: 700; font-size: 15px; color: var(--nx-navy); }
+.pillar-score-big { font-size: 36px; font-weight: 800; margin-bottom: 4px; }
+.pillar-bench-bar { display: flex; gap: 6px; align-items: center; margin: 12px 0; }
+.bench-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.bench-label { font-size: 11px; color: var(--nx-slate); }
+.bench-val { font-size: 11px; font-weight: 700; margin-left: auto; }
+.pillar-rationale { font-size: 13px; color: #4A5568; line-height: 1.6; margin-top: 12px; }
+.pillar-impact {
+  background: var(--nx-gold-light);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: #8B6914;
+  font-weight: 600;
+  margin-top: 10px;
+}
+.skeleton { background: linear-gradient(90deg, #E2E8F0 25%, #F1F5F9 50%, #E2E8F0 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 6px; }
+@keyframes shimmer { to { background-position: -200% 0; } }
+
+/* Opportunity section */
+.opportunity-section { margin: 48px 0; }
+.opp-block {
+  background: var(--nx-white);
+  border-radius: 16px;
+  padding: 28px;
+  margin-bottom: 16px;
+  border: 1px solid #E8EDF2;
+  border-left: 4px solid var(--nx-teal);
+}
+.opp-block-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+.module-pill {
+  background: var(--nx-navy);
+  color: var(--nx-teal);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 12px; font-weight: 700;
+  letter-spacing: 0.3px;
+}
+.opp-tier-progress { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--nx-slate); }
+.opp-tier-arrow { color: var(--nx-teal); font-weight: 700; }
+.opp-text { font-size: 14px; color: #4A5568; line-height: 1.6; }
+.opp-impact { font-size: 13px; font-weight: 600; color: var(--nx-navy); margin-top: 8px; }
+
+/* Benchmark chart */
+.chart-section {
+  background: var(--nx-white);
+  border-radius: 20px;
+  padding: 32px;
+  margin-bottom: 48px;
+  border: 1px solid #E8EDF2;
+}
+.chart-wrap { position: relative; height: 280px; }
+
+/* Next steps */
+.nextstep-section {
+  background: var(--nx-navy);
+  border-radius: 20px;
+  padding: 48px;
+  margin-bottom: 48px;
+  position: relative;
+  overflow: hidden;
+}
+.nextstep-section::before {
+  content: '';
+  position: absolute;
+  top: -100px; right: -100px;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,191,166,0.1) 0%, transparent 60%);
+}
+.nextstep-section .section-title { color: var(--nx-white); }
+.nextstep-section .section-subtitle { color: rgba(255,255,255,0.55); }
+.nextstep-rec {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 28px;
+  margin-bottom: 28px;
+  font-size: 15px;
+  color: rgba(255,255,255,0.8);
+  line-height: 1.7;
+}
+
+.timeline-wrap { display: flex; gap: 0; margin: 32px 0; position: relative; }
+.timeline-wrap::before {
+  content: ''; position: absolute;
+  left: 0; right: 0; top: 20px; height: 2px;
+  background: rgba(255,255,255,0.1);
+}
+.timeline-milestone { flex: 1; text-align: center; position: relative; }
+.t-dot {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--nx-teal);
+  margin: 0 auto 10px;
+  position: relative; z-index: 1;
+}
+.t-label { font-size: 11px; font-weight: 700; color: var(--nx-teal); text-transform: uppercase; letter-spacing: 0.5px; }
+.t-milestone { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 4px; line-height: 1.4; }
+
+.nextstep-closing { font-size: 15px; color: rgba(255,255,255,0.75); line-height: 1.7; margin-bottom: 28px; }
+.demo-cta-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--nx-teal);
+  color: var(--nx-navy);
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.demo-cta-btn:hover { background: #00d4b8; transform: translateY(-2px); }
+
+/* About section */
+.about-section {
+  background: var(--nx-white);
+  border-radius: 16px;
+  padding: 32px;
+  border: 1px solid #E8EDF2;
+  margin-bottom: 48px;
+}
+.about-section h3 { font-family: var(--font-display); font-size: 22px; color: var(--nx-navy); margin-bottom: 12px; }
+.about-section p { font-size: 14px; color: var(--nx-slate); line-height: 1.7; margin-bottom: 8px; }
+.data-sources { font-size: 11px; color: #94A3B8; line-height: 1.6; margin-top: 16px; border-top: 1px solid #E2E8F0; padding-top: 16px; }
+
+/* Email modal */
+.email-modal-preview {
+  background: var(--nx-silver);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  font-size: 13px;
+}
+.email-modal-preview .preview-score { font-size: 32px; font-weight: 800; color: var(--nx-teal); }
+.email-modal-row { display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+.email-modal-field { flex: 1; min-width: 180px; }
+.email-modal-field label { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.5); display: block; margin-bottom: 6px; }
+.email-modal-field input {
+  width: 100%;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: var(--nx-white);
+  font-family: var(--font-body);
+  font-size: 14px;
+  outline: none;
+}
+.email-modal-field input:focus { border-color: var(--nx-teal); }
+.modal-checkbox { display: flex; align-items: center; gap: 10px; font-size: 13px; color: rgba(255,255,255,0.6); cursor: pointer; margin-bottom: 16px; }
+.modal-checkbox input { accent-color: var(--nx-teal); }
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 32px; right: 32px;
+  background: var(--nx-navy-mid);
+  border: 1px solid rgba(0,191,166,0.3);
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex; align-items: center; gap: 12px;
+  font-size: 14px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  z-index: 9999;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.3s;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast-icon { font-size: 20px; }
+
+/* Self-serve persona select */
+.persona-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+@media(max-width: 480px) { .persona-grid { grid-template-columns: 1fr; } }
+.persona-card {
+  background: var(--nx-white);
+  border: 2px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 20px 16px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s;
+}
+.persona-card:hover { border-color: var(--nx-teal); background: var(--nx-teal-light); }
+.persona-card.selected { border-color: var(--nx-teal); background: var(--nx-teal-light); }
+.persona-card .persona-emoji { font-size: 28px; margin-bottom: 8px; display: block; }
+.persona-card .persona-name { font-weight: 600; font-size: 14px; color: var(--nx-navy); }
+.persona-card .persona-sub { font-size: 12px; color: var(--nx-slate); margin-top: 2px; }
+
+/* AE Setup Fields */
+.ae-setup {
+  background: var(--nx-white);
+  border-radius: 16px;
+  padding: 28px;
+  margin-bottom: 32px;
+  border: 1px solid #E8EDF2;
+}
+.ae-setup h3 { font-family: var(--font-display); font-size: 20px; color: var(--nx-navy); margin-bottom: 20px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+@media(max-width: 480px) { .form-row { grid-template-columns: 1fr; } }
+.form-field label { font-size: 12px; font-weight: 600; color: var(--nx-slate); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 6px; }
+.form-field input, .form-field select {
+  width: 100%;
+  background: var(--nx-silver);
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 11px 14px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--nx-navy);
+  outline: none;
+  transition: border-color 0.2s;
+}
+.form-field input:focus, .form-field select:focus { border-color: var(--nx-teal); }
+
+/* Print styles */
+@media print {
+  .q-header, .report-topbar, .report-actions, .coaching-panel, .demo-cta-btn { display: none !important; }
+  body { background: white; color: black; }
+  #screen-report { background: white; }
+  .report-hero { background: #0A1628; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .pillar-card, .opp-block, .chart-section, .about-section { break-inside: avoid; }
+  .nextstep-section { break-before: page; }
+}
+
+/* Divider */
+.report-divider { border: none; border-top: 1px solid #E2E8F0; margin: 48px 0; }
+</style>
+</head>
+<body>
+
+<!-- ===== LANDING ===== -->
+<div id="screen-landing" class="screen active">
+  <div class="landing-bg"></div>
+  <div class="landing-header">
+    <div class="logo">Netchex<span>.</span></div>
+    <div class="badge">Netchex Index Score — Powered by AI</div>
+  </div>
+  <div class="landing-hero">
+    <h1>How does your HR & payroll setup<br><em>really</em> stack up?</h1>
+    <p>Get a personalized score and report benchmarked against your industry peers — in under 5 minutes.</p>
+  </div>
+  <div class="landing-cards">
+    <div class="landing-card">
+      <div class="card-icon gold">🏢</div>
+      <h3>I'm a Netchex AE</h3>
+      <p>Run a live assessment with your prospect and generate a personalized report in minutes.</p>
+      <div class="email-row">
+        <input type="email" id="ae-email" placeholder="your@netchexonline.com" autocomplete="email">
+        <button class="btn btn-teal" onclick="initiateAELogin()">Login →</button>
+      </div>
+      <p id="ae-email-error" style="color:var(--nx-red);font-size:12px;margin-top:8px;display:none;">Please enter a @netchex.com email address.</p>
+    </div>
+    <div class="landing-card featured">
+      <div class="card-icon teal">📊</div>
+      <h3>I'm evaluating my HR platform</h3>
+      <p>Answer 10 questions, get your Netchex Index Score, and see how you compare to industry benchmarks.</p>
+      <button class="btn btn-teal btn-full" onclick="startSelfServe()">Get my score now →</button>
+      <p style="font-size:12px;color:rgba(255,255,255,0.35);margin-top:12px;margin-bottom:0;">No login required · Takes under 5 minutes</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== OTP MODAL ===== -->
+<div id="otp-modal" class="modal-overlay hidden">
+  <div class="modal">
+    <h3>Check your inbox</h3>
+    <p>We sent a 6-digit login code to <strong id="otp-email-display"></strong>. Enter it below to continue.</p>
+    <div class="otp-display">
+      <div class="otp-label">⚠️ Prototype mode — your login code</div>
+      <div class="otp-code" id="otp-code-display"></div>
+    </div>
+    <input type="text" id="otp-input" placeholder="000000" maxlength="6" oninput="this.value=this.value.replace(/\D/g,'')">
+    <p id="otp-error" style="color:var(--nx-red);font-size:13px;margin-bottom:12px;display:none;">Incorrect code. Please try again.</p>
+    <button class="btn btn-teal btn-full" onclick="verifyOTP()">Verify & continue →</button>
+    <button class="btn btn-outline btn-full" style="margin-top:10px;" onclick="closeOTP()">Cancel</button>
+  </div>
+</div>
+
+<!-- ===== QUESTIONNAIRE ===== -->
+<div id="screen-questionnaire" class="screen">
+  <div class="q-header">
+    <div class="q-logo">Netchex<span>.</span></div>
+    <div class="q-meta" id="q-meta-bar">
+      <span class="q-meta-tag teal" id="qm-mode">AE Mode</span>
+      <span class="q-meta-tag" id="qm-company"></span>
+      <span class="q-meta-tag" id="qm-platform"></span>
+      <span class="q-meta-tag" id="qm-persona"></span>
+    </div>
+    <div class="live-score-card" id="live-score-card">
+      <div>
+        <div style="font-size:10px;letter-spacing:0.5px;text-transform:uppercase;color:rgba(255,255,255,0.4);">Live Score</div>
+        <div class="live-score-num" id="live-score-num">—</div>
+      </div>
+    </div>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progress-bar" style="width:0%"></div>
+  </div>
+  <div class="q-body">
+    <div id="ae-setup-block" class="ae-setup hidden">
+      <h3>Prospect Setup</h3>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Prospect Company Name</label>
+          <input type="text" id="setup-company" placeholder="Acme Corp">
+        </div>
+        <div class="form-field">
+          <label>Prospect Email (optional)</label>
+          <input type="email" id="setup-prospect-email" placeholder="prospect@company.com">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Who are you meeting with?</label>
+          <select id="setup-persona">
+            <option value="">Select persona...</option>
+            <option value="CFO">CFO / Financial Leader</option>
+            <option value="HR">HR Director / VP of People</option>
+            <option value="Manager">Office Manager / HR Generalist</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>AE Name</label>
+          <input type="text" id="setup-ae-name" placeholder="Your name">
+        </div>
+      </div>
+      <button class="btn btn-teal" onclick="startAEQuestions()">Begin Assessment →</button>
+    </div>
+    <div id="question-container"></div>
+  </div>
+</div>
+
+<!-- ===== LOADING ===== -->
+<div id="screen-loading" class="screen">
+  <div class="loading-inner">
+    <div class="loading-logo">Netchex<span>.</span></div>
+    <div class="spinner-ring"></div>
+    <ul class="loading-steps">
+      <li class="loading-step" id="ls-1"><div class="step-dot"></div>Analyzing your answers</li>
+      <li class="loading-step" id="ls-2"><div class="step-dot"></div>Benchmarking against your industry</li>
+      <li class="loading-step" id="ls-3"><div class="step-dot"></div>Calculating Netchex Index Score</li>
+      <li class="loading-step" id="ls-4"><div class="step-dot"></div>Generating your personalized report</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===== REPORT ===== -->
+<div id="screen-report" class="screen">
+  <div class="report-topbar">
+    <div class="logo">Netchex<span>.</span> Index Score</div>
+    <div class="report-actions">
+      <button class="btn btn-outline btn-sm" onclick="openEmailModal()">✉️ Email report</button>
+      <button class="btn btn-teal btn-sm" onclick="window.print()">⬇ Download PDF</button>
+    </div>
+  </div>
+
+  <!-- Report Hero -->
+  <div class="report-hero" id="report-hero">
+    <div class="report-company-tag" id="report-company-tag"></div>
+    <h1 id="report-hero-title">Your Netchex Index Score</h1>
+    <div class="score-ring-wrap">
+      <svg class="score-ring-svg" viewBox="0 0 220 130" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 20 120 A 90 90 0 0 1 200 120" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="12" stroke-linecap="round"/>
+        <path id="score-arc-fill" d="M 20 120 A 90 90 0 0 1 200 120" fill="none" stroke="#00BFA6" stroke-width="12" stroke-linecap="round" stroke-dasharray="283" stroke-dashoffset="283"/>
+      </svg>
+      <div class="score-ring-val">
+        <div class="score-ring-num" id="report-composite-score" style="color:var(--nx-teal)">—</div>
+        <div class="score-ring-label">out of 100</div>
+        <div class="tier-badge" id="report-composite-tier"></div>
+      </div>
+    </div>
+    <p style="color:rgba(255,255,255,0.4);font-size:12px;margin-top:48px;" id="report-meta-line"></p>
+  </div>
+
+  <div class="report-body">
+    <!-- Section 1: Pillar Scores -->
+    <div style="margin-bottom:16px;">
+      <div class="section-title">Your Score Breakdown</div>
+      <div class="section-subtitle">How you perform across the four pillars of HR & payroll excellence</div>
+    </div>
+    <div class="pillars-grid" id="pillars-grid"></div>
+
+    <hr class="report-divider">
+
+    <!-- Section 2: Opportunity -->
+    <div class="opportunity-section">
+      <div class="section-title">Your Netchex Opportunity</div>
+      <div class="section-subtitle" id="opp-subtitle">Based on your Netchex Index Score, here is the roadmap to your next tier.</div>
+      <div id="opp-blocks"></div>
+      <div style="background:var(--nx-teal-light);border-radius:12px;padding:16px 20px;font-size:14px;color:#0f5132;" id="opp-closing"></div>
+    </div>
+
+    <hr class="report-divider">
+
+    <!-- Section 3: Benchmarks -->
+    <div class="chart-section">
+      <div class="section-title" style="margin-bottom:4px;">Benchmark Context</div>
+      <div class="section-subtitle" id="chart-subtitle"></div>
+      <div class="chart-wrap">
+        <canvas id="benchmark-chart"></canvas>
+      </div>
+      <div id="benchmark-targets" style="margin-top:20px;font-size:13px;color:var(--nx-slate);"></div>
+    </div>
+
+    <!-- Section 4: Next Steps -->
+    <div class="nextstep-section">
+      <div class="section-title">Your Recommended Next Step</div>
+      <div class="section-subtitle">Based on your score and your top priority</div>
+      <div class="nextstep-rec" id="nextstep-rec"></div>
+      <div class="timeline-wrap" id="timeline-wrap"></div>
+      <div class="nextstep-closing" id="nextstep-closing"></div>
+      <button class="demo-cta-btn" id="demo-cta-btn">Schedule Your Demo →</button>
+    </div>
+
+    <!-- Section 5: About -->
+    <div class="about-section">
+      <h3>About Netchex</h3>
+      <p>Netchex is a single-platform HR, payroll, and employee experience solution purpose-built for deskless and hourly workforces. Trusted by 6,000+ businesses across hospitality, healthcare, auto dealerships, and more.</p>
+      <div class="data-sources">
+        <strong>Data sources:</strong> SHRM Benchmarking Reports (2023–2024), BLS Occupational Employment & Wage Statistics, Gallup Workplace Research, NADA Annual Dealership Workforce Study. All benchmarks represent industry averages; best-in-class represents top-quartile performance for companies of 100–500 employees.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Email Modal -->
+<div id="email-modal" class="modal-overlay hidden">
+  <div class="modal">
+    <h3>Email this report</h3>
+    <div class="email-modal-preview" id="email-preview"></div>
+    <div class="email-modal-row">
+      <div class="email-modal-field">
+        <label>Send to</label>
+        <input type="email" id="email-to" placeholder="prospect@company.com">
+      </div>
+      <div class="email-modal-field">
+        <label>Your name</label>
+        <input type="text" id="email-from-name" placeholder="Jane Smith">
+      </div>
+    </div>
+    <div class="modal-checkbox" id="ae-copy-row" style="display:none;">
+      <input type="checkbox" id="ae-copy-check" checked>
+      <label for="ae-copy-check">Send a copy to my Netchex email</label>
+    </div>
+    <button class="btn btn-teal btn-full" onclick="sendEmail()">Send report →</button>
+    <button class="btn btn-outline btn-full" style="margin-top:10px;" onclick="closeEmailModal()">Cancel</button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <span class="toast-icon">✅</span>
+  <span id="toast-msg">Success!</span>
+</div>
+
+<script>
+// ========== APP STATE ==========
+window.appState = {
+  mode: null, // 'ae' or 'selfserve'
+  aeInfo: { email: '', name: '', company: '', prospectEmail: '', currentPlatform: '', persona: '' },
+  answers: {},
+  scores: { saveDollars: 0, saveTime: 0, driveEngagement: 0, reduceRisk: 0, composite: 0 },
+  narratives: {},
+  currentQ: 0,
+  totalQ: 0,
+  questionSet: []
+};
+
+const STORAGE_KEY = 'netchex_index_state';
+
+// ========== BENCHMARKS ==========
+const INDUSTRY_BENCHMARKS = {
+  'Restaurants & Hospitality': { turnoverAvg: 73, turnoverBest: 45, overtimeAvg: 12, overtimeBest: 7, adminHrsAvg: 12, adminHrsBest: 6, hireAvg: 21, hireBest: 14, utilAvg: 35, utilBest: 75 },
+  'Auto Dealerships': { turnoverAvg: 46, turnoverBest: 28, overtimeAvg: 9, overtimeBest: 5, adminHrsAvg: 10, adminHrsBest: 5, hireAvg: 28, hireBest: 18, utilAvg: 40, utilBest: 75 },
+  'Healthcare': { turnoverAvg: 22, turnoverBest: 12, overtimeAvg: 15, overtimeBest: 8, adminHrsAvg: 11, adminHrsBest: 5, hireAvg: 35, hireBest: 21, utilAvg: 45, utilBest: 78 },
+  'default': { turnoverAvg: 40, turnoverBest: 25, overtimeAvg: 10, overtimeBest: 6, adminHrsAvg: 10, adminHrsBest: 6, hireAvg: 30, hireBest: 21, utilAvg: 40, utilBest: 75 }
+};
+
+function getBenchmarks() {
+  const industry = window.appState.answers['industry'] || '';
+  return INDUSTRY_BENCHMARKS[industry] || INDUSTRY_BENCHMARKS['default'];
+}
+
+// ========== LANDING ==========
+function initiateAELogin() {
+  const email = document.getElementById('ae-email').value.trim();
+  const errEl = document.getElementById('ae-email-error');
+  if (!email.toLowerCase().endsWith('@netchexonline.com')) {
+    errEl.style.display = 'block';
+    return;
+  }
+  errEl.style.display = 'none';
+  const code = Math.floor(100000 + Math.random() * 900000).toString();
+  window._otpCode = code;
+  window.appState.aeInfo.email = email;
+  document.getElementById('otp-email-display').textContent = email;
+  document.getElementById('otp-code-display').textContent = code;
+  document.getElementById('otp-input').value = '';
+  document.getElementById('otp-error').style.display = 'none';
+  document.getElementById('otp-modal').classList.remove('hidden');
+}
+
+function closeOTP() { document.getElementById('otp-modal').classList.add('hidden'); }
+
+function verifyOTP() {
+  const input = document.getElementById('otp-input').value.trim();
+  if (input !== window._otpCode) {
+    document.getElementById('otp-error').style.display = 'block';
+    return;
+  }
+  document.getElementById('otp-modal').classList.add('hidden');
+  window.appState.mode = 'ae';
+  startAEMode();
+}
+
+function startAEMode() {
+  showScreen('screen-questionnaire');
+  document.getElementById('ae-setup-block').classList.remove('hidden');
+  document.getElementById('question-container').innerHTML = '';
+  document.getElementById('qm-mode').textContent = 'AE Mode';
+  document.getElementById('live-score-card').style.display = 'flex';
+}
+
+function startAEQuestions() {
+  const company = document.getElementById('setup-company').value.trim() || 'Prospect Company';
+  const persona = document.getElementById('setup-persona').value || 'CFO';
+  const aeName = document.getElementById('setup-ae-name').value.trim();
+  const prospectEmail = document.getElementById('setup-prospect-email').value.trim();
+  window.appState.aeInfo.company = company;
+  window.appState.aeInfo.persona = persona;
+  window.appState.aeInfo.name = aeName;
+  window.appState.aeInfo.prospectEmail = prospectEmail;
+  document.getElementById('qm-company').textContent = company;
+  document.getElementById('qm-persona').textContent = persona;
+  document.getElementById('ae-setup-block').classList.add('hidden');
+  window.appState.questionSet = buildAEQuestions();
+  window.appState.totalQ = window.appState.questionSet.length;
+  window.appState.currentQ = 0;
+  renderQuestion();
+}
+
+function startSelfServe() {
+  window.appState.mode = 'selfserve';
+  showScreen('screen-questionnaire');
+  document.getElementById('ae-setup-block').classList.add('hidden');
+  document.getElementById('live-score-card').style.display = 'none';
+  document.getElementById('qm-mode').textContent = 'Self-Serve';
+  document.getElementById('qm-company').textContent = '';
+  document.getElementById('qm-platform').textContent = '';
+  document.getElementById('qm-persona').textContent = '';
+  window.appState.questionSet = buildSelfServeQuestions();
+  window.appState.totalQ = window.appState.questionSet.length;
+  window.appState.currentQ = 0;
+  renderQuestion();
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ========== QUESTION DEFINITIONS ==========
+function buildAEQuestions() {
+  return [
+    {
+      id: 'industry', pillar: 'profile',
+      question: 'What industry best describes your organization?',
+      type: 'mc', required: true,
+      options: ['Restaurants & Hospitality','Auto Dealerships','Healthcare','Retail','Manufacturing','Construction','Transportation & Logistics','Childcare & Education','Property Management','Other deskless/field workforce'],
+      coaching: {
+        listen: 'Industry recalibrates every benchmark. Hospitality/healthcare have dramatically different baseline turnover.',
+        pivot: "Use industry selection to set up Netchex's industry-specific modules angle.",
+        cfo: 'Industry-specific compliance requirements vary dramatically — ask about state filings.',
+        hr: 'Every industry has different turnover norms. Establish the benchmark early.',
+        mgr: 'Ask about seasonal workforce fluctuations — often a scheduling pain point.',
+        idkNote: null,
+        vsADP: 'ADP serves all industries but lacks deep vertical specialization for deskless workforces.',
+        vsPaycom: 'Paycom is strong in white-collar — less specialized for hourly/deskless.',
+        vsRippling: 'Rippling skews tech-forward — less optimized for high-turnover hourly industries.'
+      }
+    },
+    {
+      id: 'size', pillar: 'profile',
+      question: 'How many employees does your organization have?',
+      type: 'mc', required: true,
+      options: ['Under 25','26–100','101–250','251–500','500+'],
+      coaching: {
+        listen: 'Size determines benchmark cohort AND which Netchex modules resonate most.',
+        pivot: '26–100 = efficiency story. 101–500 = integration and compliance story.',
+        cfo: 'Larger teams = greater compliance exposure and more complex tax filings.',
+        hr: 'HR-to-employee ratio matters — ask how many HR staff support this headcount.',
+        mgr: 'How many managers need real-time visibility into their teams?',
+        idkNote: null, vsADP: '', vsPaycom: '', vsRippling: ''
+      }
+    },
+    {
+      id: 'states', pillar: 'profile',
+      question: 'Where are your employees primarily located?',
+      type: 'mc', required: true,
+      options: ['Single state','Multi-state (2–9 states)','10+ states'],
+      coaching: {
+        listen: 'Multi-state = automatic compliance complexity flag.',
+        pivot: '10+ states = ACA, wage-and-hour, and state payroll tax exposure multiplies.',
+        cfo: 'Each additional state adds tax filing complexity and audit exposure.',
+        hr: 'Multi-state means different leave laws, minimum wages, and employment rules.',
+        mgr: 'Ask if they have a dedicated person handling state compliance filings.',
+        idkNote: null, vsADP: 'ADP handles multi-state but at add-on cost.', vsPaycom: '', vsRippling: 'Rippling has multi-state but mid-market gets less support.'
+      }
+    },
+    {
+      id: 'platform', pillar: 'profile',
+      question: 'Which HR and payroll platform are you currently using?',
+      type: 'mc', required: true,
+      options: ['ADP','Paychex','Paycom','Paylocity','Rippling','Gusto','Multiple/combination of tools','Other / In-house'],
+      coaching: {
+        listen: '"Combination of tools" = maximum Save Time and Reduce Risk opportunity.',
+        pivot: "Don't react to the answer — just note it. It unlocks competitor-specific framing.",
+        cfo: 'Ask what the all-in cost of their current setup is — often underestimated.',
+        hr: 'How long have they been on this platform? Contract terms?',
+        mgr: 'How much time does the team spend working around the platform vs. with it?',
+        idkNote: "If you're not sure what platform you're on, that's a service quality signal.",
+        vsADP: 'If ADP: focus on service model — large clients get dedicated support, mid-market often does not.',
+        vsPaycom: 'If Paycom: single-platform strength but closed ecosystem — ask about integrations.',
+        vsRippling: 'If Rippling/Gusto: often chosen for simplicity but hit walls at scale.'
+      }
+    },
+    {
+      id: 'overtime', pillar: 'saveDollars',
+      question: 'Approximately what percentage of your workforce regularly works overtime?',
+      type: 'slider', min: 0, max: 35, unit: '%', idk: true,
+      benchmark: 'Industry average: 8–12% of total payroll spend',
+      coaching: {
+        listen: 'Above 12% = scoring penalty AND product pivot to NetSchedule/OT Alert Engine.',
+        pivot: 'NetSchedule gives managers real-time OT alerts before hours are approved.',
+        cfo: "Overtime is one of the most controllable labor costs — most platforms don't give managers real-time visibility before it's already approved.",
+        hr: 'Chronic overtime often correlates with understaffing and burnout — it\'s a retention signal.',
+        mgr: 'How much visibility do your managers have into who\'s approaching OT before it happens?',
+        idkNote: "The fact that your current system doesn't surface OT spend clearly is a visibility gap. Industry average of 10% applied.",
+        vsADP: 'Shows OT in reporting but not real-time manager alerts.',
+        vsPaycom: 'Has scheduling — differentiate on the proactive alert model.',
+        vsRippling: 'Limited scheduling and OT visibility — strong gap.'
+      }
+    },
+    {
+      id: 'taxPenalties', pillar: 'saveDollars',
+      question: 'Have you received any payroll tax notices or penalties in the last two years?',
+      type: 'mc',
+      options: ['None','1–2 notices','3+ notices','Yes, with financial impact'],
+      benchmark: 'Best-in-class companies have zero compliance notices. Even one tax notice costs $8,000–$25,000+ to resolve.',
+      coaching: {
+        listen: 'Even one notice is a scoring event. Ask specifically about state filing notices.',
+        pivot: "Netchex's dedicated tax compliance team proactively monitors, files, and resolves notices.",
+        cfo: 'Tax notices create financial exposure beyond the penalty — amended filings, interest, and audit risk.',
+        hr: 'Do these notices typically fall on HR to resolve, or does your provider handle them?',
+        mgr: 'These notices often fall on your desk to figure out — has that been the case?',
+        idkNote: "Most platforms should be flagging these automatically. If you're not sure, that's a risk signal.",
+        vsADP: 'Strong tax filing but mid-market clients get self-service resolution — not proactive.',
+        vsPaycom: 'Solid tax filing — differentiate on proactive monitoring.',
+        vsRippling: 'Multi-state tax friction — strong differentiator if multi-state.'
+      }
+    },
+    {
+      id: 'supplementalPayrolls', pillar: 'saveDollars',
+      question: 'How often does your team run supplemental or correction payrolls?',
+      type: 'mc',
+      options: ['Never','1–2 per year','3–5 per year','More than 5 per year'],
+      benchmark: 'Best-in-class teams run fewer than 2 corrections per year. Each costs $1,200–$2,500 in direct cost and 4–6 admin hours.',
+      coaching: {
+        listen: 'Multiply cost × frequency for the prospect. Even 3/year = significant hidden cost.',
+        pivot: "NetPay's error-prevention engine catches discrepancies before payroll is approved.",
+        cfo: 'Each supplemental payroll has a direct cost — typically $1,200–$2,500 including provider fees, staff time, and correction overhead.',
+        hr: 'Do corrections typically happen because of data entry errors or system sync issues?',
+        mgr: 'Every correction payroll usually means a late night or a Monday morning scramble — how often does that happen?',
+        idkNote: 'Supplemental payrolls often get treated as a normal cost of doing business — they\'re not.',
+        vsADP: 'Charges per supplemental run — often $500–$1,500+ depending on contract.',
+        vsPaycom: 'More frequent supplemental payrolls due to limitations in scheduling/time integrations.',
+        vsRippling: 'Gusto has limited scheduling and time integrations — frequent corrections.'
+      }
+    },
+    {
+      id: 'turnover', pillar: 'saveDollars',
+      question: 'What is your current annual employee turnover rate?',
+      type: 'slider', min: 0, max: 150, unit: '%', idk: true,
+      benchmark: 'Dynamic by industry. Each point above industry average has a dollar cost — typically 50–200% of that employee\'s annual salary to replace.',
+      coaching: {
+        listen: 'Prospects in hospitality often normalize high turnover — use the benchmark to make 73% feel like a problem.',
+        pivot: "Netchex's engagement and turnover risk dashboards surface flight risk signals before employees walk out.",
+        cfo: 'At X% turnover with Y employees, replacement cost is roughly $Z annually — based on 50–200% of annual salary.',
+        hr: 'Turnover rate is one of the most important metrics on a CHRO\'s dashboard — if it\'s not visible in your current platform, that\'s a gap.',
+        mgr: 'Does your current platform show you who might be a flight risk before they resign?',
+        idkNote: "Not knowing your turnover rate means you likely don't have visibility into what it's costing you.",
+        vsADP: 'ADP doesn\'t surface predictive turnover analytics.',
+        vsPaycom: 'Some engagement tools — differentiate on the unified platform angle.',
+        vsRippling: 'Gusto has minimal turnover analytics for hourly workers.'
+      }
+    },
+    {
+      id: 'adminHours', pillar: 'saveTime',
+      question: 'How many hours per week does your HR or admin team spend on each of these tasks?',
+      type: 'multislider',
+      subsliders: [
+        { id: 'adminHoursPayroll', label: 'Payroll processing', min: 0, max: 20 },
+        { id: 'adminHoursBenefits', label: 'Benefits administration', min: 0, max: 20 },
+        { id: 'adminHoursReports', label: 'Report building & data exports', min: 0, max: 15 },
+        { id: 'adminHoursQA', label: 'Answering employee questions', min: 0, max: 15 }
+      ],
+      idk: true,
+      benchmark: 'Best-in-class teams of your size spend fewer than 6 hours/week on payroll processing alone.',
+      coaching: {
+        listen: 'Most teams underestimate. Break it down separately — the total almost always rises.',
+        pivot: 'NetPay automated payroll reduces processing time by an average of 67% for teams of this size.',
+        cfo: 'Multiply total hours × blended $35/hr rate = annual admin cost. That\'s your baseline for ROI.',
+        hr: 'Which of these tasks would you most want to eliminate or reduce?',
+        mgr: 'How many hours last week specifically on payroll prep and employee pay questions?',
+        idkNote: 'Most teams discover the number is higher than they thought once they break it down. Industry average applied.',
+        vsADP: 'ADP mid-market still requires significant manual steps for report building.',
+        vsPaycom: 'Single platform but report customization requires IT or specialist.',
+        vsRippling: 'Gusto requires significant manual work for benefits admin at scale.'
+      }
+    },
+    {
+      id: 'timeToHire', pillar: 'saveTime',
+      question: 'How long does it take your organization to hire a new employee — from job posting to first day?',
+      type: 'slider', min: 1, max: 90, unit: ' days', idk: true,
+      benchmark: 'Industry average: 28–35 days. Best-in-class: under 21 days. Every day a role is open costs $500–$1,500 in lost productivity.',
+      coaching: {
+        listen: 'Time-to-hire above 35 days = significant vacancy cost. Calculate days over benchmark × daily cost.',
+        pivot: 'NetRecruit ATS brings job posting, mobile apply, screening, and offer all into one platform.',
+        cfo: 'Every open role above your benchmark days is a quantifiable drag on output.',
+        hr: 'Where does hiring slow down most — sourcing, screening, or offer/onboarding?',
+        mgr: 'What does your team\'s current hiring process look like step-by-step?',
+        idkNote: "Not knowing means you likely don't have recruiting metrics — which means you can't optimize what you can't measure.",
+        vsADP: 'ADP Workforce Now has basic ATS — not purpose-built for hourly hiring.',
+        vsPaycom: 'Paycom Beti is strong — differentiate on NetRecruit\'s mobile-first apply experience.',
+        vsRippling: 'Gusto has minimal ATS functionality — strong gap.'
+      }
+    },
+    {
+      id: 'onboarding', pillar: 'saveTime',
+      question: 'How does your organization currently handle onboarding new employees?',
+      type: 'mc',
+      options: ['Fully digital (all forms, training, and equipment setup in one system)','Mostly digital with some paper','Mostly paper and manual steps','Ad hoc — it varies by manager'],
+      coaching: {
+        listen: '"Mostly paper" or "ad hoc" = strong Save Time and Drive Engagement scoring opportunity.',
+        pivot: "Netchex's digital onboarding cuts new hire first-day paperwork to near-zero — employees complete everything before they arrive.",
+        cfo: 'Each manual onboarding step is an error risk and a time cost.',
+        hr: 'What does a new hire\'s first day look like — and how many hours does that take from your team?',
+        mgr: 'When a new hire starts, what does their first day look like?',
+        idkNote: null, vsADP: 'ADP onboarding is functional but not optimized for hourly workers.', vsPaycom: '', vsRippling: 'Gusto onboarding is limited for complex multi-state or field workforces.'
+      }
+    },
+    {
+      id: 'dataIntegration', pillar: 'saveTime',
+      question: 'Does your HR, payroll, time, and benefits data live in one system — or does your team re-enter information between platforms?',
+      type: 'mc',
+      options: ['Fully integrated — one system','Partially integrated — some manual steps','Significant manual re-entry between systems'],
+      coaching: {
+        listen: 'Manual re-entry introduces errors at 1–4% per entry. For payroll and benefits, those errors are costly.',
+        pivot: 'Netchex is a single native platform — one database, no integrations to break, no re-entry required.',
+        cfo: 'Data fragmentation is a hidden cost that shows up in correction payrolls and compliance errors.',
+        hr: 'How many different logins does your HR team use daily to manage people data?',
+        mgr: 'How many times per week does your team copy-paste or re-enter data between systems?',
+        idkNote: "If you're not sure whether your systems are truly integrated, they probably aren't.",
+        vsADP: 'Integrations are often add-on cost and IT-dependent.',
+        vsPaycom: 'Single platform but closed — ask about third-party integrations.',
+        vsRippling: 'Gusto relies on third-party integrations for time and benefits.'
+      }
+    },
+    {
+      id: 'platformUtil', pillar: 'driveEngagement',
+      question: 'What percentage of your employees actively use your current HR platform day-to-day?',
+      type: 'slider', min: 0, max: 100, unit: '%', idk: true,
+      benchmark: 'Best-in-class platforms see 75%+ active utilization. Below 40% is a strong signal that your team is still absorbing tasks the platform should handle.',
+      coaching: {
+        listen: 'Low utilization usually surfaces as high call/email volume to HR for self-serve tasks.',
+        pivot: "Netchex's employee experience app is designed for frontline/hourly workers. Average client utilization: 78%+.",
+        cfo: 'Low platform utilization = high HR support cost per employee.',
+        hr: 'How many employees called or emailed HR last week just to get a pay stub or check PTO balance?',
+        mgr: 'Do your frontline employees know the app exists? What\'s the barrier to adoption?',
+        idkNote: 'Low utilization usually surfaces as high call/email volume to HR for things employees should self-serve.',
+        vsADP: 'ADP mobile app is functional but not designed for hourly/deskless workers.',
+        vsPaycom: 'Paycom Beti has strong employee self-service — differentiate on UX for frontline.',
+        vsRippling: 'Gusto has limited mobile functionality for hourly employees.'
+      }
+    },
+    {
+      id: 'engagementMeasured', pillar: 'driveEngagement',
+      question: 'Does your organization currently measure employee engagement?',
+      type: 'mc',
+      options: ['Yes, regularly and we review results','Sometimes — not consistently','No, but we want to','No — not on our radar'],
+      benchmark: 'Companies that regularly measure engagement have 21% higher profitability and 41% lower absenteeism (Gallup).',
+      coaching: {
+        listen: '"No, but we want to" = strong buying signal for NetPulse.',
+        pivot: 'NetPulse built-in pulse surveys inside the same platform managers already use — no separate tool required.',
+        cfo: 'Unmeasured engagement = unmanaged turnover cost. Gallup data: 21% higher profitability with engaged teams.',
+        hr: "If you don't measure engagement, you're managing retention reactively — finding out after people have already decided to leave.",
+        mgr: 'When was the last time you had a structured way to hear how your team was really doing?',
+        idkNote: null, vsADP: 'ADP has engagement surveys as add-on — not native to the platform.', vsPaycom: '', vsRippling: 'Gusto has limited engagement tooling.'
+      }
+    },
+    {
+      id: 'firstPaycheck', pillar: 'driveEngagement',
+      question: 'How quickly does a new hire receive their first paycheck at your organization?',
+      type: 'mc',
+      options: ['Same week they start','Within 2 weeks','3–4 weeks','More than 4 weeks','It varies'],
+      coaching: {
+        listen: 'A delayed first paycheck is one of the top causes of new hire disengagement and early turnover.',
+        pivot: "Netchex's unified onboarding + payroll means new hire data flows directly into the first available payroll cycle.",
+        cfo: 'Delayed first paycheck increases early turnover — which means re-paying recruitment and onboarding costs.',
+        hr: 'Have you ever had a new hire quit or disengage because their first paycheck was delayed?',
+        mgr: 'How many manual steps happen between a new hire\'s first day and when payroll gets their information?',
+        idkNote: 'This question often reveals a payroll cycle timing issue your current platform isn\'t solving.',
+        vsADP: '', vsPaycom: '', vsRippling: 'Gusto often has payroll lag for new hires due to manual handoff from onboarding.'
+      }
+    },
+    {
+      id: 'managerVisibility', pillar: 'driveEngagement',
+      question: 'How does your organization handle manager visibility into team performance, attendance, and engagement?',
+      type: 'mc',
+      options: ['Real-time dashboard available to managers','Weekly reports','Monthly reports','Ad hoc — managers pull reports when they think of it','Little to no structured visibility'],
+      coaching: {
+        listen: '"Little to no visibility" or "ad hoc" = most powerful engagement gap.',
+        pivot: "Netchex's manager dashboard surfaces real-time attendance, OT alerts, time-off balances, and engagement signals — on mobile.",
+        cfo: 'Teams with real-time manager visibility have 23% lower voluntary turnover (Gallup).',
+        hr: 'What happens when a manager misses a signal — like a team member who starts missing shifts?',
+        mgr: 'What does your current manager toolkit look like for day-to-day team management?',
+        idkNote: "The answer is often that visibility depends entirely on the manager's habit — which means it's inconsistent.",
+        vsADP: '', vsPaycom: 'Paycom has manager analytics — differentiate on mobile-first design for field managers.', vsRippling: ''
+      }
+    },
+    {
+      id: 'complianceRating', pillar: 'reduceRisk',
+      question: "How would you rate your organization's current compliance confidence?",
+      type: 'rating',
+      labels: ["We've had issues","Some concerns","We think we're compliant","Mostly confident","Proactively managed"],
+      benchmark: 'Compliance failures at your size typically cost $8,000–$50,000+ per incident.',
+      coaching: {
+        listen: 'Self-rating of 3 or below = significant risk exposure.',
+        pivot: 'Netchex has a dedicated compliance team — not just compliance software. They monitor, flag, and resolve proactively.',
+        cfo: 'Compliance failures at your size typically cost $8,000–$50,000+ per incident including penalty, resolution, and legal fees.',
+        hr: 'What does your current platform do when a compliance deadline is approaching?',
+        mgr: 'Who owns compliance in your organization — and what tools do they have?',
+        idkNote: "A compliance confidence score of 'I'm not sure' is itself a risk signal.",
+        vsADP: 'ADP has compliance tools — differentiate on Netchex\'s dedicated compliance team.',
+        vsPaycom: 'Paycom has strong compliance — differentiate on dedicated team vs. software-only.',
+        vsRippling: 'Gusto has limited multi-state compliance support — strong gap.'
+      }
+    },
+    {
+      id: 'complianceIssues', pillar: 'reduceRisk',
+      question: 'Has your organization experienced any of these in the last two years?',
+      type: 'mcmulti',
+      options: ['None of these','ACA filing issue','DOL inquiry','Wage-and-hour complaint','Benefits enrollment errors affecting employees','Other compliance incident'],
+      benchmark: 'Any confirmed audit or DOL inquiry represents serious exposure. Most go unresolved for 6–18 months without a dedicated compliance partner.',
+      coaching: {
+        listen: 'Even one notice is a scoring event. Ask specifically about state filing notices.',
+        pivot: 'Netchex files, monitors, and resolves ACA — with a dedicated compliance team, not just software.',
+        cfo: 'ACA and wage-and-hour compliance exposure is one of the most undercounted liabilities on a mid-market balance sheet.',
+        hr: 'Who handled the resolution when these issues came up — internal or provider?',
+        mgr: 'When notices come in, where do they go — and who\'s responsible for resolution?',
+        idkNote: "Most platforms should be flagging these automatically. If you're not sure, that's a risk signal.",
+        vsADP: 'ADP resolves but often charges separately and requires client-side work.',
+        vsPaycom: '', vsRippling: 'Gusto has limited ACA support — strong differentiator.'
+      }
+    },
+    {
+      id: 'enrollmentErrors', pillar: 'reduceRisk',
+      question: 'How often do employees report errors or confusion during annual benefits enrollment?',
+      type: 'mc',
+      options: ['Rarely or never','A few employees each year','Noticeable volume of questions and corrections','Significant disruption every open enrollment'],
+      benchmark: 'Benefits enrollment errors cost an average of $2,000–$6,000 per affected employee in correction and re-processing.',
+      coaching: {
+        listen: '"Significant disruption" = both a risk flag and an engagement flag.',
+        pivot: "Netchex's benefits enrollment includes guided, mobile-first experience with built-in decision support.",
+        cfo: 'Benefits enrollment errors cost an average of $2,000–$6,000 per affected employee.',
+        hr: 'How many hours does open enrollment consume from your HR team each year?',
+        mgr: 'Do employees come to you with enrollment questions — and how long does it take to resolve each one?',
+        idkNote: "If you're not tracking enrollment complaints, you may be absorbing the cost as payroll adjustments without seeing them as a benefits issue.",
+        vsADP: 'ADP benefits enrollment is functional but not designed for low-literacy hourly workers.',
+        vsPaycom: '', vsRippling: 'Gusto benefits enrollment has limited decision support for complex plans.'
+      }
+    },
+    {
+      id: 'topPain', pillar: 'all',
+      question: 'If you could eliminate one recurring HR or payroll headache tomorrow, what would it be?',
+      type: 'textarea',
+      placeholder: "Describe your biggest HR or payroll pain point...",
+      tags: ['Manual data re-entry','Payroll errors','OT overages','Compliance surprises','High turnover','Open enrollment chaos','Slow onboarding','Report building','Employee questions','Benefits confusion'],
+      coaching: {
+        listen: 'THIS IS THE MOST IMPORTANT ANSWER. Use their exact language in the report. Quote it back.',
+        pivot: "Whatever the answer — there is a Netchex module that addresses it. This becomes the personalized first line of the Opportunity section.",
+        cfo: 'Frame their pain in dollar terms: what does this headache cost annually?',
+        hr: 'Their answer reveals what they care about most — align the entire demo to this.',
+        mgr: 'This is their day-to-day reality. Make them feel heard and seen.',
+        idkNote: null, vsADP: '', vsPaycom: '', vsRippling: ''
+      }
+    }
+  ];
+}
+
+function buildSelfServeQuestions() {
+  return [
+    {
+      id: 'persona', pillar: 'profile',
+      question: 'I am primarily the...',
+      type: 'persona', required: true,
+      options: [
+        { value: 'CFO', label: 'CFO / Financial Leader', emoji: '💼', sub: 'Focus: ROI & cost control' },
+        { value: 'HR', label: 'HR Director / VP of People', emoji: '👥', sub: 'Focus: People & retention' },
+        { value: 'Manager', label: 'Office Manager / HR Generalist', emoji: '⚙️', sub: 'Focus: Daily operations' },
+        { value: 'Owner', label: 'Business Owner', emoji: '🏢', sub: 'Focus: Growth & risk' }
+      ]
+    },
+    {
+      id: 'industry', pillar: 'profile', question: 'What industry best describes your organization?',
+      type: 'mc', required: true,
+      options: ['Restaurants & Hospitality','Auto Dealerships','Healthcare','Retail','Manufacturing','Construction','Transportation & Logistics','Childcare & Education','Property Management','Other deskless/field workforce'],
+      benchmark: 'This calibrates your benchmark comparisons — industry averages for overtime, turnover, and hiring speed vary significantly.'
+    },
+    {
+      id: 'size', pillar: 'profile', question: 'How many employees do you have?',
+      type: 'mc', required: true,
+      options: ['Under 25','26–100','101–250','251–500','500+']
+    },
+    {
+      id: 'overtime', pillar: 'saveDollars',
+      question: 'What percentage of your workforce regularly works overtime?',
+      type: 'slider', min: 0, max: 35, unit: '%', idk: true,
+      benchmark: 'Industry average is 8–12% of total payroll spend. Above 12% is a measurable cost signal worth quantifying.'
+    },
+    {
+      id: 'adminHoursTotal', pillar: 'saveTime',
+      question: 'How many hours per week does your HR or admin team spend on payroll, benefits, and employee questions combined?',
+      type: 'slider', min: 2, max: 40, unit: ' hrs/wk', idk: true,
+      benchmark: 'Best-in-class teams of your size spend fewer than 6 hours/week on payroll processing. Most teams are surprised by how far above that they are.'
+    },
+    {
+      id: 'turnover', pillar: 'saveDollars',
+      question: 'What is your current annual employee turnover rate?',
+      type: 'slider', min: 0, max: 150, unit: '%', idk: true,
+      benchmark: 'Every point above industry average has a dollar cost — typically 50–200% of that employee\'s annual salary to replace.'
+    },
+    {
+      id: 'platformUtil', pillar: 'driveEngagement',
+      question: 'What percentage of your employees actively use your current HR platform day-to-day?',
+      type: 'slider', min: 0, max: 100, unit: '%', idk: true,
+      benchmark: 'Best-in-class platforms see 75%+ active utilization. Below 40% is a strong signal that your team is still absorbing tasks the platform should handle.'
+    },
+    {
+      id: 'engagementMeasured', pillar: 'driveEngagement',
+      question: 'Does your organization currently measure employee engagement through surveys, pulse checks, or similar tools?',
+      type: 'mc',
+      options: ['Yes, regularly and we review results','Sometimes — not consistently','No, but we want to','No — not on our radar'],
+      benchmark: 'Companies that regularly measure engagement have 21% higher profitability and 41% lower absenteeism (Gallup).'
+    },
+    {
+      id: 'complianceIssues', pillar: 'reduceRisk',
+      question: 'Have you experienced any payroll tax notices, ACA filing issues, or benefits enrollment errors in the last two years?',
+      type: 'mc',
+      options: ['None','1–2 issues','3+ issues','Yes, with financial impact'],
+      benchmark: 'Best-in-class companies have zero compliance notices. Even one tax notice costs an average of $8,000–$25,000 to resolve.'
+    },
+    {
+      id: 'dataIntegration', pillar: 'saveTime',
+      question: 'Does your HR, payroll, time, and benefits data live in one system — or does your team re-enter information between platforms?',
+      type: 'mc',
+      options: ['Fully integrated — one system','Partially integrated — some manual steps','Significant manual re-entry between systems'],
+      benchmark: 'Manual data re-entry introduces errors at 1–4% per entry. For payroll and benefits, those errors are costly to find and fix.'
+    },
+    {
+      id: 'topPain', pillar: 'all',
+      question: 'If you could fix one HR or payroll problem in your organization tomorrow, what would it be?',
+      type: 'textarea',
+      placeholder: 'Your answer shapes the most important section of your report...',
+      tags: ['Manual data re-entry','Payroll errors','OT overages','Compliance surprises','High turnover','Open enrollment chaos','Slow onboarding','Report building','Employee questions','Benefits confusion'],
+      benchmark: 'Your answer shapes the most important section of your report — we\'ll show you exactly how to solve it.'
+    }
+  ];
+}
+
+// ========== RENDER QUESTION ==========
+function renderQuestion() {
+  const state = window.appState;
+  const q = state.questionSet[state.currentQ];
+  if (!q) return;
+
+  const total = state.totalQ;
+  const current = state.currentQ + 1;
+  document.getElementById('progress-bar').style.width = ((current / total) * 100) + '%';
+
+  const isAE = state.mode === 'ae';
+  const container = document.getElementById('question-container');
+
+  let html = `<div class="q-counter">Question ${current} of ${total}</div>`;
+  html += `<div class="q-question">${q.question}</div>`;
+
+  if (q.benchmark) {
+    html += `<div class="q-benchmark">📊 ${q.benchmark}</div>`;
+  }
+
+  // Input rendering
+  if (q.type === 'persona') {
+    html += `<div class="persona-grid">`;
+    q.options.forEach(opt => {
+      const sel = state.answers[q.id] === opt.value ? 'selected' : '';
+      html += `<div class="persona-card ${sel}" onclick="selectPersona('${opt.value}', this)">
+        <span class="persona-emoji">${opt.emoji}</span>
+        <div class="persona-name">${opt.label}</div>
+        <div class="persona-sub">${opt.sub}</div>
+      </div>`;
+    });
+    html += `</div>`;
+  } else if (q.type === 'mc') {
+    html += `<div class="mc-grid">`;
+    q.options.forEach(opt => {
+      const sel = state.answers[q.id] === opt ? 'selected' : '';
+      html += `<button class="mc-btn ${sel}" onclick="selectMC(this, '${q.id}', '${opt.replace(/'/g,"\\'")}', false)">${opt}</button>`;
+    });
+    html += `</div>`;
+  } else if (q.type === 'mcmulti') {
+    const selArr = state.answers[q.id] || [];
+    html += `<div class="mc-grid">`;
+    q.options.forEach(opt => {
+      const sel = selArr.includes(opt) ? 'selected' : '';
+      html += `<button class="mc-btn mc-multi ${sel}" onclick="selectMCMulti(this, '${q.id}', '${opt.replace(/'/g,"\\'")}')">`;
+      if (sel) html += `✓ `;
+      html += `${opt}</button>`;
+    });
+    html += `</div>`;
+  } else if (q.type === 'slider') {
+    const val = state.answers[q.id] !== undefined && !state.answers[q.id+'_idk'] ? state.answers[q.id] : (q.min + q.max) / 2;
+    const isIDK = state.answers[q.id+'_idk'];
+    html += `<div class="slider-wrap">
+      <div class="slider-value-display"><span id="slider-val-${q.id}">${Math.round(val)}</span><small>${q.unit}</small></div>
+      <div class="slider-labels"><span>${q.min}${q.unit}</span><span>${q.max}${q.unit}+</span></div>
+      <input type="range" id="slider-${q.id}" min="${q.min}" max="${q.max}" value="${Math.round(val)}" ${isIDK ? 'disabled' : ''} oninput="updateSlider('${q.id}', this.value, ${JSON.stringify(q)})">
+      <div id="slider-tooltip-${q.id}" class="benchmark-tooltip" style="display:none;"></div>
+    </div>`;
+    if (q.idk) {
+      html += `<label class="idk-toggle"><input type="checkbox" id="idk-${q.id}" ${isIDK ? 'checked' : ''} onchange="toggleIDK('${q.id}', ${JSON.stringify(q).replace(/"/g,'&quot;')})"><span>I don't know — use industry average</span></label>`;
+      if (isIDK) {
+        html += `<div class="idk-note">✓ Industry average applied for scoring. ${isAE && q.coaching ? q.coaching.idkNote : 'Your report will flag this as an estimated data point.'}</div>`;
+      }
+    }
+  } else if (q.type === 'multislider') {
+    html += `<div class="multi-slider-grid">`;
+    q.subsliders.forEach(sub => {
+      const val = state.answers[sub.id] !== undefined ? state.answers[sub.id] : 0;
+      html += `<div class="multi-slider-item">
+        <label>${sub.label} <span class="mini-val" id="msval-${sub.id}">${val} hrs</span></label>
+        <input type="range" min="${sub.min}" max="${sub.max}" value="${val}" oninput="updateMultiSlider('${sub.id}', this.value)">
+      </div>`;
+    });
+    html += `</div>`;
+    const totalHrs = q.subsliders.reduce((a,s) => a + (state.answers[s.id] || 0), 0);
+    html += `<div style="text-align:center;font-size:18px;font-weight:700;color:var(--nx-navy);margin-bottom:8px;">Total: <span id="ms-total">${totalHrs}</span> hrs/week</div>`;
+    if (q.idk) {
+      const isIDK = state.answers[q.id+'_idk'];
+      html += `<label class="idk-toggle"><input type="checkbox" id="idk-${q.id}" ${isIDK ? 'checked' : ''} onchange="toggleIDKMulti('${q.id}', ${JSON.stringify(q.subsliders).replace(/"/g,'&quot;')})"><span>I don't know — use industry average</span></label>`;
+    }
+  } else if (q.type === 'rating') {
+    html += `<div class="rating-scale">`;
+    for (let i = 1; i <= 5; i++) {
+      const sel = state.answers[q.id] === i ? 'selected' : '';
+      html += `<div class="rating-btn ${sel}" onclick="selectRating('${q.id}', ${i}, this)">
+        <span class="rating-num">${i}</span>
+        <span class="rating-label">${q.labels[i-1]}</span>
+      </div>`;
+    }
+    html += `</div>`;
+  } else if (q.type === 'textarea') {
+    const val = state.answers[q.id] || '';
+    html += `<textarea class="q-textarea" id="ta-${q.id}" placeholder="${q.placeholder || ''}" oninput="state_set('${q.id}', this.value)">${val}</textarea>`;
+    if (q.tags) {
+      html += `<div class="tag-suggestions">`;
+      q.tags.forEach(tag => {
+        html += `<span class="tag-chip" onclick="appendTag('${q.id}', '${tag}')">${tag}</span>`;
+      });
+      html += `</div>`;
+    }
+  }
+
+  // AE Coaching Panel
+  if (isAE && q.coaching) {
+    const platform = state.answers.platform || '';
+    html += buildCoachingPanel(q.coaching, platform);
+  }
+
+  // Navigation
+  const isLast = state.currentQ === total - 1;
+  html += `<div class="q-nav">
+    <button class="btn btn-outline" onclick="goBack()" ${state.currentQ === 0 ? 'style="visibility:hidden"' : ''}>← Back</button>
+    <button class="btn btn-teal" onclick="goNext()" id="next-btn">${isLast ? 'Generate My Score →' : 'Next →'}</button>
+  </div>`;
+
+  container.innerHTML = html;
+  updateLiveScore();
+}
+
+function buildCoachingPanel(coaching, platform) {
+  const state = window.appState;
+  const persona = (state.aeInfo.persona || 'CFO').toLowerCase().replace(' ','');
+  const tabMap = { 'cfo': 'CFO Frame', 'hr': 'HR Frame', 'manager': 'Mgr Frame', 'mgr': 'Mgr Frame' };
+  const activePersona = persona === 'manager' || persona === 'mgr' ? 'mgr' : persona;
+  
+  let vsContent = '';
+  if (platform === 'ADP' || platform === 'Paychex') {
+    vsContent = `<div class="competitor-block highlighted"><strong>vs. ADP/Paychex:</strong> ${coaching.vsADP}</div>
+    <div class="competitor-block">${coaching.vsPaycom ? '<strong>vs. Paycom/Paylocity:</strong> ' + coaching.vsPaycom : ''}</div>`;
+  } else if (platform === 'Paycom' || platform === 'Paylocity') {
+    vsContent = `<div class="competitor-block">${coaching.vsADP ? '<strong>vs. ADP:</strong> ' + coaching.vsADP : ''}</div>
+    <div class="competitor-block highlighted"><strong>vs. Paycom/Paylocity:</strong> ${coaching.vsPaycom}</div>`;
+  } else if (platform === 'Rippling' || platform === 'Gusto') {
+    vsContent = `<div class="competitor-block">${coaching.vsADP ? '<strong>vs. ADP:</strong> ' + coaching.vsADP : ''}</div>
+    <div class="competitor-block highlighted"><strong>vs. Rippling/Gusto:</strong> ${coaching.vsRippling}</div>`;
+  } else {
+    vsContent = `
+      ${coaching.vsADP ? `<div class="competitor-block"><strong>vs. ADP:</strong> ${coaching.vsADP}</div>` : ''}
+      ${coaching.vsPaycom ? `<div class="competitor-block"><strong>vs. Paycom:</strong> ${coaching.vsPaycom}</div>` : ''}
+      ${coaching.vsRippling ? `<div class="competitor-block"><strong>vs. Rippling/Gusto:</strong> ${coaching.vsRippling}</div>` : ''}
+    `;
+  }
+
+  return `<div class="coaching-panel">
+    <div class="coaching-toggle" onclick="toggleCoaching(this)">
+      <span>🎯 AE Coaching Panel</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="coaching-body">
+      <div class="coaching-tabs">
+        <button class="coaching-tab ${activePersona === 'cfo' ? 'active' : ''}" onclick="switchCoachTab(this, 'cfo-tab')">CFO Frame</button>
+        <button class="coaching-tab ${activePersona === 'hr' ? 'active' : ''}" onclick="switchCoachTab(this, 'hr-tab')">HR Frame</button>
+        <button class="coaching-tab ${activePersona === 'mgr' ? 'active' : ''}" onclick="switchCoachTab(this, 'mgr-tab')">Mgr Frame</button>
+        <button class="coaching-tab" onclick="switchCoachTab(this, 'comp-tab')">Competitor Context</button>
+      </div>
+      <div id="cfo-tab" class="coaching-content" style="${activePersona !== 'cfo' ? 'display:none' : ''}">
+        <div class="coaching-section"><h4>What to listen for</h4><p>${coaching.listen}</p></div>
+        <div class="coaching-section"><h4>CFO Framing</h4><p>${coaching.cfo}</p></div>
+        <div class="coaching-section"><h4>Netchex Pivot</h4><p><strong>${coaching.pivot}</strong></p></div>
+        ${coaching.idkNote ? `<div class="coaching-section"><h4>"I don't know" signal</h4><p>${coaching.idkNote}</p></div>` : ''}
+      </div>
+      <div id="hr-tab" class="coaching-content" style="${activePersona !== 'hr' ? 'display:none' : ''}">
+        <div class="coaching-section"><h4>What to listen for</h4><p>${coaching.listen}</p></div>
+        <div class="coaching-section"><h4>HR Framing</h4><p>${coaching.hr}</p></div>
+        <div class="coaching-section"><h4>Netchex Pivot</h4><p><strong>${coaching.pivot}</strong></p></div>
+        ${coaching.idkNote ? `<div class="coaching-section"><h4>"I don't know" signal</h4><p>${coaching.idkNote}</p></div>` : ''}
+      </div>
+      <div id="mgr-tab" class="coaching-content" style="${activePersona !== 'mgr' ? 'display:none' : ''}">
+        <div class="coaching-section"><h4>What to listen for</h4><p>${coaching.listen}</p></div>
+        <div class="coaching-section"><h4>Manager Framing</h4><p>${coaching.mgr}</p></div>
+        <div class="coaching-section"><h4>Netchex Pivot</h4><p><strong>${coaching.pivot}</strong></p></div>
+        ${coaching.idkNote ? `<div class="coaching-section"><h4>"I don't know" signal</h4><p>${coaching.idkNote}</p></div>` : ''}
+      </div>
+      <div id="comp-tab" class="coaching-content" style="display:none">${vsContent}</div>
+    </div>
+  </div>`;
+}
+
+function toggleCoaching(el) {
+  el.classList.toggle('open');
+  const body = el.nextElementSibling;
+  body.classList.toggle('open');
+}
+
+function switchCoachTab(btn, tabId) {
+  const panel = btn.closest('.coaching-panel');
+  panel.querySelectorAll('.coaching-tab').forEach(t => t.classList.remove('active'));
+  panel.querySelectorAll('.coaching-content').forEach(c => c.style.display = 'none');
+  btn.classList.add('active');
+  panel.querySelector('#' + tabId).style.display = 'block';
+}
+
+// ========== INPUT HANDLERS ==========
+function selectPersona(val, el) {
+  document.querySelectorAll('.persona-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  window.appState.answers['persona'] = val;
+  if (window.appState.mode === 'selfserve') {
+    window.appState.aeInfo.persona = val;
+    document.getElementById('qm-persona').textContent = val;
+  }
+}
+
+function selectMC(el, qid, val, isMulti) {
+  if (!isMulti) {
+    el.closest('.mc-grid').querySelectorAll('.mc-btn').forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected');
+    window.appState.answers[qid] = val;
+    if (qid === 'platform') {
+      window.appState.aeInfo.currentPlatform = val;
+      document.getElementById('qm-platform').textContent = val;
+    }
+    updateLiveScore();
+  }
+}
+
+function selectMCMulti(el, qid, val) {
+  let arr = window.appState.answers[qid] || [];
+  if (val === 'None of these') {
+    arr = [val];
+    document.querySelectorAll('.mc-multi').forEach(b => {
+      b.classList.remove('selected');
+      b.innerHTML = b.textContent.replace('✓ ','');
+    });
+    el.classList.add('selected');
+    el.innerHTML = '✓ ' + val;
+  } else {
+    const noneIdx = arr.indexOf('None of these');
+    if (noneIdx > -1) {
+      arr.splice(noneIdx, 1);
+      document.querySelectorAll('.mc-multi').forEach(b => {
+        if (b.textContent.includes('None')) { b.classList.remove('selected'); b.innerHTML = 'None of these'; }
+      });
+    }
+    const idx = arr.indexOf(val);
+    if (idx > -1) {
+      arr.splice(idx, 1);
+      el.classList.remove('selected');
+      el.innerHTML = val;
+    } else {
+      arr.push(val);
+      el.classList.add('selected');
+      el.innerHTML = '✓ ' + val;
+    }
+  }
+  window.appState.answers[qid] = arr;
+  updateLiveScore();
+}
+
+function updateSlider(qid, val, q) {
+  document.getElementById('slider-val-' + qid).textContent = Math.round(val);
+  window.appState.answers[qid] = parseFloat(val);
+  const bench = getBenchmarks();
+  const tooltip = document.getElementById('slider-tooltip-' + qid);
+  if (tooltip) {
+    if (qid === 'overtime') {
+      const avg = bench.overtimeAvg, best = bench.overtimeBest;
+      if (val <= best) { tooltip.className = 'benchmark-tooltip good'; tooltip.textContent = '✓ Best-in-class range'; tooltip.style.display = 'block'; }
+      else if (val <= avg) { tooltip.className = 'benchmark-tooltip warning'; tooltip.textContent = '⚠️ At industry average'; tooltip.style.display = 'block'; }
+      else { tooltip.className = 'benchmark-tooltip bad'; tooltip.textContent = '⚠️ Above industry average — cost impact applies'; tooltip.style.display = 'block'; }
+    } else if (qid === 'turnover') {
+      const avg = bench.turnoverAvg, best = bench.turnoverBest;
+      if (val <= best) { tooltip.className = 'benchmark-tooltip good'; tooltip.textContent = '✓ Best-in-class range'; tooltip.style.display = 'block'; }
+      else if (val <= avg) { tooltip.className = 'benchmark-tooltip warning'; tooltip.textContent = '⚠️ Near industry average'; tooltip.style.display = 'block'; }
+      else { tooltip.className = 'benchmark-tooltip bad'; tooltip.textContent = '⚠️ Above industry average — high replacement cost'; tooltip.style.display = 'block'; }
+    } else if (qid === 'platformUtil') {
+      if (val >= 75) { tooltip.className = 'benchmark-tooltip good'; tooltip.textContent = '✓ Best-in-class utilization'; tooltip.style.display = 'block'; }
+      else if (val >= 40) { tooltip.className = 'benchmark-tooltip warning'; tooltip.textContent = '⚠️ Below best-in-class'; tooltip.style.display = 'block'; }
+      else { tooltip.className = 'benchmark-tooltip bad'; tooltip.textContent = '⚠️ Low utilization — HR absorbing extra workload'; tooltip.style.display = 'block'; }
+    }
+  }
+  updateLiveScore();
+}
+
+function updateMultiSlider(sid, val) {
+  window.appState.answers[sid] = parseInt(val);
+  document.getElementById('msval-' + sid).textContent = val + ' hrs';
+  const qDef = window.appState.questionSet.find(q => q.type === 'multislider');
+  if (qDef) {
+    const total = qDef.subsliders.reduce((a,s) => a + (window.appState.answers[s.id] || 0), 0);
+    const el = document.getElementById('ms-total');
+    if (el) el.textContent = total;
+  }
+  updateLiveScore();
+}
+
+function toggleIDK(qid, q) {
+  const cb = document.getElementById('idk-' + qid);
+  const slider = document.getElementById('slider-' + qid);
+  const bench = getBenchmarks();
+  const isIDK = cb.checked;
+  window.appState.answers[qid + '_idk'] = isIDK;
+  if (isIDK) {
+    slider.disabled = true;
+    let avgVal = bench.overtimeAvg;
+    if (qid === 'turnover') avgVal = bench.turnoverAvg;
+    else if (qid === 'timeToHire') avgVal = bench.hireAvg;
+    else if (qid === 'platformUtil') avgVal = bench.utilAvg;
+    else if (qid === 'adminHoursTotal') avgVal = bench.adminHrsAvg;
+    slider.value = avgVal;
+    window.appState.answers[qid] = avgVal;
+    document.getElementById('slider-val-' + qid).textContent = avgVal;
+  } else {
+    slider.disabled = false;
+    delete window.appState.answers[qid + '_idk'];
+  }
+  renderQuestion();
+}
+
+function toggleIDKMulti(qid, subsliders) {
+  const cb = document.getElementById('idk-' + qid);
+  const bench = getBenchmarks();
+  if (cb.checked) {
+    window.appState.answers[qid + '_idk'] = true;
+    subsliders.forEach(s => {
+      window.appState.answers[s.id] = Math.round(bench.adminHrsBest * 1.5);
+    });
+  } else {
+    delete window.appState.answers[qid + '_idk'];
+  }
+  renderQuestion();
+}
+
+function selectRating(qid, val, el) {
+  document.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  window.appState.answers[qid] = val;
+  updateLiveScore();
+}
+
+function appendTag(qid, tag) {
+  const ta = document.getElementById('ta-' + qid);
+  if (!ta) return;
+  ta.value = ta.value ? ta.value + ', ' + tag : tag;
+  window.appState.answers[qid] = ta.value;
+}
+
+function state_set(qid, val) {
+  window.appState.answers[qid] = val;
+}
+
+// ========== NAVIGATION ==========
+function goNext() {
+  const state = window.appState;
+  const q = state.questionSet[state.currentQ];
+  
+  // Validate required
+  if (q.required && !state.answers[q.id]) {
+    showToast('Please select an answer to continue.', '⚠️');
+    return;
+  }
+  
+  if (state.currentQ < state.totalQ - 1) {
+    state.currentQ++;
+    renderQuestion();
+    window.scrollTo(0,0);
+  } else {
+    // Submit
+    generateReport();
+  }
+}
+
+function goBack() {
+  if (window.appState.currentQ > 0) {
+    window.appState.currentQ--;
+    renderQuestion();
+    window.scrollTo(0,0);
+  }
+}
+
+// ========== SCORING ENGINE ==========
+function calculateScores() {
+  const ans = window.appState.answers;
+  const bench = getBenchmarks();
+  const isAE = window.appState.mode === 'ae';
+
+  // ---- SAVE DOLLARS ----
+  let sd = 100;
+  
+  // Overtime penalty (max 25)
+  const ot = ans.overtime !== undefined ? ans.overtime : bench.overtimeAvg;
+  if (ot > bench.overtimeBest) {
+    sd -= Math.min(25, ((ot - bench.overtimeBest) / bench.overtimeBest) * 25);
+  }
+  
+  // Tax penalties (max 30)
+  const taxMap = { 'None': 0, '1–2 notices': 15, '1–2 issues': 15, '3+ notices': 25, '3+ issues': 25, 'Yes, with financial impact': 30 };
+  sd -= (taxMap[ans.taxPenalties] || taxMap[ans.complianceIssues] || 0) * 0.2;
+  if (isAE) {
+    const issueArr = ans.complianceIssues || [];
+    if (Array.isArray(issueArr) && issueArr.some(i => ['DOL inquiry','Wage-and-hour complaint','ACA filing issue'].includes(i))) {
+      sd -= 20;
+    }
+  }
+  
+  // Supplemental payrolls (max 25)
+  const suppMap = { 'Never': 0, '1–2 per year': 5, '3–5 per year': 15, 'More than 5 per year': 25 };
+  sd -= (suppMap[ans.supplementalPayrolls] || 0);
+  
+  // Turnover cost (max 20)
+  const turnover = ans.turnover !== undefined ? ans.turnover : bench.turnoverAvg;
+  if (turnover > bench.turnoverBest) {
+    sd -= Math.min(20, ((turnover - bench.turnoverBest) / bench.turnoverBest) * 20);
+  }
+  
+  sd = Math.max(0, Math.round(sd));
+
+  // ---- SAVE TIME ----
+  let st = 100;
+  
+  // Admin hours
+  let adminTotal = 0;
+  if (isAE) {
+    adminTotal = (ans.adminHoursPayroll || 0) + (ans.adminHoursBenefits || 0) + (ans.adminHoursReports || 0) + (ans.adminHoursQA || 0);
+  } else {
+    adminTotal = ans.adminHoursTotal || bench.adminHrsAvg;
+  }
+  const adminAbove = Math.max(0, adminTotal - bench.adminHrsBest);
+  st -= Math.min(35, adminAbove * 3);
+  
+  // Onboarding
+  const onboardMap = { 'Ad hoc — it varies by manager': 15, 'Mostly paper and manual steps': 15, 'Mostly digital with some paper': 5, 'Fully digital (all forms, training, and equipment setup in one system)': 0 };
+  st -= (onboardMap[ans.onboarding] || 0);
+  
+  // Time to hire
+  const tth = ans.timeToHire !== undefined ? ans.timeToHire : bench.hireAvg;
+  const weeksOver = Math.max(0, (tth - bench.hireBest) / 7);
+  st -= Math.min(20, weeksOver * 5);
+  
+  // Manual re-entry
+  const reentryMap = { 'Significant manual re-entry between systems': 15, 'Partially integrated — some manual steps': 7, 'Fully integrated — one system': 0 };
+  st -= (reentryMap[ans.dataIntegration] || 0);
+  
+  st = Math.max(0, Math.round(st));
+
+  // ---- DRIVE ENGAGEMENT ----
+  let de = 100;
+  let deCap = 100;
+  
+  // Turnover
+  if (turnover > bench.turnoverBest) {
+    de -= Math.min(30, ((turnover - bench.turnoverBest) / bench.turnoverBest) * 30);
+  }
+  
+  // Platform utilization
+  const util = ans.platformUtil !== undefined ? ans.platformUtil : bench.utilAvg;
+  if (util < 75) {
+    de -= (75 - util) / 75 * 25;
+    if (util < 40) de -= 15;
+  }
+  
+  // Engagement measured
+  const engMap = { 'No — not on our radar': 20, 'No': 20, 'Sometimes — not consistently': 10, 'No, but we want to': 10, 'Yes, regularly and we review results': 0 };
+  const engPenalty = engMap[ans.engagementMeasured] || 0;
+  if (engPenalty === 20) deCap = 80;
+  
+  // Manager visibility
+  const mgvMap = { 'Little to no structured visibility': 15, 'Ad hoc — managers pull reports when they think of it': 10, 'Monthly reports': 5, 'Weekly reports': 2, 'Real-time dashboard available to managers': 0 };
+  de -= (mgvMap[ans.managerVisibility] || 0);
+  
+  // First paycheck
+  const fpMap = { 'More than 4 weeks': 10, '3–4 weeks': 5, 'It varies': 5, 'Within 2 weeks': 0, 'Same week they start': 0 };
+  de -= (fpMap[ans.firstPaycheck] || 0);
+  
+  de = Math.max(0, Math.min(deCap, Math.round(de)));
+
+  // ---- REDUCE RISK ----
+  let rr = 100;
+  
+  // Compliance self-rating
+  const compRating = ans.complianceRating || 3;
+  rr -= (5 - compRating) * 10;
+  
+  // ACA/DOL issues
+  let rrFloor = 0;
+  if (isAE) {
+    const issues = ans.complianceIssues || [];
+    if (Array.isArray(issues)) {
+      if (issues.includes('DOL inquiry') || issues.includes('Wage-and-hour complaint')) rrFloor = 44;
+      else if (issues.includes('ACA filing issue') || issues.includes('Benefits enrollment errors affecting employees')) { rr -= 20; }
+      if (issues.length > 2) rr -= 10;
+    }
+  } else {
+    const issueMap = { 'None': 0, '1–2 issues': 20, '3+ issues': 30, 'Yes, with financial impact': 30 };
+    rr -= (issueMap[ans.complianceIssues] || 0);
+  }
+  
+  // Benefits enrollment errors
+  const errMap = { 'Rarely or never': 0, 'A few employees each year': 10, 'Noticeable volume of questions and corrections': 20, 'Significant disruption every open enrollment': 30 };
+  rr -= (errMap[ans.enrollmentErrors] || 0);
+  
+  // Multi-state
+  const stateMap = { '10+ states': 10, 'Multi-state (2–9 states)': 5, 'Single state': 0 };
+  rr -= (stateMap[ans.states] || 0);
+  
+  rr = Math.max(rrFloor, Math.round(rr));
+
+  // ---- COMPOSITE ----
+  const composite = Math.round(sd * 0.30 + st * 0.25 + de * 0.25 + rr * 0.20);
+
+  window.appState.scores = { saveDollars: sd, saveTime: st, driveEngagement: de, reduceRisk: rr, composite };
+  return window.appState.scores;
+}
+
+function getTier(score) {
+  if (score <= 44) return 'At Risk';
+  if (score <= 64) return 'Average';
+  if (score <= 79) return 'Strong';
+  return 'Best-in-Class';
+}
+
+function getTierClass(tier) {
+  const map = { 'At Risk': 'tier-at-risk', 'Average': 'tier-average', 'Strong': 'tier-strong', 'Best-in-Class': 'tier-best' };
+  return map[tier] || 'tier-average';
+}
+
+function getTierColor(tier) {
+  const map = { 'At Risk': '#E84855', 'Average': '#F5A623', 'Strong': '#3B82F6', 'Best-in-Class': '#2DC98E' };
+  return map[tier] || '#F5A623';
+}
+
+function updateLiveScore() {
+  if (window.appState.mode !== 'ae') return;
+  const scores = calculateScores();
+  const el = document.getElementById('live-score-num');
+  if (el) {
+    el.textContent = scores.composite;
+    el.style.color = getTierColor(getTier(scores.composite));
+  }
+}
+
+// ========== REPORT GENERATION ==========
+async function generateReport() {
+  calculateScores();
+  showScreen('screen-loading');
+
+  // Reset all steps
+  ['ls-1','ls-2','ls-3','ls-4'].forEach(function(id) {
+    document.getElementById(id).className = 'loading-step';
+  });
+
+  const steps = ['ls-1','ls-2','ls-3','ls-4'];
+
+  // Animate steps sequentially
+  async function animateSteps() {
+    for (let i = 0; i < steps.length; i++) {
+      if (i > 0) document.getElementById(steps[i-1]).className = 'loading-step done';
+      document.getElementById(steps[i]).className = 'loading-step active';
+      await sleep(750);
+    }
+  }
+
+  // Wraps any promise so it ALWAYS resolves (never rejects), returning null on failure
+  function safeResolve(promise, timeoutMs) {
+    return new Promise(function(resolve) {
+      var timer = setTimeout(function() { resolve(null); }, timeoutMs);
+      promise
+        .then(function() { clearTimeout(timer); resolve('ok'); })
+        .catch(function(e) { clearTimeout(timer); console.warn('API error:', e); resolve(null); });
+    });
+  }
+
+  // Run animation and API call in parallel; API never blocks the transition
+  var narrativePromise = safeResolve(generateNarratives(), 10000);
+  await animateSteps();
+  var narrativeResult = await narrativePromise;
+  if (narrativeResult === null) {
+    setFallbackNarratives();
+  }
+
+  // Mark all done, then always transition to report
+  steps.forEach(function(id) { document.getElementById(id).className = 'loading-step done'; });
+  await sleep(350);
+
+  buildReport();
+  showScreen('screen-report');
+  window.scrollTo(0, 0);
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+async function generateNarratives() {
+  const state = window.appState;
+  const scores = state.scores;
+  const ans = state.answers;
+  const bench = getBenchmarks();
+  const persona = (state.aeInfo.persona || ans.persona || 'CFO');
+  const company = state.aeInfo.company || 'Your Organization';
+  const industry = ans.industry || 'your industry';
+  const size = ans.size || '26–100';
+  const platform = state.aeInfo.currentPlatform || ans.platform || 'current platform';
+  const topPain = ans.topPain || 'improving HR efficiency';
+
+  const prompt = `You are writing content for a Netchex Index Score report — a premium B2B sales intelligence tool used with HR, payroll, and workforce management buyers.
+
+Company: ${company}
+Industry: ${industry}
+Employee count: ${size}
+Persona: ${persona}
+Current platform: ${platform}
+Composite score: ${scores.composite} (${getTier(scores.composite)})
+
+Pillar scores:
+- Save Dollars: ${scores.saveDollars} (${getTier(scores.saveDollars)}) — key inputs: overtime ${ans.overtime||'est. avg'}%, tax penalties: ${ans.taxPenalties || ans.complianceIssues || 'none reported'}, supplemental payrolls: ${ans.supplementalPayrolls || 'not specified'}, turnover rate: ${ans.turnover||'est. avg'}%
+- Save Time: ${scores.saveTime} (${getTier(scores.saveTime)}) — key inputs: admin hrs/wk: ${(ans.adminHoursPayroll||0)+(ans.adminHoursBenefits||0)+(ans.adminHoursReports||0)+(ans.adminHoursQA||0) || ans.adminHoursTotal || bench.adminHrsAvg}, time-to-hire: ${ans.timeToHire||bench.hireAvg} days, onboarding: ${ans.onboarding || 'not specified'}, data integration: ${ans.dataIntegration || 'not specified'}
+- Drive Engagement: ${scores.driveEngagement} (${getTier(scores.driveEngagement)}) — key inputs: turnover ${ans.turnover||'est.'}%, platform util: ${ans.platformUtil||bench.utilAvg}%, engagement measured: ${ans.engagementMeasured || 'unknown'}, manager visibility: ${ans.managerVisibility || 'unknown'}
+- Reduce Risk: ${scores.reduceRisk} (${getTier(scores.reduceRisk)}) — key inputs: compliance rating: ${ans.complianceRating || 'not rated'}/5, issues: ${JSON.stringify(ans.complianceIssues)}, enrollment errors: ${ans.enrollmentErrors || 'not specified'}, states: ${ans.states || 'unknown'}
+
+Their stated #1 pain: "${topPain}"
+
+Generate the following (return as JSON with these exact keys):
+{
+  "saveDollarsRationale": "2-3 sentences explaining their Save Dollars score. Lead with their primary cost driver using their specific data. Include an estimated annual dollar impact. Note the gap to best-in-class.",
+  "saveTimeRationale": "2-3 sentences on their Save Time score. Lead with specific hours/week finding. Translate to dollar equivalent using $35/hr blended rate assumption. Note best-in-class benchmark.",
+  "driveEngagementRationale": "2-3 sentences on Drive Engagement. Lead with turnover rate vs. industry average. Include estimated replacement cost impact. Reference platform utilization if below 40%.",
+  "reduceRiskRationale": "2-3 sentences on Reduce Risk. Lead with specific compliance exposure. Reference any confirmed issues. Frame as proactive risk to be addressed.",
+  "opportunityStatement": "2-3 sentences for the Opportunity section. Prescribe the top 2 Netchex modules by name. State specific projected impact in ${persona}'s language (dollars / hours / people outcomes). Sound like a confident consultant, not a vendor.",
+  "personalizedRecommendation": "3-4 sentences personalizing the next step. Reference company name, their exact score, their bottom pillar, and the Q20 pain in their exact words. Recommend a specific 45-minute demo focus. Sound confident and specific.",
+  "closingNarrative": "4-5 sentences closing narrative adapted exactly for the ${persona}. CFO version leads with dollar ROI. HR version leads with people outcomes. Office Manager version leads with hours recovered and daily relief. End with a line that makes the reader feel like a hero for finding this."
+}
+
+Rules:
+- Use their exact data points (never placeholder text like [X] or [Y])
+- Never use generic marketing language
+- Sound like a senior consultant who has seen hundreds of companies like theirs
+- The persona adaptation is critical — completely different emotional register for CFO vs. HR vs. Office Manager
+- Dollar estimates should use industry-standard replacement costs: 50-150% of annual salary for turnover, $1,200-$2,500 per supplemental payroll, $8,000-$25,000 per compliance notice
+- Return ONLY the JSON object. No preamble, no markdown, no explanation.`;
+
+  const response = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 1000,
+      messages: [{ role: "user", content: prompt }]
+    })
+  });
+  
+  const data = await response.json();
+  const text = data.content.map(i => i.text || '').join('');
+  const clean = text.replace(/```json|```/g, '').trim();
+  window.appState.narratives = JSON.parse(clean);
+}
+
+function setFallbackNarratives() {
+  const state = window.appState;
+  const scores = state.scores;
+  const company = state.aeInfo.company || 'Your organization';
+  window.appState.narratives = {
+    saveDollarsRationale: `Your Save Dollars score of ${scores.saveDollars} reflects measurable cost exposure in your current setup. Overtime spend, payroll corrections, and turnover costs represent your highest-opportunity areas. Closing the gap to best-in-class benchmarks could recover significant annual spend.`,
+    saveTimeRationale: `At ${scores.saveTime}/100 on Save Time, your team is spending more hours than necessary on manual administrative tasks. Industry best-in-class teams recover 4–8 hours per week through automation alone. That translates to $7,000–$14,000+ in annual efficiency gains per HR team member.`,
+    driveEngagementRationale: `Your Drive Engagement score of ${scores.driveEngagement} points to a gap between your current platform's capabilities and what your employees need day-to-day. Low platform utilization often means HR is absorbing the tasks the system should handle. Improving engagement visibility can meaningfully reduce early-stage turnover.`,
+    reduceRiskRationale: `Your Reduce Risk score of ${scores.reduceRisk} indicates areas of compliance exposure worth addressing proactively. Multi-state operations and benefits enrollment complexity create compounding risk. A proactive compliance partner — not just software — is your best mitigation strategy.`,
+    opportunityStatement: `Based on your score, NetPay's automated payroll and NetRecruit ATS represent your highest-ROI starting points. These two modules address your top-scoring gaps and deliver measurable results within 90 days of implementation. Netchex clients in your size range typically recover their investment within the first two payroll cycles.`,
+    personalizedRecommendation: `${company}'s Netchex Index Score of ${scores.composite} puts you in the ${getTier(scores.composite)} tier — with clear, actionable gaps identified. A focused 45-minute demo on your bottom pillar and top stated pain would give you everything you need to make a confident decision. We recommend starting with a workflow walkthrough that maps directly to your current process.`,
+    closingNarrative: `The data you've shared tells a story that's common among companies at your stage — not broken, but not optimized either. The gap between where you are and where best-in-class companies perform is measurable, closeable, and worth closing. You found this assessment for a reason. The next step is a conversation — and it starts with a 45-minute demo designed around your specific score.`
+  };
+}
+
+// ========== BUILD REPORT ==========
+function buildReport() {
+  const state = window.appState;
+  const scores = state.scores;
+  const ans = state.answers;
+  const narratives = state.narratives;
+  const persona = state.aeInfo.persona || ans.persona || 'CFO';
+  const company = state.aeInfo.company || 'Your Organization';
+  const industry = ans.industry || 'your industry';
+  const size = ans.size || '';
+  const bench = getBenchmarks();
+  const composite = scores.composite;
+  const compTier = getTier(composite);
+
+  // Hero
+  document.getElementById('report-company-tag').textContent = `${company} · ${industry} · ${size} employees · ${persona} View`;
+  document.getElementById('report-hero-title').textContent = `${company}'s Netchex Index Score`;
+  document.getElementById('report-composite-score').textContent = composite;
+  document.getElementById('report-composite-score').style.color = getTierColor(compTier);
+  document.getElementById('report-composite-tier').textContent = compTier;
+  document.getElementById('report-composite-tier').className = 'tier-badge ' + getTierClass(compTier);
+  document.getElementById('report-meta-line').textContent = `Generated on ${new Date().toLocaleDateString('en-US', {month:'long',day:'numeric',year:'numeric'})} · Powered by Netchex AI`;
+
+  // Animate score arc
+  setTimeout(() => {
+    const arc = document.getElementById('score-arc-fill');
+    const pct = composite / 100;
+    arc.style.strokeDashoffset = 283 - (283 * pct);
+    arc.style.stroke = getTierColor(compTier);
+    arc.style.transition = 'stroke-dashoffset 1.5s ease, stroke 0.3s';
+  }, 200);
+
+  // Pillars
+  const pillars = [
+    { key: 'saveDollars', label: 'Save Dollars', icon: '💰', score: scores.saveDollars, rationale: narratives.saveDollarsRationale, color: '#2DC98E' },
+    { key: 'saveTime', label: 'Save Time', icon: '⏱', score: scores.saveTime, rationale: narratives.saveTimeRationale, color: '#3B82F6' },
+    { key: 'driveEngagement', label: 'Drive Engagement', icon: '🚀', score: scores.driveEngagement, rationale: narratives.driveEngagementRationale, color: '#F5A623' },
+    { key: 'reduceRisk', label: 'Reduce Risk', icon: '🛡', score: scores.reduceRisk, rationale: narratives.reduceRiskRationale, color: '#00BFA6' }
+  ];
+
+  let pillarsHTML = '';
+  pillars.forEach(p => {
+    const tier = getTier(p.score);
+    const tierClass = getTierClass(tier);
+    const tierColor = getTierColor(tier);
+    const industryScore = 55; // representative industry avg
+    const bestScore = 82; // best-in-class representative
+
+    let impact = '';
+    if (persona === 'CFO') {
+      if (p.key === 'saveDollars') impact = `<div class="pillar-impact">💰 Estimated annual savings opportunity: $${Math.round((100 - p.score) * 800).toLocaleString()}+</div>`;
+      else if (p.key === 'saveTime') {
+        const hrs = Math.max(0, (state.answers.adminHoursPayroll||0)+(state.answers.adminHoursBenefits||0)+(state.answers.adminHoursReports||0)+(state.answers.adminHoursQA||0) || (state.answers.adminHoursTotal||bench.adminHrsAvg));
+        impact = `<div class="pillar-impact">⏱ ${hrs} hrs/week = $${Math.round(hrs * 35 * 52).toLocaleString()}/yr in admin cost</div>`;
+      }
+    } else if (persona === 'HR' || persona === 'Owner') {
+      if (p.key === 'driveEngagement') impact = `<div class="pillar-impact">👥 Turnover reduction potential: ${Math.round((100-p.score)/5)}% improvement possible</div>`;
+    } else {
+      if (p.key === 'saveTime') impact = `<div class="pillar-impact">⏱ Estimated hours recoverable: ${Math.round((100-p.score)/10)} hrs/week</div>`;
+    }
+
+    pillarsHTML += `<div class="pillar-card">
+      <div class="pillar-card-header">
+        <div class="pillar-icon" style="background:${tierColor}20;">${p.icon}</div>
+        <div class="pillar-name">${p.label}</div>
+        <div class="tier-badge ${tierClass}" style="margin-left:auto;">${tier}</div>
+      </div>
+      <div class="pillar-score-big" style="color:${tierColor}">${p.score}</div>
+      <div style="font-size:12px;color:var(--nx-slate);margin-bottom:8px;">out of 100</div>
+      <div class="pillar-bench-bar">
+        <div class="bench-dot" style="background:${tierColor}"></div>
+        <span class="bench-label">You</span>
+        <span class="bench-val" style="color:${tierColor}">${p.score}</span>
+      </div>
+      <div class="pillar-bench-bar">
+        <div class="bench-dot" style="background:#94A3B8"></div>
+        <span class="bench-label">Industry Avg</span>
+        <span class="bench-val">~${industryScore}</span>
+      </div>
+      <div class="pillar-bench-bar">
+        <div class="bench-dot" style="background:var(--nx-teal)"></div>
+        <span class="bench-label">Best-in-Class</span>
+        <span class="bench-val" style="color:var(--nx-teal)">${bestScore}+</span>
+      </div>
+      <div class="pillar-rationale">${p.rationale || ''}</div>
+      ${impact}
+    </div>`;
+  });
+  document.getElementById('pillars-grid').innerHTML = pillarsHTML;
+
+  // Opportunity blocks
+  const gapPillars = pillars.filter(p => p.score < 65).sort((a,b) => a.score - b.score);
+  const moduleMap = {
+    saveDollars: ans.overtime > bench.overtimeBest ? 
+      [{ name: 'NetSchedule + OT Alert Engine', impact: 'Reduce overtime spend by up to 18%' }, { name: 'NetPay Error Prevention', impact: 'Eliminate costly correction payrolls' }] :
+      [{ name: 'NetPay Automated Payroll', impact: 'Cut payroll processing time by 67%' }, { name: 'Netchex Tax Compliance Team', impact: 'Proactive penalty prevention' }],
+    saveTime: ans.dataIntegration === 'Significant manual re-entry between systems' ?
+      [{ name: 'Single Native Platform', impact: 'Eliminate all manual re-entry across HR, payroll, time & benefits' }, { name: 'NetRecruit ATS', impact: 'Cut time-to-hire by up to 40%' }] :
+      [{ name: 'NetPay Automated Payroll', impact: 'Recover 4–8 hrs/week in payroll processing' }, { name: 'NetRecruit ATS', impact: 'Streamlined hiring in one platform' }],
+    driveEngagement: [
+      { name: 'Employee Experience App', impact: 'Drive 75%+ platform utilization' },
+      { name: 'NetPulse Engagement Surveys', impact: 'Measure and improve engagement systematically' }
+    ],
+    reduceRisk: [
+      { name: 'Netchex ACA Compliance Engine', impact: 'Zero compliance notices — proactively managed' },
+      { name: 'Guided Benefits Enrollment', impact: 'Eliminate open enrollment errors and confusion' }
+    ]
+  };
+
+  let oppHTML = '';
+  (gapPillars.length > 0 ? gapPillars : pillars.slice(0,2)).forEach(p => {
+    const modules = moduleMap[p.key] || [];
+    const fromTier = getTier(p.score);
+    const toTier = p.score <= 44 ? 'Strong' : 'Best-in-Class';
+    modules.forEach(m => {
+      oppHTML += `<div class="opp-block">
+        <div class="opp-block-header">
+          <span class="module-pill">${m.name}</span>
+          <div class="opp-tier-progress">
+            <span class="tier-badge ${getTierClass(fromTier)}">${fromTier}</span>
+            <span class="opp-tier-arrow">→</span>
+            <span class="tier-badge ${getTierClass(toTier)}">${toTier}</span>
+          </div>
+        </div>
+        <div class="opp-impact">${m.impact}</div>
+      </div>`;
+    });
+  });
+  document.getElementById('opp-blocks').innerHTML = oppHTML;
+  
+  const worstPillar = pillars.sort((a,b) => a.score - b.score)[0];
+  const topModules = gapPillars.length > 0 ? 
+    (moduleMap[gapPillars[0].key] || []).slice(0,2).map(m => m.name).join(' and ') : 'NetPay and NetRecruit';
+  
+  document.getElementById('opp-closing').innerHTML = `<strong>Recommended starting point:</strong> A focused 45-minute demo of ${topModules} — the two highest-impact areas based on your Netchex Index Score of ${composite}.`;
+  document.getElementById('opp-subtitle').textContent = `Based on your Netchex Index Score, here is the roadmap from ${worstPillar.label} (${getTier(worstPillar.score)}) to your next tier.`;
+
+  // Benchmark chart
+  document.getElementById('chart-subtitle').textContent = `How ${company} compares to ${industry} companies with ${size} employees`;
+  
+  setTimeout(() => {
+    const ctx = document.getElementById('benchmark-chart').getContext('2d');
+    const industryAvgs = [55, 58, 52, 57];
+    const bestInClass = [83, 85, 80, 82];
+    const yours = [scores.saveDollars, scores.saveTime, scores.driveEngagement, scores.reduceRisk];
+    
+    if (window._benchChart) window._benchChart.destroy();
+    window._benchChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Save Dollars','Save Time','Drive Engagement','Reduce Risk'],
+        datasets: [
+          { label: 'You', data: yours, backgroundColor: '#0A1628', borderRadius: 6 },
+          { label: 'Industry Avg', data: industryAvgs, backgroundColor: '#94A3B8', borderRadius: 6 },
+          { label: 'Best-in-Class', data: bestInClass, backgroundColor: '#00BFA6', borderRadius: 6 }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { position: 'top' } },
+        scales: {
+          y: { beginAtZero: true, max: 100, grid: { color: '#E2E8F0' } },
+          x: { grid: { display: false } }
+        }
+      }
+    });
+  }, 100);
+
+  document.getElementById('benchmark-targets').innerHTML = `<strong>Best-in-class for a ${size}-employee ${industry} company means:</strong><br>
+    Overtime ≤${bench.overtimeBest}% · Turnover ≤${bench.turnoverBest}% · Admin hrs ≤${bench.adminHrsBest}/wk · Time-to-hire ≤${bench.hireBest} days · Platform utilization ≥${bench.utilBest}%`;
+
+  // Timeline
+  const timelineHTML = [
+    { t: 'Day 1', m: 'Demo & decision' },
+    { t: '30 Days', m: 'Implementation & data migration' },
+    { t: '90 Days', m: 'First full payroll cycle optimized' },
+    { t: '180 Days', m: 'Engagement & compliance gains visible' },
+    { t: '12 Months', m: 'Full ROI realized' }
+  ].map(item => `<div class="timeline-milestone">
+    <div class="t-dot"></div>
+    <div class="t-label">${item.t}</div>
+    <div class="t-milestone">${item.m}</div>
+  </div>`).join('');
+  document.getElementById('timeline-wrap').innerHTML = timelineHTML;
+
+  // Next step
+  document.getElementById('nextstep-rec').innerHTML = narratives.personalizedRecommendation || '';
+  document.getElementById('nextstep-closing').innerHTML = narratives.closingNarrative || '';
+  document.getElementById('demo-cta-btn').textContent = `Schedule ${company}'s Demo →`;
+}
+
+// ========== EMAIL MODAL ==========
+function openEmailModal() {
+  const state = window.appState;
+  const scores = state.scores;
+  const isAE = state.mode === 'ae';
+  
+  document.getElementById('email-preview').innerHTML = `
+    <div style="font-weight:700;font-size:14px;color:var(--nx-navy);margin-bottom:8px;">Netchex Index Score Report</div>
+    <div class="preview-score">${scores.composite}</div>
+    <div style="font-size:12px;color:var(--nx-slate);">Save Dollars: ${scores.saveDollars} · Save Time: ${scores.saveTime} · Engagement: ${scores.driveEngagement} · Risk: ${scores.reduceRisk}</div>
+  `;
+  
+  if (isAE && state.aeInfo.prospectEmail) {
+    document.getElementById('email-to').value = state.aeInfo.prospectEmail;
+  }
+  if (isAE && state.aeInfo.name) {
+    document.getElementById('email-from-name').value = state.aeInfo.name;
+  }
+  
+  document.getElementById('ae-copy-row').style.display = isAE ? 'flex' : 'none';
+  document.getElementById('email-modal').classList.remove('hidden');
+}
+
+function closeEmailModal() {
+  document.getElementById('email-modal').classList.add('hidden');
+}
+
+function sendEmail() {
+  const email = document.getElementById('email-to').value;
+  if (!email) return;
+  closeEmailModal();
+  showToast(`Report sent to ${email}`, '✅');
+}
+
+// ========== TOAST ==========
+function showToast(msg, icon = '✅') {
+  const toast = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  toast.querySelector('.toast-icon').textContent = icon;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 4000);
+}
+
+// ========== INIT ==========
+// Load saved state
+try {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) {
+    const parsed = JSON.parse(saved);
+    // Only restore if recent (within 24hrs)
+    if (parsed._ts && Date.now() - parsed._ts < 86400000) {
+      Object.assign(window.appState, parsed);
+    }
+  }
+} catch(e) {}
+
+// Save state periodically
+setInterval(() => {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...window.appState, _ts: Date.now() }));
+  } catch(e) {}
+}, 3000);
+</script>
+</body>
+</html>
