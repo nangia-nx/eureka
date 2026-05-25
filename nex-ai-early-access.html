@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nex AI — Hire AI teammates who do the work</title>
+<meta name="description" content="Nex AI gives you a team of conversational AI teammates — for payroll, people, insights, anomalies, and your employees — who do the work for you. 24/7. In plain English." />
+
+<style>
+:root {
+  --white: #FFFFFF;
+  --ink: #0B1F3A;
+  --navy: #102A54;
+  --navy-deep: #081834;
+  --blue: #1E4A8C;
+  --blue-mid: #2F6BC9;
+  --blue-light: #E8EFF9;
+  --blue-soft: #F4F7FC;
+  --slate: #475569;
+  --slate-light: #64748B;
+  --border: #D9E2F0;
+  --green: #7BC466;
+  --green-dark: #5FA84A;
+  --green-soft: #F2F8EC;
+  --error: #C44545;
+
+  --serif: Georgia, "Times New Roman", Times, serif;
+  --sans: "Calibri", "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+
+  --maxw: 1200px;
+  --gutter: clamp(20px, 4vw, 48px);
+  --section-y: clamp(64px, 9vw, 120px);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--white);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+img { max-width: 100%; display: block; }
+
+/* ============ NAV ============ */
+.nav { position: sticky; top: 0; z-index: 100; background: #FFFFFF; border-bottom: 1px solid var(--border); }
+.nav-inner { max-width: var(--maxw); margin: 0 auto; padding: 16px var(--gutter); display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--serif); font-weight: 700; font-size: 22px; color: var(--navy); letter-spacing: -0.01em; display: flex; align-items: center; gap: 12px; }
+.brand .by { font-family: var(--sans); font-size: 11px; color: var(--slate-light); font-weight: 400; margin-left: 4px; border-left: 1px solid var(--border); padding-left: 12px; font-style: italic; }
+.brand .netchex-logo { height: 20px; width: auto; display: inline-block; background: transparent; flex-shrink: 0; }
+.footer .brand .netchex-logo { height: 18px; }
+.nav-cta { font-size: 14px; font-weight: 600; padding: 10px 18px; background: var(--navy); color: var(--white); border-radius: 2px; transition: background 0.2s ease; }
+.nav-cta:hover { background: var(--blue); }
+
+/* ============ HERO ============ */
+.hero { padding: clamp(56px, 8vw, 96px) var(--gutter) clamp(40px, 6vw, 80px); max-width: var(--maxw); margin: 0 auto; display: grid; grid-template-columns: 1.05fr 1fr; gap: clamp(40px, 6vw, 72px); align-items: center; }
+@media (max-width: 900px) { .hero { grid-template-columns: 1fr; } }
+
+.eyebrow { display: inline-flex; align-items: center; gap: 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--blue); margin-bottom: 24px; }
+.eyebrow::before { content: ""; width: 8px; height: 8px; background: var(--green); display: inline-block; }
+
+h1.hero-h { font-family: var(--serif); font-weight: 700; font-size: clamp(34px, 5.6vw, 68px); line-height: 1.04; letter-spacing: -0.02em; color: var(--navy); margin-bottom: 24px; }
+h1.hero-h em { font-style: italic; color: var(--green-dark); }
+
+.hero-sub { font-size: clamp(16px, 1.4vw, 19px); line-height: 1.55; color: var(--slate); max-width: 560px; margin-bottom: 32px; }
+
+.hero-cta-row { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+.btn-primary { background: var(--navy); color: var(--white); padding: 14px 24px; font-size: 15px; font-weight: 600; border-radius: 2px; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 10px; }
+.btn-primary:hover { background: var(--blue); transform: translateY(-1px); }
+.btn-primary .arrow { transition: transform 0.2s ease; }
+.btn-primary:hover .arrow { transform: translateX(4px); }
+.btn-secondary { color: var(--navy); font-size: 14px; font-weight: 600; padding: 14px 8px; border-bottom: 1px solid var(--border); transition: border-color 0.2s ease; }
+.btn-secondary:hover { border-color: var(--navy); }
+
+.hero-meta { margin-top: 28px; display: flex; gap: 28px; font-size: 12px; letter-spacing: 0.06em; color: var(--slate-light); flex-wrap: wrap; }
+.hero-meta span { display: inline-flex; align-items: center; gap: 8px; }
+.hero-meta .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 3px var(--green-soft); }
+
+/* Hero chat panel */
+.chat-panel { background: var(--blue-soft); border: 1px solid var(--border); border-radius: 4px; padding: 28px; position: relative; box-shadow: 0 1px 0 var(--border), 0 30px 60px -30px rgba(11, 31, 58, 0.18); }
+.chat-head { display: flex; align-items: center; gap: 12px; padding-bottom: 18px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+.chat-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--navy); color: var(--white); display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-weight: 700; font-size: 14px; position: relative; flex-shrink: 0; }
+.chat-avatar::after { content: ""; position: absolute; bottom: -1px; right: -1px; width: 10px; height: 10px; background: var(--green); border: 2px solid var(--blue-soft); border-radius: 50%; }
+.chat-who { font-family: var(--serif); font-weight: 700; font-size: 16px; color: var(--navy); }
+.chat-role { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--green-dark); font-weight: 700; margin-top: 2px; }
+
+.chat-stream { display: flex; flex-direction: column; gap: 14px; min-height: 360px; }
+
+.bubble { max-width: 92%; padding: 12px 16px; font-size: 14.5px; line-height: 1.5; border-radius: 2px; }
+.bubble.scripted { opacity: 0; transform: translateY(8px); transition: opacity 0.4s ease, transform 0.4s ease; }
+.bubble.scripted.visible { opacity: 1; transform: translateY(0); }
+.bubble.user { background: var(--white); color: var(--ink); border: 1px solid var(--border); align-self: flex-end; border-top-right-radius: 0; }
+.bubble.agent { background: var(--navy); color: var(--white); align-self: flex-start; border-top-left-radius: 0; }
+.bubble.agent .accent { color: var(--green); font-weight: 700; }
+
+.stream-list { list-style: none; margin: 8px 0 4px; padding: 0; }
+.stream-list li { padding: 4px 0 4px 18px; position: relative; font-size: 14px; opacity: 0; transform: translateX(-4px); transition: opacity 0.3s ease, transform 0.3s ease; }
+.stream-list li.visible { opacity: 1; transform: translateX(0); }
+.bubble.agent .stream-list li::before { content: ""; position: absolute; left: 0; top: 11px; width: 6px; height: 6px; background: var(--green); border-radius: 50%; }
+
+.stream-small { display: block; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0; margin-top: 10px; font-weight: 600; color: rgba(255,255,255,0.7); transition: opacity 0.3s ease; }
+.stream-small.visible { opacity: 0.85; }
+
+/* Action chips OUTSIDE the bubble, on the light panel bg, visually tied to Penny */
+.chat-actions { display: flex; flex-wrap: wrap; gap: 8px; align-self: flex-start; max-width: 92%; margin-top: -2px; padding-left: 12px; border-left: 2px solid var(--green); opacity: 0; transform: translateY(4px); transition: opacity 0.4s ease, transform 0.4s ease; }
+.chat-actions.visible { opacity: 1; transform: translateY(0); }
+.chat-actions .chip { background: var(--white); color: var(--navy); border: 1px solid var(--border); font-size: 12.5px; font-weight: 600; padding: 8px 12px; border-radius: 2px; cursor: pointer; transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease; }
+.chat-actions .chip:hover { border-color: var(--navy); }
+.chat-actions .chip.primary { background: var(--navy); color: var(--white); border-color: var(--navy); }
+.chat-actions .chip.primary:hover { background: var(--blue); border-color: var(--blue); }
+
+.chat-foot { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--slate-light); }
+.chat-foot .ping { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 0 rgba(123, 196, 102, 0.7); animation: ping 2s infinite; }
+@keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(123, 196, 102, 0.7); } 70% { box-shadow: 0 0 0 8px rgba(123, 196, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(123, 196, 102, 0); } }
+
+/* Streaming word styles */
+.stream-word { display: inline; opacity: 0; transition: opacity 0.1s ease; }
+.stream-word.visible { opacity: 1; }
+.stream-cursor { display: inline-block; width: 7px; height: 15px; background: var(--green); margin-left: 2px; vertical-align: text-bottom; animation: blink 0.9s infinite; }
+.stream-cursor.gone { display: none; }
+@keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
+
+/* ============ TRUSTBAR ============ */
+.trustbar { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 28px var(--gutter); background: var(--blue-soft); }
+.trustbar-inner { max-width: var(--maxw); margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+.trustbar-label { font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--blue); }
+.trustbar-stats { display: flex; gap: clamp(24px, 4vw, 56px); flex-wrap: wrap; }
+.trustbar-stat { font-family: var(--serif); font-size: 13px; color: var(--slate); }
+.trustbar-stat strong { font-family: var(--serif); font-weight: 700; color: var(--navy); font-size: 20px; margin-right: 6px; }
+
+/* ============ SECTION ============ */
+section { padding: var(--section-y) var(--gutter); }
+.container { max-width: var(--maxw); margin: 0 auto; }
+.section-head { max-width: 760px; margin-bottom: clamp(40px, 5vw, 64px); }
+.section-head h2 { font-family: var(--serif); font-size: clamp(28px, 3.8vw, 46px); font-weight: 700; letter-spacing: -0.015em; line-height: 1.1; color: var(--navy); margin-bottom: 18px; }
+.section-head h2 em { font-style: italic; color: var(--green-dark); }
+.section-head p { font-size: clamp(15px, 1.3vw, 18px); color: var(--slate); max-width: 620px; line-height: 1.55; }
+
+/* ============ TEAM CARDS ============ */
+.team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+.team-card { background: var(--white); padding: 32px; position: relative; display: flex; flex-direction: column; min-height: 420px; transition: background 0.3s ease; cursor: pointer; }
+.team-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--green); transform: scaleX(0); transform-origin: left; transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
+.team-card:hover::before { transform: scaleX(1); }
+.team-card:hover { background: var(--blue-soft); }
+.team-card .role-tag { position: absolute; top: 20px; right: 20px; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; padding: 4px 10px; border-radius: 2px; font-family: var(--sans); }
+.role-tag.admin { background: var(--blue-light); color: var(--blue); }
+.role-tag.employee { background: var(--green-soft); color: var(--green-dark); }
+
+.team-avatar { width: 56px; height: 56px; border-radius: 50%; background: var(--navy); color: var(--white); display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-weight: 700; font-size: 22px; margin-bottom: 20px; position: relative; }
+.team-avatar::after { content: ""; position: absolute; bottom: 1px; right: 1px; width: 14px; height: 14px; background: var(--green); border: 2.5px solid var(--white); border-radius: 50%; }
+.team-name { font-family: var(--serif); font-size: 26px; font-weight: 700; color: var(--navy); margin-bottom: 4px; letter-spacing: -0.01em; }
+.team-role { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--green-dark); font-weight: 700; margin-bottom: 16px; }
+.team-bio { font-size: 14.5px; color: var(--slate); line-height: 1.55; margin-bottom: 20px; }
+.team-asks { margin-top: auto; padding-top: 20px; border-top: 1px dashed var(--border); }
+.team-asks-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--slate-light); font-weight: 700; margin-bottom: 12px; }
+.team-asks ul { list-style: none; }
+.team-asks li { font-size: 13.5px; color: var(--ink); padding: 6px 0; padding-left: 16px; position: relative; line-height: 1.45; }
+.team-asks li::before { content: "›"; position: absolute; left: 0; color: var(--green-dark); font-weight: 700; font-size: 16px; line-height: 1.2; }
+.team-asks li em { font-style: italic; color: var(--slate); }
+
+/* MORE-ON-THE-WAY CODA — lives inside .team-grid as a grid child */
+.team-coda { grid-column: 1 / -1; padding: clamp(24px, 3vw, 36px); background: var(--blue-soft); display: grid; grid-template-columns: auto 1fr auto; gap: clamp(20px, 3vw, 32px); align-items: center; position: relative; }
+.team-coda::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--green); }
+.coda-icon { width: 52px; height: 52px; background: var(--white); border: 2px solid var(--green); color: var(--green-dark); display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-weight: 700; font-size: 28px; border-radius: 50%; flex-shrink: 0; }
+.coda-body h3 { font-family: var(--serif); font-size: 22px; color: var(--navy); margin-bottom: 6px; letter-spacing: -0.01em; }
+.coda-body p { font-size: 14.5px; color: var(--slate); line-height: 1.55; max-width: 640px; }
+.coda-cta { font-size: 14px; color: var(--slate); line-height: 1.5; white-space: nowrap; text-align: right; }
+.coda-cta strong { display: block; color: var(--navy); font-weight: 700; margin-top: 4px; font-family: var(--serif); font-size: 15px; }
+.coda-cta:hover strong { color: var(--green-dark); }
+@media (max-width: 900px) {
+  .team-coda { grid-template-columns: 1fr; text-align: center; }
+  .team-coda::before { width: 100%; height: 4px; bottom: auto; }
+  .coda-icon { margin: 0 auto; }
+  .coda-body p { margin: 0 auto; }
+  .coda-cta { white-space: normal; text-align: center; }
+}
+/* WIDE: 4-col layout has 2 empty cells in row 2 — slot the coda into them */
+@media (min-width: 1230px) {
+  .team-coda { grid-column: span 2; grid-template-columns: 1fr; align-content: center; gap: 18px; text-align: left; padding: 32px; }
+  .team-coda .coda-icon { margin: 0 0 4px 0; }
+  .team-coda .coda-body p { max-width: none; }
+  .team-coda .coda-cta { white-space: normal; text-align: left; }
+  .team-coda .coda-cta strong { margin-top: 6px; }
+}
+
+/* ============ WORKPLACE COMMS SECTION ============ */
+.comms-section { background: var(--blue-soft); }
+.comms-grid { display: grid; grid-template-columns: 1fr 1.05fr; gap: clamp(40px, 6vw, 80px); align-items: center; }
+@media (max-width: 900px) { .comms-grid { grid-template-columns: 1fr; } }
+.comms-copy h2 { font-family: var(--serif); font-size: clamp(28px, 3.8vw, 44px); font-weight: 700; letter-spacing: -0.015em; line-height: 1.1; color: var(--navy); margin-bottom: 20px; }
+.comms-copy h2 em { font-style: italic; color: var(--green-dark); }
+.comms-copy p { font-size: 16px; line-height: 1.6; color: var(--slate); margin-bottom: 16px; }
+.comms-copy p strong { color: var(--ink); font-weight: 600; }
+.comms-callout { margin-top: 24px; padding: 16px 18px; background: var(--white); border-left: 3px solid var(--green); font-size: 14px; color: var(--slate); line-height: 1.5; }
+.comms-callout strong { color: var(--navy); font-family: var(--serif); }
+
+.group-chat { background: var(--white); border: 1px solid var(--border); border-radius: 4px; box-shadow: 0 30px 60px -30px rgba(11, 31, 58, 0.18); overflow: hidden; }
+.group-head { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: var(--blue-soft); gap: 4px 12px; flex-wrap: wrap; }
+.group-name { white-space: nowrap; }
+.group-name { font-family: var(--serif); font-weight: 700; font-size: 15px; color: var(--navy); display: flex; align-items: center; gap: 8px; }
+.group-name::before { content: "#"; color: var(--slate-light); font-weight: 700; }
+.group-count { font-size: 11px; color: var(--slate-light); letter-spacing: 0.1em; }
+.group-stream { padding: 18px; display: flex; flex-direction: column; gap: 14px; min-height: 320px; }
+.msg { display: flex; gap: 10px; align-items: flex-start; }
+.scripted-msg { opacity: 0; transform: translateY(8px); transition: opacity 0.45s ease, transform 0.45s ease; }
+.scripted-msg.shown { opacity: 1; transform: translateY(0); }
+@keyframes bubbleIn { to { opacity: 1; transform: translateY(0); } }
+
+.msg-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--blue); color: var(--white); display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-weight: 700; font-size: 13px; flex-shrink: 0; }
+.msg-avatar.a { background: #8B5A8C; }
+.msg-avatar.b { background: #4A8BA8; }
+.msg-avatar.c { background: var(--navy); }
+.msg-avatar.bot { background: var(--green-dark); }
+.msg-body { flex: 1; min-width: 0; }
+.msg-head { display: flex; align-items: baseline; gap: 8px; margin-bottom: 2px; flex-wrap: wrap; }
+.msg-name { font-weight: 700; font-size: 13.5px; color: var(--navy); }
+.msg-time { font-size: 11px; color: var(--slate-light); }
+.msg-text { font-size: 14px; color: var(--ink); line-height: 1.5; }
+
+.msg.nudge { background: linear-gradient(90deg, rgba(123,196,102,0.08) 0%, rgba(123,196,102,0.02) 100%); border: 1px dashed var(--green); border-radius: 4px; padding: 14px; position: relative; margin-top: 4px; }
+.msg.nudge::before { content: "🔒 Only visible to you"; position: absolute; top: -10px; left: 12px; background: var(--white); padding: 2px 8px; font-size: 10px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--green-dark); border: 1px solid var(--green); border-radius: 2px; }
+.msg.nudge .msg-name { color: var(--green-dark); }
+.nudge-actions-outside { display: flex; gap: 6px; flex-wrap: wrap; margin-left: 42px; padding-left: 10px; border-left: 2px solid var(--green); opacity: 0; transform: translateY(4px); transition: opacity 0.4s ease, transform 0.4s ease; }
+.nudge-actions-outside.visible { opacity: 1; transform: translateY(0); }
+.nudge-actions-outside button { font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 2px; border: 1px solid var(--border); background: var(--white); color: var(--navy); cursor: pointer; transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease; }
+.nudge-actions-outside button:hover { border-color: var(--navy); }
+.nudge-actions-outside button.primary { background: var(--navy); color: var(--white); border-color: var(--navy); }
+.nudge-actions-outside button.primary:hover { background: var(--blue); border-color: var(--blue); }
+
+.group-input { padding: 10px 14px; border-top: 1px solid var(--border); background: var(--white); display: flex; gap: 8px; align-items: center; }
+.group-input input { flex: 1; padding: 9px 12px; border: 1px solid var(--border); border-radius: 4px; font-family: var(--sans); font-size: 13.5px; color: var(--ink); background: var(--white); outline: none; cursor: text; }
+.group-input input::placeholder { color: var(--slate-light); }
+.group-input .send-btn { width: 36px; height: 36px; background: var(--green); color: var(--white); border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.2s ease; cursor: pointer; }
+.group-input .send-btn:hover { background: var(--green-dark); }
+.group-input .send-btn svg { width: 18px; height: 18px; }
+
+/* ============ HOW IT WORKS ============ */
+.how-section { background: var(--navy); color: var(--white); position: relative; overflow: hidden; }
+.how-section::before { content: ""; position: absolute; right: -200px; top: -200px; width: 600px; height: 600px; border-radius: 50%; background: var(--green); opacity: 0.08; filter: blur(40px); }
+.how-section .section-head h2 { color: var(--white); }
+.how-section .section-head h2 em { color: var(--green); }
+.how-section .section-head p { color: rgba(255,255,255,0.7); }
+.how-section .eyebrow { color: var(--green); }
+.how-section .eyebrow::before { background: var(--green); }
+.how-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; position: relative; z-index: 1; }
+@media (max-width: 900px) { .how-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px) { .how-grid { grid-template-columns: 1fr; } }
+.how-step { padding: 28px 0; border-top: 1px solid rgba(255,255,255,0.15); }
+.how-num { font-family: var(--serif); font-size: 14px; letter-spacing: 0.18em; color: var(--green); font-weight: 700; margin-bottom: 16px; }
+.how-step h3 { font-family: var(--serif); font-size: 26px; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.01em; }
+.how-step p { font-size: 14.5px; color: rgba(255,255,255,0.75); line-height: 1.55; }
+
+/* ============ VIDEO SECTION ============ */
+.video-section { padding: var(--section-y) var(--gutter); }
+.video-head { text-align: center; max-width: 720px; margin: 0 auto clamp(32px, 4vw, 48px); }
+.video-head .eyebrow { justify-content: center; }
+.video-head h2 { font-family: var(--serif); font-size: clamp(26px, 3.4vw, 40px); font-weight: 700; letter-spacing: -0.015em; line-height: 1.1; color: var(--navy); }
+.video-head h2 em { font-style: italic; color: var(--green-dark); }
+.video-card { max-width: 980px; margin: 0 auto; aspect-ratio: 16 / 9; background: var(--navy); position: relative; overflow: hidden; cursor: pointer; border: 1px solid var(--border); box-shadow: 0 40px 80px -30px rgba(11, 31, 58, 0.35); display: flex; align-items: center; justify-content: center; }
+.video-card::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 30% 40%, rgba(123, 196, 102, 0.18), transparent 50%), radial-gradient(circle at 70% 60%, rgba(47, 107, 201, 0.18), transparent 50%), linear-gradient(135deg, var(--navy-deep) 0%, var(--navy) 100%); }
+.video-card::after { content: ""; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 40px 40px; }
+.video-content { position: relative; z-index: 1; text-align: center; color: var(--white); padding: 20px; }
+.play-button { width: 80px; height: 80px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; transition: transform 0.3s ease, box-shadow 0.3s ease; box-shadow: 0 0 0 0 rgba(123, 196, 102, 0.6); animation: pulse-play 2.5s infinite; }
+@keyframes pulse-play { 0% { box-shadow: 0 0 0 0 rgba(123, 196, 102, 0.5); } 70% { box-shadow: 0 0 0 24px rgba(123, 196, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(123, 196, 102, 0); } }
+.video-card:hover .play-button { transform: scale(1.1); }
+.play-button svg { width: 28px; height: 28px; margin-left: 4px; fill: var(--navy-deep); }
+.video-card .video-label { font-family: var(--serif); font-size: clamp(18px, 2vw, 26px); font-weight: 700; margin-bottom: 8px; letter-spacing: -0.01em; }
+.video-card .video-sub { font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--green); font-weight: 700; }
+
+/* ============ MOAT ============ */
+.moat { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px, 6vw, 80px); align-items: center; }
+@media (max-width: 900px) { .moat { grid-template-columns: 1fr; } }
+.moat-visual { background: var(--blue-soft); border: 1px solid var(--border); padding: clamp(24px, 4vw, 40px); position: relative; min-height: 380px; display: flex; flex-direction: column; justify-content: center; }
+.moat-stack { display: flex; flex-direction: column; gap: 10px; }
+.moat-layer { background: var(--white); border: 1px solid var(--border); padding: 14px 18px; position: relative; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.moat-layer.top { background: var(--navy); color: var(--white); border-color: var(--navy); }
+.moat-layer.top::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--green); }
+.moat-layer .ml-label { font-family: var(--serif); font-size: 15px; font-weight: 700; }
+.moat-layer.top .ml-label { color: var(--white); }
+.moat-layer:not(.top) .ml-label { color: var(--navy); }
+.moat-layer .ml-tag { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--slate-light); font-weight: 700; }
+.moat-layer.top .ml-tag { color: var(--green); }
+.moat-copy h3 { font-family: var(--serif); font-size: clamp(26px, 3.4vw, 40px); line-height: 1.1; font-weight: 700; color: var(--navy); letter-spacing: -0.015em; margin-bottom: 18px; }
+.moat-copy h3 em { font-style: italic; color: var(--green-dark); }
+.moat-copy p { font-size: 16px; line-height: 1.6; color: var(--slate); margin-bottom: 16px; }
+.moat-copy p strong { color: var(--ink); font-weight: 600; }
+
+/* ============ ROI SECTION ============ */
+.roi-section { background: var(--white); padding-top: 0; }
+.roi-head { max-width: 720px; margin: 0 auto clamp(40px, 5vw, 56px); text-align: center; }
+.roi-head .eyebrow { justify-content: center; }
+.roi-head h2 { font-family: var(--serif); font-size: clamp(26px, 3.8vw, 44px); font-weight: 700; letter-spacing: -0.015em; line-height: 1.1; color: var(--navy); margin-bottom: 18px; }
+.roi-head h2 em { font-style: italic; color: var(--green-dark); }
+.roi-head p { font-size: 16px; color: var(--slate); line-height: 1.55; }
+.roi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+@media (max-width: 900px) { .roi-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px) { .roi-grid { grid-template-columns: 1fr; } }
+.roi-card { background: var(--white); padding: 32px 28px; position: relative; }
+.roi-icon { width: 44px; height: 44px; border: 1.5px solid var(--green); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; color: var(--green-dark); }
+.roi-icon svg { width: 22px; height: 22px; stroke: var(--green-dark); fill: none; stroke-width: 1.8; }
+.roi-card h3 { font-family: var(--serif); font-size: 22px; font-weight: 700; color: var(--navy); margin-bottom: 8px; letter-spacing: -0.01em; }
+.roi-card .roi-line { font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--green-dark); font-weight: 700; margin-bottom: 14px; }
+.roi-card p { font-size: 14.5px; color: var(--slate); line-height: 1.55; }
+
+/* ============ TESTIMONIAL ============ */
+.testimonial-section { background: var(--navy); color: var(--white); text-align: center; position: relative; overflow: hidden; }
+.testimonial-section::before { content: ""; position: absolute; left: -100px; bottom: -100px; width: 500px; height: 500px; border-radius: 50%; background: var(--green); opacity: 0.06; filter: blur(80px); }
+.testimonial-inner { max-width: 880px; margin: 0 auto; position: relative; z-index: 1; }
+.testimonial-section .eyebrow { color: var(--green); justify-content: center; }
+.testimonial-section .eyebrow::before { background: var(--green); }
+.testimonial-quote { font-family: var(--serif); font-style: italic; font-size: clamp(19px, 2.8vw, 34px); line-height: 1.35; font-weight: 400; margin-bottom: 32px; letter-spacing: -0.01em; position: relative; padding: 0 clamp(16px, 4vw, 40px); }
+.testimonial-quote::before, .testimonial-quote::after { font-family: var(--serif); font-size: 48px; color: var(--green); position: absolute; font-style: normal; line-height: 1; opacity: 0.6; }
+.testimonial-quote::before { content: "\201C"; top: -10px; left: -8px; }
+.testimonial-quote::after { content: "\201D"; bottom: -34px; right: -8px; }
+.testimonial-attr { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 32px; }
+.testimonial-avatar { width: 52px; height: 52px; border-radius: 50%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-weight: 700; font-size: 18px; color: rgba(255,255,255,0.5); flex-shrink: 0; }
+.testimonial-meta { text-align: left; }
+.testimonial-name { font-family: var(--serif); font-weight: 700; font-size: 16px; }
+.testimonial-title { font-size: 12px; letter-spacing: 0.06em; color: rgba(255,255,255,0.65); margin-top: 2px; }
+.testimonial-pending { display: inline-block; margin-top: 24px; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--green); font-weight: 700; padding: 4px 10px; border: 1px dashed var(--green); }
+
+/* ============ FORM ============ */
+.form-section { background: var(--blue-soft); position: relative; overflow: hidden; }
+.form-section::before { content: ""; position: absolute; left: -100px; bottom: -100px; width: 400px; height: 400px; background: var(--green); opacity: 0.06; border-radius: 50%; filter: blur(60px); }
+.form-wrap { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(40px, 5vw, 64px); align-items: start; position: relative; z-index: 1; }
+@media (max-width: 900px) { .form-wrap { grid-template-columns: 1fr; } }
+.form-copy h2 { font-family: var(--serif); font-size: clamp(28px, 3.6vw, 44px); font-weight: 700; letter-spacing: -0.015em; line-height: 1.1; color: var(--navy); margin-bottom: 20px; }
+.form-copy h2 em { font-style: italic; color: var(--green-dark); }
+.form-copy p { font-size: 16px; color: var(--slate); line-height: 1.6; margin-bottom: 24px; }
+.form-perks { list-style: none; margin-top: 24px; }
+.form-perks li { font-size: 14.5px; color: var(--ink); padding: 10px 0 10px 28px; position: relative; border-bottom: 1px solid var(--border); }
+.form-perks li:last-child { border-bottom: none; }
+.form-perks li::before { content: ""; position: absolute; left: 0; top: 16px; width: 14px; height: 8px; border-left: 2px solid var(--green-dark); border-bottom: 2px solid var(--green-dark); transform: rotate(-45deg); }
+
+.form-card { background: var(--white); border: 1px solid var(--border); padding: clamp(24px, 3vw, 40px); box-shadow: 0 30px 60px -30px rgba(11, 31, 58, 0.15); }
+.field { margin-bottom: 18px; }
+.field label { display: block; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--blue); font-weight: 700; margin-bottom: 8px; }
+.field label .optional { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--slate-light); font-weight: 600; margin-left: 6px; }
+.field input, .field textarea { width: 100%; font-family: var(--sans); font-size: 15px; color: var(--ink); background: var(--white); border: 1px solid var(--border); border-radius: 2px; padding: 12px 14px; outline: none; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+.field input:focus, .field textarea:focus { border-color: var(--navy); box-shadow: 0 0 0 3px var(--blue-light); }
+.field input.error, .field textarea.error { border-color: var(--error); }
+.field textarea { resize: vertical; min-height: 80px; }
+.field-error { display: none; font-size: 12px; color: var(--error); margin-top: 6px; letter-spacing: 0.02em; }
+.field-error.show { display: block; }
+
+.form-submit { width: 100%; background: var(--navy); color: var(--white); padding: 16px; font-size: 15px; font-weight: 600; letter-spacing: 0.02em; margin-top: 8px; border-radius: 2px; transition: background 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 10px; }
+.form-submit:hover { background: var(--blue); }
+.form-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+.form-note { font-size: 12px; color: var(--slate-light); margin-top: 14px; text-align: center; line-height: 1.5; }
+
+.form-success { display: none; padding: 28px; text-align: center; background: var(--green-soft); border: 1px solid var(--green); border-radius: 2px; }
+.form-success.show { display: block; }
+.form-success h3 { font-family: var(--serif); font-size: 22px; color: var(--navy); margin-bottom: 8px; }
+.form-success p { color: var(--slate); font-size: 14.5px; }
+
+/* ============ MODAL ============ */
+.modal-overlay { position: fixed; inset: 0; background: rgba(11, 31, 58, 0.65); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
+.modal-overlay.show { opacity: 1; pointer-events: auto; }
+.modal { background: var(--white); width: 100%; max-width: 480px; padding: clamp(28px, 4vw, 44px); position: relative; transform: translateY(20px); transition: transform 0.3s ease; border: 1px solid var(--border); border-radius: 4px; box-shadow: 0 30px 60px -20px rgba(0,0,0,0.3); max-height: calc(100vh - 40px); overflow-y: auto; }
+.modal-overlay.show .modal { transform: translateY(0); }
+.modal-close { position: absolute; top: 10px; right: 10px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 26px; color: var(--slate-light); cursor: pointer; line-height: 1; border-radius: 2px; transition: background 0.2s ease, color 0.2s ease; }
+.modal-close:hover { background: var(--blue-soft); color: var(--navy); }
+.modal .eyebrow { margin-bottom: 16px; }
+.modal h3 { font-family: var(--serif); font-size: clamp(22px, 2.6vw, 28px); color: var(--navy); margin-bottom: 10px; letter-spacing: -0.01em; line-height: 1.15; }
+.modal > p { font-size: 14.5px; color: var(--slate); margin-bottom: 24px; line-height: 1.55; }
+.modal-success-state { display: none; text-align: center; padding: 12px 0; }
+.modal-success-state.show { display: block; }
+.modal-success-state .check { width: 56px; height: 56px; border-radius: 50%; background: var(--green-soft); border: 2px solid var(--green); margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; color: var(--green-dark); font-size: 28px; font-weight: 700; }
+
+/* ============ FOOTER ============ */
+.footer { border-top: 1px solid var(--border); padding: 36px var(--gutter); background: var(--white); }
+.footer-inner { max-width: var(--maxw); margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; font-size: 13px; color: var(--slate-light); }
+
+/* ============ REVEAL ============ */
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ============ MOBILE HARDENING ============ */
+@media (max-width: 720px) {
+  :root { --section-y: 56px; }
+  .nav-inner { padding: 14px 18px; }
+  .brand { font-size: 18px; gap: 8px; }
+  .brand .by { padding-left: 8px; margin-left: 2px; font-size: 10px; }
+  .brand .netchex-logo { height: 16px; }
+  .nav-cta { padding: 11px 16px; font-size: 13px; }
+  .hero { padding: 36px 20px 24px; }
+  h1.hero-h { font-size: 34px; line-height: 1.05; }
+  .hero-sub { font-size: 15px; }
+  .hero-meta { gap: 16px; font-size: 11px; }
+  .chat-panel { padding: 20px; }
+  .chat-stream { min-height: auto; gap: 12px; }
+  .bubble { max-width: 95%; font-size: 14px; }
+  .chat-actions { padding-left: 10px; max-width: 95%; }
+  .chat-actions .chip { font-size: 12px; padding: 7px 10px; }
+  .trustbar { padding: 22px 20px; }
+  .trustbar-stats { gap: 16px 24px; }
+  .trustbar-stat { font-size: 12px; }
+  .trustbar-stat strong { font-size: 18px; margin-right: 4px; }
+  section { padding: 56px 20px; }
+  .team-card { padding: 24px; min-height: auto; }
+  .team-card .role-tag { font-size: 9px; padding: 3px 8px; }
+  .team-avatar { width: 48px; height: 48px; font-size: 19px; margin-bottom: 16px; }
+  .team-name { font-size: 24px; }
+  .team-coda { padding: 24px; }
+  .coda-icon { width: 44px; height: 44px; font-size: 24px; }
+  .coda-body h3 { font-size: 20px; }
+  .group-stream { padding: 14px; min-height: auto; }
+  .msg-text { font-size: 13.5px; }
+  .video-card { aspect-ratio: 4/3; }
+  .play-button { width: 64px; height: 64px; margin-bottom: 18px; }
+  .play-button svg { width: 22px; height: 22px; }
+  .testimonial-quote { padding: 0 8px; }
+  .testimonial-quote::before, .testimonial-quote::after { font-size: 36px; }
+  .moat-visual { padding: 24px; min-height: auto; }
+  .moat-layer { padding: 12px 14px; }
+  .moat-layer .ml-label { font-size: 14px; }
+  .form-card { padding: 24px; }
+  .footer-inner { flex-direction: column; text-align: center; gap: 14px; }
+}
+@media (max-width: 420px) {
+  h1.hero-h { font-size: 30px; }
+  .trustbar-stats { width: 100%; justify-content: flex-start; }
+  .chat-actions { flex-direction: column; align-items: stretch; }
+  .chat-actions .chip { text-align: left; }
+  .nudge-actions-outside { margin-left: 32px; }
+}
+@media (max-width: 360px) {
+  .group-head { padding: 12px 14px; }
+  .group-name { font-size: 14px; }
+  .group-count { font-size: 10px; }
+  .msg-text { font-size: 13px; }
+  .role-tag { font-size: 9px; padding: 3px 7px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#top" class="brand">
+      Nex AI
+      <span class="by">by</span>
+      <svg class="netchex-logo" viewBox="0 0 737 142" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Netchex" role="img"><path fill-rule="evenodd" clip-rule="evenodd" d="M233.147 105.045V37.0005H222.716V74.3349C222.716 78.5412 222.803 81.8416 222.976 84.2188C223.149 86.6015 223.405 88.8867 223.748 91.0768C222.379 89.3155 221.047 87.7036 219.748 86.2459C218.446 84.786 217.222 83.5487 216.069 82.5144L165.432 37.0005H158.325V105.045H168.757V64.9395C168.757 61.7643 168.692 59.007 168.56 56.6676C168.43 54.3286 168.239 52.1303 167.982 50.0704C169.219 52.1736 171.118 54.3801 173.676 56.7003C174.192 57.1697 174.57 57.5143 174.827 57.7287L226.809 105.045H233.147Z" fill="#212121"/><path fill-rule="evenodd" clip-rule="evenodd" d="M310.94 96.9055H264.976V80.1258H292.412V71.7833H264.976V57.5439H310.435V49.2014H254.447V105.044H310.94V96.9055Z" fill="#212121"/><path fill-rule="evenodd" clip-rule="evenodd" d="M326.385 57.5434H352.607V105.044H363.037V57.5434H389.456V49.2037H326.385V57.5434Z" fill="#212121"/><path fill-rule="evenodd" clip-rule="evenodd" d="M464.582 91.8439V85.2736L454.054 83.2792V96.6014H415.279V57.5435H454.054V69.4467L464.582 67.715V62.4695C464.582 57.3646 463.626 53.8771 461.727 52.0074C459.82 50.1374 456.215 49.2042 450.92 49.2042H418.286C413.023 49.2042 409.452 50.1214 407.572 51.9451C405.686 53.7714 404.752 57.2776 404.752 62.4695V91.8439C404.752 97.0817 405.678 100.591 407.539 102.374C409.401 104.157 412.983 105.044 418.286 105.044H450.92C456.215 105.044 459.82 104.124 461.727 102.276C463.626 100.425 464.582 96.9488 464.582 91.8439Z" fill="#212121"/><path fill-rule="evenodd" clip-rule="evenodd" d="M495.674 80.1272H539.922V105.046H550.446V49.3088H539.922V71.6841H495.674V49.3088H485.144V105.046H495.674V80.1272Z" fill="#212121"/><path fill-rule="evenodd" clip-rule="evenodd" d="M628.245 96.9055H582.28V80.1258H609.712V71.7833H582.28V57.5439H627.735V49.2014H571.755V105.044H628.245V96.9055Z" fill="#212121"/><path fill-rule="evenodd" clip-rule="evenodd" d="M715.675 105.045L684.406 75.1302L709.976 49.2019H697.034L678.643 69.4745L658.585 49.2019H644.36L672.743 76.4818L644.806 105.045H658.331L678.515 82.3979L700.94 105.045H715.675Z" fill="#212121"/><path fill-rule="evenodd" clip-rule="evenodd" d="M727.921 97.4495H728.75C729.715 97.4495 730.493 97.1267 730.493 96.3424C730.493 95.65 729.988 95.1888 728.886 95.1888C728.426 95.1888 728.108 95.2348 727.921 95.2812V97.4495ZM727.875 101.74H726.132V94.1737C726.819 94.0353 727.784 93.9433 729.023 93.9433C730.452 93.9433 731.089 94.1737 731.64 94.4969C732.054 94.8196 732.378 95.4196 732.378 96.1548C732.378 96.9883 731.736 97.6311 730.816 97.9106V98.003C731.549 98.2798 731.963 98.8334 732.191 99.8485C732.423 101.002 732.56 101.463 732.742 101.74H730.862C730.63 101.463 730.493 100.771 730.265 99.8918C730.124 99.0642 729.669 98.695 728.704 98.695H727.875V101.74ZM723.241 97.7722C723.241 101.138 725.722 103.816 729.118 103.816C732.423 103.816 734.854 101.138 734.854 97.8187C734.854 94.4504 732.423 91.7286 729.068 91.7286C725.722 91.7286 723.241 94.4504 723.241 97.7722ZM736.784 97.7722C736.784 102.06 733.434 105.428 729.068 105.428C724.753 105.428 721.311 102.06 721.311 97.7722C721.311 93.5741 724.753 90.2064 729.068 90.2064C733.434 90.2064 736.784 93.5741 736.784 97.7722Z" fill="#212121"/><path fill-rule="evenodd" clip-rule="evenodd" d="M75.5949 106.106C57.115 106.106 55.5431 65.2322 43.9082 65.2322C35.9852 65.2322 18.9208 99.9369 6.59723 141.5C11.8054 130.785 15.6008 125.412 19.7338 119.374C30.5419 129.347 44.9023 135.496 60.7404 135.496C94.2856 135.496 121.477 108.184 121.477 74.4838C121.477 64.3964 118.976 54.914 114.651 46.5338C116.11 34.4301 116.272 24.5245 115.753 20.3452C106.947 60.1355 90.5578 106.106 75.5949 106.106Z" fill="#7BC466"/><path fill-rule="evenodd" clip-rule="evenodd" d="M98.5584 26.8807C88.1747 18.5383 75.0678 13.4688 60.7395 13.4688C27.1972 13.4688 0 40.7838 0 74.4842C0 84.0016 2.30965 92.9223 6.18339 100.944C5.32975 110.275 5.28655 117.683 5.71874 121.152C14.5197 81.3559 33.0104 38.0319 47.9704 38.0319C66.4558 38.0319 67.582 80.4764 79.6656 80.4764C87.5829 80.4764 102.554 41.5653 114.872 0C108.375 13.3684 104.064 18.4705 98.5584 26.8807Z" fill="#7BC466"/></svg>
+    </a>
+    <a href="#access" class="nav-cta">Join waitlist</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="top">
+  <div>
+    <div class="eyebrow">Early access · Spring 2026</div>
+    <h1 class="hero-h">Hire AI teammates who <em>actually</em> do the work.</h1>
+    <p class="hero-sub">
+      Nex AI is a team of conversational AI specialists who run your operations through chat. They handle payroll. They onboard people. They surface what matters. They answer your team's questions. They never sleep, never quit, and live inside the platform your workforce already uses.
+    </p>
+    <div class="hero-cta-row">
+      <a href="#access" class="btn-primary">
+        Join the waitlist
+        <span class="arrow">→</span>
+      </a>
+      <a href="#team" class="btn-secondary">Meet the team</a>
+    </div>
+    <div class="hero-meta">
+      <span><span class="dot"></span>5+ specialists, day one</span>
+      <span><span class="dot"></span>Mobile + web</span>
+      <span><span class="dot"></span>Ships from Netchex</span>
+    </div>
+  </div>
+
+  <!-- HERO CHAT MOCK: Penny + payroll dry run -->
+  <aside class="chat-panel" aria-label="Conversation with Penny">
+    <div class="chat-head">
+      <div class="chat-avatar">P</div>
+      <div>
+        <div class="chat-who">Penny</div>
+        <div class="chat-role">Payroll &amp; Time Captain</div>
+      </div>
+    </div>
+    <div class="chat-stream" id="chatStream">
+
+      <div class="bubble user scripted" id="userBubble">
+        Run payroll for the last 2 weeks.
+      </div>
+
+      <div class="bubble agent scripted" id="agentBubble">
+        <div class="stream-head" id="streamHead">Reviewing the period <span class="accent">Dec 9 – Dec 22</span>. Pulled <span class="accent">247 timecards</span> across 4 locations. I found <span class="accent">4 things</span> you should look at before we run:<span class="stream-cursor" id="streamCursor"></span></div>
+        <ul class="stream-list" id="streamList">
+          <li>Marcus M. — 68.5 hrs, overtime threshold hit</li>
+          <li>2 new hires — direct deposit missing</li>
+          <li>Sarah K. — PTO request still pending approval</li>
+          <li>Tuesday's bonus from your Slack — not on the run yet</li>
+        </ul>
+        <small class="stream-small" id="streamSmall">How would you like to handle these?</small>
+      </div>
+
+      <div class="chat-actions" id="chatActions">
+        <button class="chip primary">Fix what you can, ask me on the rest</button>
+        <button class="chip">Show me each one</button>
+        <button class="chip">Run as-is</button>
+      </div>
+
+    </div>
+    <div class="chat-foot">
+      <span class="ping"></span>
+      Penny is online · Average response 2.4s
+    </div>
+  </aside>
+</header>
+
+<!-- TRUST BAR -->
+<div class="trustbar">
+  <div class="trustbar-inner">
+    <div class="trustbar-label">Built for deskless workforces</div>
+    <div class="trustbar-stats">
+      <div class="trustbar-stat"><strong>5+</strong>AI teammates</div>
+      <div class="trustbar-stat"><strong>24/7</strong>availability</div>
+      <div class="trustbar-stat"><strong>1</strong>unified data model</div>
+      <div class="trustbar-stat"><strong>100%</strong>productivity</div>
+    </div>
+  </div>
+</div>
+
+<!-- TEAM -->
+<section id="team">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Meet the team</div>
+      <h2>Six specialists. <em>One conversation.</em></h2>
+      <p>Each teammate is purpose-built for the work your admins and employees actually do — and they share the same brain. Bring one in, and the rest are ready when you need them.</p>
+    </div>
+
+    <div class="team-grid reveal">
+
+      <article class="team-card">
+        <span class="role-tag admin">For Admins</span>
+        <div class="team-avatar">P</div>
+        <div class="team-name">Penny</div>
+        <div class="team-role">Payroll &amp; Time Captain</div>
+        <p class="team-bio">Owns the pay cycle end-to-end. Approves timecards, plans schedules, processes PTO, runs payroll — and catches paycheck discrepancies before they hit anyone's bank account.</p>
+        <div class="team-asks">
+          <div class="team-asks-label">Ask Penny</div>
+          <ul>
+            <li>"<em>Run payroll for the last 2 weeks. Flag anything weird.</em>"</li>
+            <li>"<em>Approve all clean timecards. Show me only the exceptions.</em>"</li>
+            <li>"<em>Build a schedule for next week — same coverage as last week.</em>"</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="team-card">
+        <span class="role-tag admin">For Admins</span>
+        <div class="team-avatar">A</div>
+        <div class="team-name">Atlas</div>
+        <div class="team-role">People Operations Lead</div>
+        <p class="team-bio">Carries the full employee lifecycle. Onboards new hires, processes promotions and comp changes, transfers people between departments, and keeps performance records current.</p>
+        <div class="team-asks">
+          <div class="team-asks-label">Ask Atlas</div>
+          <ul>
+            <li>"<em>Onboard the three new hires starting Monday.</em>"</li>
+            <li>"<em>Move Priya to the Houston location, effective Dec 1.</em>"</li>
+            <li>"<em>Process the comp changes from the leadership review.</em>"</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="team-card">
+        <span class="role-tag admin">For Admins</span>
+        <div class="team-avatar">N</div>
+        <div class="team-name">Nova</div>
+        <div class="team-role">Insights &amp; Analytics Lead</div>
+        <p class="team-bio">Turns your operations data into answers. Pulls reports, builds comparisons, runs ad-hoc analysis — no SQL, no BI license, no waiting on a data team.</p>
+        <div class="team-asks">
+          <div class="team-asks-label">Ask Nova</div>
+          <ul>
+            <li>"<em>What's overtime trending at this quarter vs last?</em>"</li>
+            <li>"<em>Which locations had the most callouts in November?</em>"</li>
+            <li>"<em>Show me turnover by manager for Q4.</em>"</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="team-card">
+        <span class="role-tag admin">For Admins</span>
+        <div class="team-avatar">S</div>
+        <div class="team-name">Sentinel</div>
+        <div class="team-role">Anomaly Watchdog</div>
+        <p class="team-bio">Doesn't wait to be asked. Watches your operations 24/7 and surfaces only what needs your attention — wrongly approved hours, sudden comp drift, a compliance window closing.</p>
+        <div class="team-asks">
+          <div class="team-asks-label">Sentinel just told me</div>
+          <ul>
+            <li>"<em>3 managers haven't approved timecards. Cutoff in 2 hours.</em>"</li>
+            <li>"<em>Sam's last paycheck is 14% below his peers in the same role.</em>"</li>
+            <li>"<em>I-9 expires next week for two employees.</em>"</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="team-card">
+        <span class="role-tag employee">For Employees</span>
+        <div class="team-avatar">M</div>
+        <div class="team-name">Milo</div>
+        <div class="team-role">Employee Concierge</div>
+        <p class="team-bio">Does the work your employees usually have to chase admins for. Files PTO, punches timecards, completes review forms, updates direct deposit — all in chat, from anywhere they happen to be.</p>
+        <div class="team-asks">
+          <div class="team-asks-label">Employees ask Milo</div>
+          <ul>
+            <li>"<em>Apply for PTO next Friday — I have a doctor's appointment.</em>"</li>
+            <li>"<em>I forgot to clock in this morning. Fix it for me.</em>"</li>
+            <li>"<em>Fill out my self-review form — pull from my OKRs.</em>"</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="team-card">
+        <span class="role-tag employee">For Employees</span>
+        <div class="team-avatar">S</div>
+        <div class="team-name">Sage</div>
+        <div class="team-role">HR Knowledge Partner</div>
+        <p class="team-bio">Answers every employee question so HR doesn't have to. Knows your policies, your benefits, the tax changes coming next quarter, and the difference between FMLA and your paid parental leave plan.</p>
+        <div class="team-asks">
+          <div class="team-asks-label">Employees ask Sage</div>
+          <ul>
+            <li>"<em>How much paternity leave do I get?</em>"</li>
+            <li>"<em>What's changing with my paycheck in January?</em>"</li>
+            <li>"<em>Can I cash out my unused PTO?</em>"</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- MORE ON THE WAY CODA — sits inside the grid so it can fill the empty cells at 4-col layout -->
+      <div class="team-coda">
+        <div class="coda-icon">+</div>
+        <div class="coda-body">
+          <h3>The roster keeps growing.</h3>
+          <p>Recruiting. Benefits administration. Learning &amp; development. Compliance. More specialists are already in training — built on the same conversational brain as the six above. Your team grows when you do.</p>
+        </div>
+        <a href="#access" class="coda-cta">
+          Got a teammate in mind?
+          <strong>Tell us who you'd hire next →</strong>
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- WORKPLACE COMMS / LISTEN-IN SECTION -->
+<section class="comms-section">
+  <div class="container">
+    <div class="comms-grid">
+      <div class="comms-copy reveal">
+        <div class="eyebrow">They listen in. They help out.</div>
+        <h2>Your teammates are <em>in the room</em> — even when no one called them.</h2>
+        <p>Nex AI lives inside the same conversations your team is already having. When something comes up that needs an action — a sick day, a shift swap, a question — your AI teammates step in with a quiet, private nudge. <strong>Only the right person sees it.</strong></p>
+        <p>No new app to learn. No "please log in to the portal." Just help, where the conversation already is.</p>
+        <div class="comms-callout">
+          <strong>What you're seeing →</strong> A real morning in the <em>#florida-am-shift</em> group. Marcus tells the team he's down with a fever. Milo notices, files PTO, and starts coverage — privately, just for Marcus to confirm.
+        </div>
+      </div>
+
+      <div class="group-chat reveal">
+        <div class="group-head">
+          <div class="group-name">florida-am-shift</div>
+          <div class="group-count">12 members · Active now</div>
+        </div>
+        <div class="group-stream" id="groupStream">
+
+          <div class="msg scripted-msg" id="gMsg1">
+            <div class="msg-avatar a">JC</div>
+            <div class="msg-body">
+              <div class="msg-head"><span class="msg-name">Jessica C.</span><span class="msg-time">6:42 AM</span></div>
+              <div class="msg-text">Coffee's on, see y'all at 7 ☕</div>
+            </div>
+          </div>
+
+          <div class="msg scripted-msg" id="gMsg2">
+            <div class="msg-avatar b">MD</div>
+            <div class="msg-body">
+              <div class="msg-head"><span class="msg-name">Marcus D.</span><span class="msg-time">6:48 AM</span></div>
+              <div class="msg-text">Hey team — woke up with a fever this morning 🤒 won't make it in. Sorry guys.</div>
+            </div>
+          </div>
+
+          <div class="msg nudge scripted-msg" id="gMilo">
+            <div class="msg-avatar bot">M</div>
+            <div class="msg-body">
+              <div class="msg-head"><span class="msg-name">Milo</span><span class="msg-time">just now</span></div>
+              <div class="msg-text" id="miloText">Hey Marcus — sorry you're not feeling well. Want me to file a sick PTO request for today and ask the team if anyone can cover your 7am shift?<span class="stream-cursor" id="miloCursor"></span></div>
+            </div>
+          </div>
+
+          <div class="nudge-actions-outside" id="miloActions">
+            <button class="primary">Yes, do both</button>
+            <button>Just file PTO</button>
+            <button>Not now</button>
+          </div>
+
+          <div class="msg scripted-msg" id="gMsg4">
+            <div class="msg-avatar c">RP</div>
+            <div class="msg-body">
+              <div class="msg-head"><span class="msg-name">Rashida P.</span><span class="msg-time">6:51 AM</span></div>
+              <div class="msg-text">Feel better Marcus 💚 covered for you — see you when you're back!</div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="group-input" aria-hidden="true">
+          <input type="text" placeholder="Message #florida-am-shift" readonly aria-label="Message input" />
+          <button class="send-btn" type="button" aria-label="Send message" tabindex="-1">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M2 21l21-9L2 3v7l15 2-15 2z" fill="currentColor"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">How it works</div>
+      <h2>From asking, to acting, to <em>doing it without being asked.</em></h2>
+      <p>Your teammates grow with you. Each one moves through four levels of autonomy — and you stay in control of how much you delegate.</p>
+    </div>
+    <div class="how-grid reveal">
+      <div class="how-step"><div class="how-num">01 — ASK</div><h3>Ask anything</h3><p>Plain English questions, instant answers. "How many of my people are on PTO next week?" Done.</p></div>
+      <div class="how-step"><div class="how-num">02 — ACT</div><h3>Get it done</h3><p>Tell them what to do and they do it. Approve a stack of timecards. Process a transfer. Run a report. Send a notice.</p></div>
+      <div class="how-step"><div class="how-num">03 — ANTICIPATE</div><h3>One step ahead</h3><p>They nudge you before you ask. "Payroll cutoff in 2 hours, here are the open items." "This shift is uncovered Saturday."</p></div>
+      <div class="how-step"><div class="how-num">04 — AUTOMATE</div><h3>Off your plate</h3><p>When you trust the work, hand it over. Your teammates handle the repeat motions and only escalate the exceptions.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEO -->
+<section class="video-section">
+  <div class="container">
+    <div class="video-head reveal">
+      <div class="eyebrow">See it in action</div>
+      <h2>Two minutes to see what <em>conversational HR</em> actually feels like.</h2>
+    </div>
+    <div class="video-card reveal" id="videoCard" role="button" tabindex="0" aria-label="Watch Nex AI in action">
+      <div class="video-content">
+        <div class="play-button">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <div class="video-label">Watch Nex AI in action</div>
+        <div class="video-sub">2:14 · Get the video</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY IT WORKS / MOAT -->
+<section>
+  <div class="container">
+    <div class="moat reveal">
+      <div class="moat-visual">
+        <div class="moat-stack">
+          <div class="moat-layer top"><span class="ml-label">Nex AI teammates</span><span class="ml-tag">CONVERSATIONAL</span></div>
+          <div class="moat-layer"><span class="ml-label">Do everything in one chat</span><span class="ml-tag">NO MORE CLICKS</span></div>
+          <div class="moat-layer"><span class="ml-label">Unified employee data model</span><span class="ml-tag">ONE BRAIN</span></div>
+          <div class="moat-layer"><span class="ml-label">Payroll · Time · Benefits · HR</span><span class="ml-tag">SYSTEM OF RECORD</span></div>
+        </div>
+      </div>
+      <div class="moat-copy">
+        <div class="eyebrow">Why it works</div>
+        <h3>Stop clicking. <em>Start talking.</em></h3>
+        <p>Every other HR tool makes you click through 100 screens to get one thing done. Open payroll. Find the employee. Open their record. Click edit. Save. Go back. Repeat.</p>
+        <p>Nex AI is different. <strong>Your teammates do the work in chat, end-to-end.</strong> Because they share the same brain — one unified employee data model — they know your people, your policies, your numbers. So when Penny runs payroll, she's looking at the same source of truth as your check run. When Sage answers a paternity-leave question, it's <em>your</em> real policy, applied to that <em>real</em> employee.</p>
+        <p><strong>One conversation. Every action. No dashboards required.</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROI -->
+<section class="roi-section">
+  <div class="container">
+    <div class="roi-head reveal">
+      <div class="eyebrow">What you get back</div>
+      <h2>Hours back. Money saved. <em>Fewer mistakes.</em> Focus on the business.</h2>
+      <p>You didn't start this company to chase timecard approvals or click through twelve screens to change someone's department. Hand it over.</p>
+    </div>
+    <div class="roi-grid reveal">
+      <div class="roi-card">
+        <div class="roi-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+        <div class="roi-line">Save time</div>
+        <h3>Hours back, every week</h3>
+        <p>The routine work — timecards, PTO, transfers, reports — happens in chat in seconds. Your admins get their afternoons back. Your employees stop chasing answers.</p>
+      </div>
+      <div class="roi-card">
+        <div class="roi-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <div class="roi-line">Save money</div>
+        <h3>Mistakes that don't make payroll</h3>
+        <p>Wrong overtime. Missed bonuses. Compensation drift. Penny and Sentinel catch it before it costs you — and before it costs an employee their trust.</p>
+      </div>
+      <div class="roi-card">
+        <div class="roi-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="roi-line">Lower risk</div>
+        <h3>Compliance, on autopilot</h3>
+        <p>I-9 windows. Tax updates. Approval cutoffs. Sentinel watches the clock so you don't have to — and surfaces only what needs you, before it becomes a liability.</p>
+      </div>
+      <div class="roi-card">
+        <div class="roi-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg></div>
+        <div class="roi-line">Refocus</div>
+        <h3>Do what only you can do</h3>
+        <p>Stop clicking across an archaic navigation just to <em>find</em> the work. Your teammates handle the motions. You handle the business.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section class="testimonial-section">
+  <div class="container">
+    <div class="testimonial-inner reveal">
+      <div class="eyebrow">Revolutionary</div>
+      <blockquote class="testimonial-quote">
+        What Netchex is building with Nex AI is one of the most visionary applications of agentic AI we've seen — a conversational operating system purpose-built for the deskless workforce, where chat replaces the dashboard and the AI actually does the work.
+      </blockquote>
+      <div class="testimonial-attr">
+        <div class="testimonial-avatar">—</div>
+        <div class="testimonial-meta">
+          <div class="testimonial-name">[ Name to be added ]</div>
+          <div class="testimonial-title">[ Title · OpenAI ]</div>
+        </div>
+      </div>
+      <span class="testimonial-pending">Quote pending sourcing — placeholder copy</span>
+    </div>
+  </div>
+</section>
+
+<!-- FORM -->
+<section class="form-section" id="access">
+  <div class="container">
+    <div class="form-wrap">
+      <div class="form-copy reveal">
+        <div class="eyebrow">Early access</div>
+        <h2>Be one of the first teams to <em>make a hire.</em></h2>
+        <p>Nex AI is rolling out to a small group of design partners this quarter. Tell us where to reach you — we'll get you in.</p>
+        <ul class="form-perks">
+          <li>White-glove onboarding from the Nex AI team</li>
+          <li>Direct line to product for what you build with</li>
+          <li>Early access to new teammates before they ship broadly</li>
+          <li>Pricing locked at design-partner rates</li>
+        </ul>
+      </div>
+
+      <form class="form-card reveal" id="accessForm" novalidate>
+        <div class="field">
+          <label for="email">Work email</label>
+          <input id="email" name="email" type="email" required autocomplete="email" placeholder="you@company.com" />
+          <div class="field-error" id="emailError">Please enter a valid email address.</div>
+        </div>
+        <div class="field">
+          <label for="phone">Phone</label>
+          <input id="phone" name="phone" type="tel" required autocomplete="tel" placeholder="(555) 000-0000" />
+          <div class="field-error" id="phoneError">Please enter a valid US phone number.</div>
+        </div>
+        <div class="field">
+          <label for="firstHire">Who would you hire first? <span class="optional">optional</span></label>
+          <textarea id="firstHire" name="firstHire" placeholder="Penny for payroll? Milo for your team? Sage for employee questions? Tell us what you'd hand over on day one."></textarea>
+        </div>
+        <button type="submit" class="form-submit" id="submitBtn">
+          Join the waitlist
+          <span>→</span>
+        </button>
+        <p class="form-note">We'll be in touch within 48 hours. By submitting, you agree to receive updates from Netchex about Nex AI.</p>
+      </form>
+
+      <div class="form-success" id="formSuccess">
+        <h3>You're on the waitlist.</h3>
+        <p>A member of the Nex AI team will reach out within 48 hours to schedule your onboarding. In the meantime — start thinking about what you'd hand over first.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <a href="#top" class="brand">
+      Nex AI
+      <span class="by">by</span>
+      <svg class="netchex-logo" viewBox="0 0 737 142" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Netchex" role="img"><path fill-rule="evenodd" clip-rule="evenodd" d="M233.147 105.045V37.0005H222.716V74.3349C222.716 78.5412 222.803 81.8416 222.976 84.2188C223.149 86.6015 223.405 88.8867 223.748 91.0768C222.379 89.3155 221.047 87.7036 219.748 86.2459C218.446 84.786 217.222 83.5487 216.069 82.5144L165.432 37.0005H158.325V105.045H168.757V64.9395C168.757 61.7643 168.692 59.007 168.56 56.6676C168.43 54.3286 168.239 52.1303 167.982 50.0704C169.219 52.1736 171.118 54.3801 173.676 56.7003C174.192 57.1697 174.57 57.5143 174.827 57.7287L226.809 105.045H233.147Z" fill="#212121"/><path fill-rule="evenodd" clip-rule="evenodd" d="M310.94 96.9055H264.976V80.1258H292.412V71.7833H264.976V57.5439H310.435V49.2014H254.447V105.044H310.94V96.9055Z" fill="#212121"/><path fill-rule="evenodd" clip-rule="evenodd" d="M326.385 57.5434H352.607V105.044H363.037V57.5434H389.456V49.2037H326.385V57.5434Z" fill="#212121"/><path fill-rule="evenodd" clip-rule="evenodd" d="M464.582 91.8439V85.2736L454.054 83.2792V96.6014H415.279V57.5435H454.054V69.4467L464.582 67.715V62.4695C464.582 57.3646 463.626 53.8771 461.727 52.0074C459.82 50.1374 456.215 49.2042 450.92 49.2042H418.286C413.023 49.2042 409.452 50.1214 407.572 51.9451C405.686 53.7714 404.752 57.2776 404.752 62.4695V91.8439C404.752 97.0817 405.678 100.591 407.539 102.374C409.401 104.157 412.983 105.044 418.286 105.044H450.92C456.215 105.044 459.82 104.124 461.727 102.276C463.626 100.425 464.582 96.9488 464.582 91.8439Z" fill="#212121"/><path fill-rule="evenodd" clip-rule="evenodd" d="M495.674 80.1272H539.922V105.046H550.446V49.3088H539.922V71.6841H495.674V49.3088H485.144V105.046H495.674V80.1272Z" fill="#212121"/><path fill-rule="evenodd" clip-rule="evenodd" d="M628.245 96.9055H582.28V80.1258H609.712V71.7833H582.28V57.5439H627.735V49.2014H571.755V105.044H628.245V96.9055Z" fill="#212121"/><path fill-rule="evenodd" clip-rule="evenodd" d="M715.675 105.045L684.406 75.1302L709.976 49.2019H697.034L678.643 69.4745L658.585 49.2019H644.36L672.743 76.4818L644.806 105.045H658.331L678.515 82.3979L700.94 105.045H715.675Z" fill="#212121"/><path fill-rule="evenodd" clip-rule="evenodd" d="M727.921 97.4495H728.75C729.715 97.4495 730.493 97.1267 730.493 96.3424C730.493 95.65 729.988 95.1888 728.886 95.1888C728.426 95.1888 728.108 95.2348 727.921 95.2812V97.4495ZM727.875 101.74H726.132V94.1737C726.819 94.0353 727.784 93.9433 729.023 93.9433C730.452 93.9433 731.089 94.1737 731.64 94.4969C732.054 94.8196 732.378 95.4196 732.378 96.1548C732.378 96.9883 731.736 97.6311 730.816 97.9106V98.003C731.549 98.2798 731.963 98.8334 732.191 99.8485C732.423 101.002 732.56 101.463 732.742 101.74H730.862C730.63 101.463 730.493 100.771 730.265 99.8918C730.124 99.0642 729.669 98.695 728.704 98.695H727.875V101.74ZM723.241 97.7722C723.241 101.138 725.722 103.816 729.118 103.816C732.423 103.816 734.854 101.138 734.854 97.8187C734.854 94.4504 732.423 91.7286 729.068 91.7286C725.722 91.7286 723.241 94.4504 723.241 97.7722ZM736.784 97.7722C736.784 102.06 733.434 105.428 729.068 105.428C724.753 105.428 721.311 102.06 721.311 97.7722C721.311 93.5741 724.753 90.2064 729.068 90.2064C733.434 90.2064 736.784 93.5741 736.784 97.7722Z" fill="#212121"/><path fill-rule="evenodd" clip-rule="evenodd" d="M75.5949 106.106C57.115 106.106 55.5431 65.2322 43.9082 65.2322C35.9852 65.2322 18.9208 99.9369 6.59723 141.5C11.8054 130.785 15.6008 125.412 19.7338 119.374C30.5419 129.347 44.9023 135.496 60.7404 135.496C94.2856 135.496 121.477 108.184 121.477 74.4838C121.477 64.3964 118.976 54.914 114.651 46.5338C116.11 34.4301 116.272 24.5245 115.753 20.3452C106.947 60.1355 90.5578 106.106 75.5949 106.106Z" fill="#7BC466"/><path fill-rule="evenodd" clip-rule="evenodd" d="M98.5584 26.8807C88.1747 18.5383 75.0678 13.4688 60.7395 13.4688C27.1972 13.4688 0 40.7838 0 74.4842C0 84.0016 2.30965 92.9223 6.18339 100.944C5.32975 110.275 5.28655 117.683 5.71874 121.152C14.5197 81.3559 33.0104 38.0319 47.9704 38.0319C66.4558 38.0319 67.582 80.4764 79.6656 80.4764C87.5829 80.4764 102.554 41.5653 114.872 0C108.375 13.3684 104.064 18.4705 98.5584 26.8807Z" fill="#7BC466"/></svg>
+    </a>
+    <div>© 2026 Netchex · All rights reserved</div>
+  </div>
+</footer>
+
+<!-- VIDEO LEAD-GEN MODAL -->
+<div class="modal-overlay" id="videoModal" role="dialog" aria-modal="true" aria-labelledby="modalHeading">
+  <div class="modal">
+    <button class="modal-close" id="modalClose" aria-label="Close">×</button>
+    <div id="modalForm">
+      <div class="eyebrow">Coming soon</div>
+      <h3 id="modalHeading">Get the video in your inbox.</h3>
+      <p>We're putting the finishing touches on the demo. Drop your email and phone — we'll send it the moment it's ready.</p>
+      <form id="videoLeadForm" novalidate>
+        <div class="field">
+          <label for="modal-email">Work email</label>
+          <input id="modal-email" type="email" required autocomplete="email" placeholder="you@company.com" />
+          <div class="field-error" id="modalEmailError">Please enter a valid email address.</div>
+        </div>
+        <div class="field">
+          <label for="modal-phone">Phone</label>
+          <input id="modal-phone" type="tel" required autocomplete="tel" placeholder="(555) 000-0000" />
+          <div class="field-error" id="modalPhoneError">Please enter a valid US phone number.</div>
+        </div>
+        <button type="submit" class="form-submit" id="modalSubmit">
+          Send me the video
+          <span>→</span>
+        </button>
+      </form>
+    </div>
+    <div class="modal-success-state" id="modalSuccessState">
+      <div class="check">✓</div>
+      <h3>You're on the list.</h3>
+      <p>We'll email the video the moment it's ready. In the meantime — join the waitlist below.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ========== Reveal on scroll ========== */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+
+  /* ========== Word-by-word streaming for hero chat ========== */
+  function wrapWordsForStream(element) {
+    // Walk text nodes and wrap each word in a span (preserves HTML structure like <strong>, <span class="accent">)
+    const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, null, false);
+    const textNodes = [];
+    let n;
+    while ((n = walker.nextNode())) textNodes.push(n);
+
+    const spans = [];
+    textNodes.forEach((textNode) => {
+      const text = textNode.nodeValue;
+      if (!text || !text.trim()) return;
+      const parts = text.split(/(\s+)/);
+      const frag = document.createDocumentFragment();
+      parts.forEach((part) => {
+        if (/^\s+$/.test(part)) {
+          frag.appendChild(document.createTextNode(part));
+        } else if (part) {
+          const span = document.createElement('span');
+          span.className = 'stream-word';
+          span.textContent = part;
+          frag.appendChild(span);
+          spans.push(span);
+        }
+      });
+      textNode.parentNode.replaceChild(frag, textNode);
+    });
+    return spans;
+  }
+
+  function streamWords(spans, wordDelay, onDone) {
+    let i = 0;
+    function next() {
+      if (i >= spans.length) { onDone && onDone(); return; }
+      spans[i].classList.add('visible');
+      i++;
+      setTimeout(next, wordDelay);
+    }
+    next();
+  }
+
+  function runHeroChat() {
+    const userBubble = document.getElementById('userBubble');
+    const agentBubble = document.getElementById('agentBubble');
+    const streamHead = document.getElementById('streamHead');
+    const streamCursor = document.getElementById('streamCursor');
+    const streamList = document.getElementById('streamList');
+    const streamSmall = document.getElementById('streamSmall');
+    const chatActions = document.getElementById('chatActions');
+
+    // Pre-wrap the streaming head text (excluding the cursor)
+    // Move cursor out temporarily
+    const cursor = streamCursor;
+    cursor.parentNode.removeChild(cursor);
+    const wordSpans = wrapWordsForStream(streamHead);
+    streamHead.appendChild(cursor);
+
+    // T+400ms: show user bubble
+    setTimeout(() => userBubble.classList.add('visible'), 400);
+
+    // T+1500ms: show agent bubble, start streaming
+    setTimeout(() => {
+      agentBubble.classList.add('visible');
+      streamWords(wordSpans, 28, () => {
+        cursor.classList.add('gone');
+
+        // Reveal list items
+        const items = streamList.querySelectorAll('li');
+        items.forEach((li, idx) => {
+          setTimeout(() => li.classList.add('visible'), idx * 140);
+        });
+        const listTotal = items.length * 140 + 200;
+
+        // Reveal "How would you like to handle these?"
+        setTimeout(() => streamSmall.classList.add('visible'), listTotal);
+
+        // Reveal action chips outside the bubble
+        setTimeout(() => chatActions.classList.add('visible'), listTotal + 300);
+      });
+    }, 1500);
+  }
+
+  // Trigger after DOM ready (don't wait for full load — feels snappier)
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => setTimeout(runHeroChat, 150));
+  } else {
+    setTimeout(runHeroChat, 150);
+  }
+
+  /* ========== Workplace comms animation (triggered on scroll into view) ========== */
+  function runCommsAnimation() {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const $ = (id) => document.getElementById(id);
+
+    if (prefersReducedMotion) {
+      ['gMsg1', 'gMsg2', 'gMilo', 'gMsg4'].forEach(id => $(id) && $(id).classList.add('shown'));
+      $('miloActions') && $('miloActions').classList.add('visible');
+      $('miloCursor') && $('miloCursor').classList.add('gone');
+      return;
+    }
+
+    // T+200ms: Jessica
+    setTimeout(() => $('gMsg1').classList.add('shown'), 200);
+    // T+1200ms: Marcus
+    setTimeout(() => $('gMsg2').classList.add('shown'), 1200);
+    // T+2300ms: Milo's nudge box appears (empty, cursor blinking)
+    setTimeout(() => {
+      $('gMilo').classList.add('shown');
+
+      // T+2500ms: start streaming Milo's words
+      setTimeout(() => {
+        const miloText = $('miloText');
+        const cursor = $('miloCursor');
+        if (cursor && cursor.parentNode === miloText) {
+          cursor.parentNode.removeChild(cursor);
+        }
+        const spans = wrapWordsForStream(miloText);
+        miloText.appendChild(cursor);
+
+        streamWords(spans, 28, () => {
+          cursor.classList.add('gone');
+          // After streaming: show action buttons outside the box
+          setTimeout(() => $('miloActions').classList.add('visible'), 250);
+          // Then a longer pause before Rashida arrives
+          setTimeout(() => $('gMsg4').classList.add('shown'), 2200);
+        });
+      }, 200);
+    }, 2300);
+  }
+
+  const commsSection = document.querySelector('.comms-section');
+  if (commsSection) {
+    let commsRan = false;
+    const commsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !commsRan) {
+          commsRan = true;
+          runCommsAnimation();
+          commsObserver.disconnect();
+        }
+      });
+    }, { threshold: 0.25 });
+    commsObserver.observe(commsSection);
+  }
+
+  /* ========== Validation helpers ========== */
+  function isValidEmail(v) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+  }
+  function isValidUSPhone(v) {
+    // Strip everything except digits
+    const digits = v.replace(/\D/g, '');
+    // 10-digit US number, or 11 digits starting with 1
+    if (digits.length === 10) return true;
+    if (digits.length === 11 && digits.charAt(0) === '1') return true;
+    return false;
+  }
+
+  function setError(input, errorEl, hasError) {
+    input.classList.toggle('error', hasError);
+    errorEl.classList.toggle('show', hasError);
+  }
+
+  /* ========== Video modal ========== */
+  const videoCard = document.getElementById('videoCard');
+  const videoModal = document.getElementById('videoModal');
+  const modalClose = document.getElementById('modalClose');
+  const modalForm = document.getElementById('modalForm');
+  const modalSuccessState = document.getElementById('modalSuccessState');
+  const videoLeadForm = document.getElementById('videoLeadForm');
+  const modalSubmit = document.getElementById('modalSubmit');
+
+  function openModal() {
+    videoModal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => document.getElementById('modal-email').focus(), 250);
+  }
+  function closeModal() {
+    videoModal.classList.remove('show');
+    document.body.style.overflow = '';
+    setTimeout(() => {
+      modalForm.style.display = '';
+      modalSuccessState.classList.remove('show');
+      videoLeadForm.reset();
+      modalSubmit.disabled = false;
+      modalSubmit.innerHTML = 'Send me the video <span>→</span>';
+      ['modal-email','modal-phone'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove('error');
+      });
+      document.querySelectorAll('#videoModal .field-error').forEach(e => e.classList.remove('show'));
+    }, 300);
+  }
+
+  videoCard.addEventListener('click', openModal);
+  videoCard.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(); }
+  });
+  modalClose.addEventListener('click', closeModal);
+  videoModal.addEventListener('click', (e) => { if (e.target === videoModal) closeModal(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && videoModal.classList.contains('show')) closeModal();
+  });
+
+  videoLeadForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('modal-email');
+    const phone = document.getElementById('modal-phone');
+    const emailErr = document.getElementById('modalEmailError');
+    const phoneErr = document.getElementById('modalPhoneError');
+
+    const emailOk = isValidEmail(email.value);
+    const phoneOk = isValidUSPhone(phone.value);
+
+    setError(email, emailErr, !emailOk);
+    setError(phone, phoneErr, !phoneOk);
+
+    if (!emailOk || !phoneOk) return;
+
+    modalSubmit.disabled = true;
+    modalSubmit.innerHTML = 'Sending…';
+
+    // Simulate submit
+    setTimeout(() => {
+      modalForm.style.display = 'none';
+      modalSuccessState.classList.add('show');
+    }, 700);
+  });
+
+  /* ========== Main access form ========== */
+  const form = document.getElementById('accessForm');
+  const success = document.getElementById('formSuccess');
+  const submitBtn = document.getElementById('submitBtn');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email');
+    const phone = document.getElementById('phone');
+    const emailErr = document.getElementById('emailError');
+    const phoneErr = document.getElementById('phoneError');
+
+    const emailOk = isValidEmail(email.value);
+    const phoneOk = isValidUSPhone(phone.value);
+
+    setError(email, emailErr, !emailOk);
+    setError(phone, phoneErr, !phoneOk);
+
+    if (!emailOk || !phoneOk) return;
+
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = 'Sending…';
+
+    setTimeout(() => {
+      form.style.display = 'none';
+      success.classList.add('show');
+      success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 800);
+  });
+
+  // Clear validation styles on input
+  ['email','phone','modal-email','modal-phone'].forEach((id) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('input', () => {
+      el.classList.remove('error');
+      const errEl = el.parentElement.querySelector('.field-error');
+      if (errEl) errEl.classList.remove('show');
+    });
+  });
+</script>
+
+</body>
+</html>
